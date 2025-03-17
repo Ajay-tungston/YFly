@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.swiper-slide {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* Ensure slides take full height of the container */
+}
+
+.slide-content {
+    flex-grow: 1; /* Make sure the content takes up available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

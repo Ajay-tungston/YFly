@@ -1,0 +1,46 @@
+/************************************* for trainings *******************************************/
+@keyframes marquee {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.marquee {
+  display: flex;
+  width: 200%; 
+  animation: marquee 10s linear infinite;
+}
+
+/************************************** for universities *******************************************/
+@keyframes marqueetwo {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marqueetwo {
+  width: 200%; 
+  animation: marqueetwo 10s linear infinite;
+}
+
+/************************************* for top schools *******************************************/
+@keyframes marqueethree {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.marqueethree {
+  display: flex;
+  width: 200%; 
+  animation: marqueethree 7s linear infinite;
+}

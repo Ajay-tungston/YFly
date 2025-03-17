@@ -1,0 +1,9 @@
+<svg width="55" height="54" viewBox="0 0 55 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" width="54" height="54" rx="8" fill="#30589F"/>
+<path d="M10 44.5H45" stroke="white" stroke-width="2.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.6628 44.5L11.7503 23.4475C11.7503 22.38 12.2578 21.3651 13.0978 20.7001L25.3478 11.1626C26.6078 10.1826 28.3753 10.1826 29.6528 11.1626L41.9028 20.6826C42.7603 21.3476 43.2503 22.3625 43.2503 23.4475V44.5" stroke="white" stroke-width="2.5" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M29.25 35.75H25.75C24.2975 35.75 23.125 36.9225 23.125 38.375V44.5H31.875V38.375C31.875 36.9225 30.7025 35.75 29.25 35.75Z" stroke="white" stroke-width="2.5" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M23.125 30.0625H19.625C18.6625 30.0625 17.875 29.275 17.875 28.3125V25.6875C17.875 24.725 18.6625 23.9375 19.625 23.9375H23.125C24.0875 23.9375 24.875 24.725 24.875 25.6875V28.3125C24.875 29.275 24.0875 30.0625 23.125 30.0625Z" stroke="white" stroke-width="2.5" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M35.375 30.0625H31.875C30.9125 30.0625 30.125 29.275 30.125 28.3125V25.6875C30.125 24.725 30.9125 23.9375 31.875 23.9375H35.375C36.3375 23.9375 37.125 24.725 37.125 25.6875V28.3125C37.125 29.275 36.3375 30.0625 35.375 30.0625Z" stroke="white" stroke-width="2.5" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M39.7505 18.25L39.698 13H31.998" stroke="white" stroke-width="2.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
