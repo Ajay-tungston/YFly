@@ -223,3 +223,137 @@ exports.getScholarshipBrochure = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+//get scholorship by filter and serch with pagination
+
+
+exports.getScholarships = async (req, res) => {
+    try {
+      let {
+        page = 1,
+        limit = 10,
+        search = "",
+        country,
+        course_level,
+        types_of_scholarship,
+        area_of_study,
+        scholarship_amount,
+        intakeYear,
+        specialRestrictions,
+        scholarship_applicability,
+        student_citizenship,
+        scholarship_deadline,
+        sortBy,
+        order = "asc"
+      } = req.query;
+  
+      page = isNaN(page) || page < 1 ? 1 : parseInt(page);
+      limit = isNaN(limit) || limit < 1 || limit > 100 ? 10 : parseInt(limit);
+      order = order === "desc" ? -1 : 1;
+  
+      let filter = {};
+  
+    //   if (search) {
+    //     filter.$or = [
+    //       { scholarship_name: { $regex: search, $options: "i" } },
+    //       { overview: { $regex: search, $options: "i" } }
+    //     ];
+    //   }
+    if (search) {
+        filter.scholarship_name = { $regex: search, $options: "i" };
+      }
+  
+      //  Apply Filters
+      if (country) filter.country = country;
+      if (course_level) filter.course_level = course_level;
+      if (types_of_scholarship) filter.types_of_scholarship = types_of_scholarship;
+      if (area_of_study) filter.area_of_study = area_of_study;
+      if (scholarship_amount) filter.scholarship_amount = scholarship_amount;
+      if (scholarship_applicability) filter.scholarship_applicability = scholarship_applicability;
+      if (student_citizenship) filter.student_citizenship = student_citizenship;
+      if (specialRestrictions) filter.specialRestrictions = { $in: specialRestrictions.split(',') };
+  
+      //  Filter by Intake Year (Deadline falls within the year)
+      if (intakeYear) {
+        const startDate = new Date(`${intakeYear}-01-01`);
+        const endDate = new Date(`${intakeYear}-12-31`);
+        filter.scholarship_deadline = { $gte: startDate, $lte: endDate };
+      }
+  
+      //  Filter by Scholarship Deadline (greater than or equal to given date)
+    //   if (scholarship_deadline) filter.scholarship_deadline = { $gte: new Date(scholarship_deadline) };
+    if (scholarship_deadline) {
+        const [minDate, maxDate] = scholarship_deadline.split(",");
+        const startDate = new Date(minDate);
+        const endDate = new Date(maxDate);
+  
+        if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+          filter.scholarship_deadline = { 
+            ...(filter.scholarship_deadline || {}), 
+            $gte: startDate, 
+            $lte: endDate 
+          };
+        }
+      } 
+  
+      //  Fetch scholarships with filters, pagination, and sorting
+      const scholarships = await Scholarship.find(filter)
+        .select("-brochure") // Exclude large binary data
+        .sort({ [sortBy || "createdAt"]: order }) // Default sorting by createdAt
+        .skip((page - 1) * limit)
+        .limit(limit);
+  
+      //  Get total count for pagination
+      const total = await Scholarship.countDocuments(filter);
+  
+      res.status(200).json({
+        success: true,
+        data: scholarships,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      });
+  
+    } catch (error) {
+      console.error("Error fetching scholarships:", error);
+      res.status(500).json({ success: false, message: "Server Error", error });
+    }
+  };
+  
+
+exports.getScholarshipFilters = async (req, res) => {
+    try {
+        const courses = await Scholarship.distinct('course_level');
+        const scholarshipTypes = await Scholarship.distinct('types_of_scholarship');
+        const areasOfStudy = await Scholarship.distinct('area_of_study');
+        const scholarshipAmounts = await Scholarship.distinct('scholarship_amount');
+        const intakeYears = await Scholarship.aggregate([
+            { $project: { year: { $year: "$scholarship_deadline" } } },
+            { $group: { _id: "$year" } },
+            { $sort: { _id: 1 } }
+        ]);
+        const specialRestrictions = await Scholarship.distinct('specialRestrictions');
+        const applicability = await Scholarship.distinct('scholarship_applicability');
+        const citizenships = await Scholarship.distinct('student_citizenship');
+        const countries = await Scholarship.distinct('country');
+
+        res.json({
+            courses,
+            scholarshipTypes,
+            areasOfStudy,
+            scholarshipAmounts,
+            intakeYears: intakeYears.map(y => y._id),
+            specialRestrictions,
+            applicability,
+            citizenships,
+            countries
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching filter options', error });
+    }
+}
+
+
