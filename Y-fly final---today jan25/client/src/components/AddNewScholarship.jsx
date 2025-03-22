@@ -2050,17 +2050,21 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
          {/* Scholarship Amount section */}
          <div className='font-urban mr-10 max-xl:mr-0'>
                 <div className='flex text-[0.9rem]'>
-                    <div className='w-[20%] max-xl:w-[15%]'>Scholarship Amount</div>
+                    <div className='w-[20%] max-xl:w-[15%] mt-2'>Scholarship Amount</div>
+                    <input className='w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]'
+                    placeholder='Enter here'
+                    value={addScholarship.scholarship_amount}
+                    onChange={(e)=>handleScholarshipTypeAmount(e.target.value)}/>
                     {/* Button */}
-                    <button
+                    {/* <button
                         type='button'
                         onClick={() => setIsOpen5(!isOpen5)} // Toggle dropdown visibility
                         className="w-[30%] flex items-center px-5 py-1 justify-between text-[#898C9A] border-[#898C9A] border text-gray-800 bg-[#F9F9F9] rounded-md">
                         {scholarshipAmount}
                         <img src={down} alt="down" width={12} className="ml-8" />
-                    </button>
+                    </button> */}
                     {/* Dropdown */}
-                    {isOpen5 && (
+                    {/* {isOpen5 && (
                         <div ref={dropdownRef1} className="absolute mt-10 ml-[13.5rem] max-xl:ml-[7rem] w-[22.2%] bg-[#F9F9F9] border border-[#898C9A] rounded-md shadow-lg z-10">
                             <ul className="">
                                 <li
@@ -2080,7 +2084,7 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
                                 </li>
                             </ul>
                         </div>
-                    )}
+                    )} */}
                     <div className='w-[25%] max-xl:w-[25%] flex items-center justify-center'>Scholarship Deadline</div>
                     <input
                         className="w-[25%] max-xl:w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.8rem]"
@@ -2089,8 +2093,10 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
                         onChange={handleScholarshipDeadline}
                     />
                 </div>
-                <input className='w-[30%] ml-[20%] max-xl:ml-[15%] mt-3 bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]'
-                    placeholder='Enter here'/>
+
+                {/* moved to top */}
+                {/* <input className='w-[30%] ml-[20%] max-xl:ml-[15%] mt-3 bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]'
+                    placeholder='Enter here'/> */}
         </div>
         <div className='border-[#BFBFBF] border-b-[1px] my-5'></div>
         {/* overview section */}

@@ -8,23 +8,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 const ResponsiveSearchBar2 = ({
   filters,
-  desiredCourse,
   setDesiredCourse,
-  scholarshipTypes,
   setScholarshipTypes,
-  areasOfStudy,
   setAreasOfStudy,
-  intakeYears,
   setIntakeYears,
-  specialRestrictions,
   setSpecialRestrictions,
-  applicability,
   setApplicability,
-  setSelectedDateRange,
-  citizenships,
   setCitizenships,
+  sortOptions,
+  setAppliedCountry,
+  setAppliedSort,
 }) => {
-  
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
 
@@ -43,15 +37,40 @@ const ResponsiveSearchBar2 = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const [tempValues, setTempValues] = useState({
+    sortBy: { label: "", value: "" },
+    country: "",
+    courseLevel: "",
+    scholarshipType: "",
+    areaOfStudy: "",
+    intakeYear: "",
+    specialRestrictions: "",
+    applicability: "",
+    citizenship: "",
+  });
+
+  const habdleButtonClick = () => {
+    //sortBy and country have an another state in the parent for data fetching
+    setAppliedCountry(tempValues.country);
+    setAppliedSort(tempValues.sortBy);
+    setDesiredCourse(tempValues.courseLevel);
+    setScholarshipTypes(tempValues.scholarshipType);
+    setAreasOfStudy(tempValues.areaOfStudy);
+    setIntakeYears(tempValues.intakeYear);
+    setSpecialRestrictions(tempValues.specialRestrictions);
+    setApplicability(tempValues.applicability);
+    setCitizenships(tempValues.citizenship);
+  };
   return (
     <div
       ref={dropdownRef}
       className="lg:hidden w-96 max-w-96 min-w-96 px-5 py-6 bg-gradient-to-b from-blue-800 via-sky-950 to-blue-800 rounded-3xl inline-flex justify-center items-center gap-2.5 flex-wrap content-center "
     >
       <div className="flex-1 flex justify-end items-center gap-2.5 flex-wrap content-center">
+        {/* sortby */}
         <div className="relative flex-1 min-w-40">
           <button
-            onClick={() => toggleDropdown("sort")}
+            onClick={() => toggleDropdown("sortBy")}
             className="w-full px-5 py-2 bg-white rounded-3xl shadow-md outline outline-[0.58px] outline-offset-[-0.58px] outline-slate-900 flex justify-between items-center"
           >
             <span className="text-slate-900 text-sm font-normal font-[Urbanist] leading-tight">
@@ -59,32 +78,76 @@ const ResponsiveSearchBar2 = ({
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "sort" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
-              {["Newest", "Oldest", "Popular"].map((option) => (
+          {openDropdown === "sortBy" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
+              {sortOptions.map((i) => (
                 <label
-                  key={option}
-                  className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                  key={i.value}
+                  htmlFor={i.value}
+                  className="flex items-center p-2 cursor-pointer text-sm"
                 >
                   <input
+                    id={i.value}
+                    className="mr-1 before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute 				 
+                                   before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 
+                                   before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
-                    // checked={sortBy.includes(option)}
-                    // onChange={() => handleSortChange(option)}
-                    className="mr-2"
+                    value={i.value}
+                    checked={tempValues.sortBy.value === i.value}
+                    onChange={() =>
+                      setTempValues((prev) => ({
+                        ...prev,
+                        sortBy: prev.sortBy === i ? "" : i,
+                      }))
+                    }
                   />
-                  {option}
+                  {i.label}
                 </label>
               ))}
             </div>
           )}
         </div>
-        <div className="flex-1 min-w-40 px-5 py-2 bg-white rounded-3xl outline outline-[0.58px] outline-offset-[-0.58px] outline-slate-900 flex justify-between items-center">
-          <div className="justify-center text-slate-900 text-sm font-normal font-['Urbanist'] leading-tight">
-            Country
-          </div>
-          <div className="w-3.5 h-3.5 flex">
-            <FontAwesomeIcon icon={faAngleDown} />
-          </div>
+
+        {/* country */}
+        <div className="relative flex-1 min-w-40">
+          <button
+            onClick={() => toggleDropdown("country")}
+            className="w-full px-5 py-2 bg-white rounded-3xl shadow-md outline outline-[0.58px] outline-offset-[-0.58px] outline-slate-900 flex justify-between items-center"
+          >
+            <span className="text-slate-900 text-sm font-normal font-[Urbanist] leading-tight">
+              Country
+            </span>
+            <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
+          </button>
+          {filters?.countries?.length>0&&
+          openDropdown === "country" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
+              {filters?.countries?.map((i) => (
+                <label
+                  key={i}
+                  htmlFor={i}
+                  className="flex items-center p-2 cursor-pointer text-sm"
+                >
+                  <input
+                    id={i}
+                    className="mr-1 before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute 				 
+                                   before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 
+                                   before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
+                    type="checkbox"
+                    value={i}
+                    checked={tempValues.country === i}
+                    onChange={() =>
+                      setTempValues((prev) => ({
+                        ...prev,
+                        country: prev.country === i ? "" : i,
+                      }))
+                    }
+                  />
+                  {i}
+                </label>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* course level */}
@@ -98,8 +161,8 @@ const ResponsiveSearchBar2 = ({
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "courseLevel" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
+          {filters?.courses?.length>0&&openDropdown === "courseLevel" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
               {filters?.courses?.map((i) => (
                 <label
                   key={i}
@@ -113,9 +176,12 @@ const ResponsiveSearchBar2 = ({
                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
                     value={i}
-                    checked={desiredCourse === i}
+                    checked={tempValues.courseLevel === i}
                     onChange={() =>
-                      setDesiredCourse((prev) => (prev === i ? "" : i))
+                      setTempValues((prev) => ({
+                        ...prev,
+                        courseLevel: prev.courseLevel === i ? "" : i,
+                      }))
                     }
                   />
                   {i}
@@ -145,8 +211,8 @@ const ResponsiveSearchBar2 = ({
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "scholerShipType" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
+          {filters?.scholarshipTypes?.length>0&&openDropdown === "scholerShipType" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
               {filters?.scholarshipTypes?.map((i) => (
                 <label
                   key={i}
@@ -160,9 +226,12 @@ const ResponsiveSearchBar2 = ({
                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
                     value={i}
-                    checked={scholarshipTypes === i}
+                    checked={tempValues.scholarshipType === i}
                     onChange={() =>
-                      setScholarshipTypes((prev) => (prev === i ? "" : i))
+                      setTempValues((prev) => ({
+                        ...prev,
+                        scholarshipType: prev.scholarshipType === i ? "" : i,
+                      }))
                     }
                   />
                   {i}
@@ -183,8 +252,8 @@ const ResponsiveSearchBar2 = ({
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "areaOfStudy" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
+          {filters?.areasOfStudy?.length>0&&openDropdown === "areaOfStudy" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
               {filters?.areasOfStudy?.map((i) => (
                 <label
                   key={i}
@@ -198,9 +267,12 @@ const ResponsiveSearchBar2 = ({
                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
                     value={i}
-                    checked={areasOfStudy === i}
+                    checked={tempValues.areaOfStudy === i}
                     onChange={() =>
-                      setAreasOfStudy((prev) => (prev === i ? "" : i))
+                      setTempValues((prev) => ({
+                        ...prev,
+                        areaOfStudy: prev.areaOfStudy === i ? "" : i,
+                      }))
                     }
                   />
                   {i}
@@ -221,8 +293,8 @@ const ResponsiveSearchBar2 = ({
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "intakeYears" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
+          {filters?.intakeYears?.length>0&&openDropdown === "intakeYears" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
               {filters?.intakeYears?.map((i) => (
                 <label
                   key={i}
@@ -236,9 +308,12 @@ const ResponsiveSearchBar2 = ({
                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
                     value={i}
-                    checked={intakeYears === i}
+                    checked={tempValues.intakeYear === i}
                     onChange={() =>
-                      setIntakeYears((prev) => (prev === i ? "" : i))
+                      setTempValues((prev) => ({
+                        ...prev,
+                        intakeYear: prev.intakeYear === i ? "" : i,
+                      }))
                     }
                   />
                   {i}
@@ -255,12 +330,14 @@ const ResponsiveSearchBar2 = ({
             className="w-full px-5 py-2 bg-white rounded-3xl shadow-md outline outline-[0.58px] outline-offset-[-0.58px] outline-slate-900 flex justify-between items-center"
           >
             <span className="text-slate-900 text-sm font-normal font-[Urbanist] leading-tight">
-            Special<br />Restrictions
+              Special
+              <br />
+              Restrictions
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "specialRestrictions" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
+          {filters?.specialRestrictions?.length>0&&openDropdown === "specialRestrictions" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
               {filters?.specialRestrictions?.map((i) => (
                 <label
                   key={i}
@@ -274,9 +351,13 @@ const ResponsiveSearchBar2 = ({
                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
                     value={i}
-                    checked={specialRestrictions === i}
+                    checked={tempValues.specialRestrictions === i}
                     onChange={() =>
-                      setSpecialRestrictions((prev) => (prev === i ? "" : i))
+                      setTempValues((prev) => ({
+                        ...prev,
+                        specialRestrictions:
+                          prev.specialRestrictions === i ? "" : i,
+                      }))
                     }
                   />
                   {i}
@@ -286,19 +367,21 @@ const ResponsiveSearchBar2 = ({
           )}
         </div>
 
-                {/* scholarship applicability */}
+        {/* scholarship applicability */}
         <div className="relative flex-1 min-w-40">
           <button
             onClick={() => toggleDropdown("applicability")}
             className="w-full px-5 py-2 bg-white rounded-3xl shadow-md outline outline-[0.58px] outline-offset-[-0.58px] outline-slate-900 flex justify-between items-center"
           >
             <span className="text-slate-900 text-sm font-normal font-[Urbanist] leading-tight">
-            Scholarship<br />Applicabillity
+              Scholarship
+              <br />
+              Applicabillity
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "applicability" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
+          {filters?.applicability?.length>0&&openDropdown === "applicability" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
               {filters?.applicability?.map((i) => (
                 <label
                   key={i}
@@ -312,9 +395,12 @@ const ResponsiveSearchBar2 = ({
                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
                     value={i}
-                    checked={applicability === i}
+                    checked={tempValues.applicability === i}
                     onChange={() =>
-                      setApplicability((prev) => (prev === i ? "" : i))
+                      setTempValues((prev) => ({
+                        ...prev,
+                        applicability: prev.applicability === i ? "" : i,
+                      }))
                     }
                   />
                   {i}
@@ -323,20 +409,22 @@ const ResponsiveSearchBar2 = ({
             </div>
           )}
         </div>
-        
-             {/* studen citizenship*/}
-             <div className="relative flex-1 min-w-40">
+
+        {/* studen citizenship*/}
+        <div className="relative flex-1 min-w-40">
           <button
             onClick={() => toggleDropdown("citizenships")}
             className="w-full px-5 py-2 bg-white rounded-3xl shadow-md outline outline-[0.58px] outline-offset-[-0.58px] outline-slate-900 flex justify-between items-center"
           >
             <span className="text-slate-900 text-sm font-normal font-[Urbanist] leading-tight">
-            Student<br />Citizenship
+              Student
+              <br />
+              Citizenship
             </span>
             <FontAwesomeIcon icon={faAngleDown} className="w-3.5 h-3.5" />
           </button>
-          {openDropdown === "citizenships" && (
-            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10">
+          {filters?.citizenships?.length>0&&openDropdown === "citizenships" && (
+            <div className="absolute left-0 w-full mt-1 bg-white rounded-md shadow-md p-1 z-10 max-h-[250px] overflow-y-scroll">
               {filters?.citizenships?.map((i) => (
                 <label
                   key={i}
@@ -350,9 +438,12 @@ const ResponsiveSearchBar2 = ({
                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                     type="checkbox"
                     value={i}
-                    checked={citizenships === i}
+                    checked={tempValues.citizenship === i}
                     onChange={() =>
-                      setCitizenships((prev) => (prev === i ? "" : i))
+                      setTempValues((prev) => ({
+                        ...prev,
+                        citizenship: prev.citizenship === i ? "" : i,
+                      }))
                     }
                   />
                   {i}
@@ -383,9 +474,12 @@ const ResponsiveSearchBar2 = ({
           </div>
         </div> */}
         <div className="w-20 px-5 py-2 bg-blue-600 rounded-3xl outline outline-1 outline-slate-900 flex justify-between items-center bg-[#2B7CD6]">
-          <div className="justify-center  text-white text-sm font-normal font-['Urbanist'] leading-tight">
+          <button
+            className="justify-center  text-white text-sm font-normal font-['Urbanist'] leading-tight"
+            onClick={habdleButtonClick}
+          >
             Done
-          </div>
+          </button>
         </div>
       </div>
     </div>

@@ -227,7 +227,7 @@ exports.getScholarshipBrochure = async (req, res) => {
 //get scholorship by filter and serch with pagination
 
 
-exports.getScholarships = async (req, res) => {
+exports.searchScholarships = async (req, res) => {
     try {
       let {
         page = 1,
@@ -237,19 +237,19 @@ exports.getScholarships = async (req, res) => {
         course_level,
         types_of_scholarship,
         area_of_study,
-        scholarship_amount,
+        minAmount, maxAmount ,
         intakeYear,
         specialRestrictions,
         scholarship_applicability,
         student_citizenship,
         scholarship_deadline,
         sortBy,
-        order = "asc"
+        // order = "asc"
       } = req.query;
   
       page = isNaN(page) || page < 1 ? 1 : parseInt(page);
       limit = isNaN(limit) || limit < 1 || limit > 100 ? 10 : parseInt(limit);
-      order = order === "desc" ? -1 : 1;
+    //   order = order === "desc" ? -1 : 1;
   
       let filter = {};
   
@@ -268,7 +268,12 @@ exports.getScholarships = async (req, res) => {
       if (course_level) filter.course_level = course_level;
       if (types_of_scholarship) filter.types_of_scholarship = types_of_scholarship;
       if (area_of_study) filter.area_of_study = area_of_study;
-      if (scholarship_amount) filter.scholarship_amount = scholarship_amount;
+    //   if (scholarship_amount) filter.scholarship_amount = scholarship_amount;
+    if (!isNaN(minAmount) || !isNaN(maxAmount)) {
+        filter.scholarship_amount = {};
+        if (!isNaN(minAmount)) filter.scholarship_amount.$gte = parseInt(minAmount);
+        if (!isNaN(maxAmount)) filter.scholarship_amount.$lte = parseInt(maxAmount);
+    }
       if (scholarship_applicability) filter.scholarship_applicability = scholarship_applicability;
       if (student_citizenship) filter.student_citizenship = student_citizenship;
       if (specialRestrictions) filter.specialRestrictions = { $in: specialRestrictions.split(',') };
@@ -296,10 +301,23 @@ exports.getScholarships = async (req, res) => {
         }
       } 
   
+
+      const sortOptionsMap = {
+        newest: { createdAt: -1 },
+        oldest: { createdAt: 1 },
+        deadline_asc: { scholarship_deadline: 1 },
+        deadline_desc: { scholarship_deadline: -1 },
+        amount_asc: { scholarship_amount: 1 },
+        amount_desc: { scholarship_amount: -1 },
+      };
+      
+      // Default to newest if no valid sortBy is provided
+      const sortOptions = sortOptionsMap[sortBy] || { createdAt: -1 };
+
       //  Fetch scholarships with filters, pagination, and sorting
       const scholarships = await Scholarship.find(filter)
         .select("-brochure") // Exclude large binary data
-        .sort({ [sortBy || "createdAt"]: order }) // Default sorting by createdAt
+        .sort(sortOptions) // Default sorting by createdAt
         .skip((page - 1) * limit)
         .limit(limit);
   
@@ -329,7 +347,19 @@ exports.getScholarshipFilters = async (req, res) => {
         const courses = await Scholarship.distinct('course_level');
         const scholarshipTypes = await Scholarship.distinct('types_of_scholarship');
         const areasOfStudy = await Scholarship.distinct('area_of_study');
-        const scholarshipAmounts = await Scholarship.distinct('scholarship_amount');
+
+        const amountRange = await Scholarship.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    minAmount: { $min: "$scholarship_amount" },
+                    maxAmount: { $max: "$scholarship_amount" }
+                }
+            }
+        ]);
+        
+        const scholarshipAmounts = amountRange.length > 0 ? amountRange[0] : { minAmount: 0, maxAmount: 10000 }; // Default values
+                
         const intakeYears = await Scholarship.aggregate([
             { $project: { year: { $year: "$scholarship_deadline" } } },
             { $group: { _id: "$year" } },

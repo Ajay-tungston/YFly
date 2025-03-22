@@ -31,7 +31,7 @@ router.put('/edit/:id', scholarshipController.updateScholarship);
 router.delete('/delete/:id', scholarshipController.deleteScholarship);
 
 
-router.get('/get', scholarshipController.getScholarships);
+router.get('/search', scholarshipController.searchScholarships);
 router.get('/get-filters', scholarshipController.getScholarshipFilters);
 
 
