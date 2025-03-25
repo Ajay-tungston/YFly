@@ -22,9 +22,10 @@ const courseSchema = new mongoose.Schema(
       ],
       required: true,
     },
-    university_ranking: { type: Number, required: true },
-    university_name: { type: String, required: true, trim: true },
-    university_logo: { data: Buffer, contentType: String },
+    // university_ranking: { type: Number, required: true },
+    // university_name: { type: String, required: true, trim: true },
+    university_name: { type: mongoose.Schema.Types.ObjectId, ref: "University" },
+    // university_logo: { data: Buffer, contentType: String },
     course_duration: {
       type: String,
       enum: [

@@ -5,11 +5,13 @@ import EnquiryList from '../components/EnquiryList'
 import CourseList from '../components/CourseList'
 import AddNewCourse from '../components/AddNewCourse'
 import ScholarshipList from '../components/ScholarshipList'
+import AddNewUniversity from '../components/AddNewUniversity'
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState('enquiries');
   const [addCourse, setAddCourse] = useState('');
   const [addScholarship, setAddScholarship] = useState('');
+  const [addUniversity, setAddUniversity] = useState('');
 
   useEffect(() => {
     // clear addCourse or addScholarship when changing selectedComponent
@@ -18,6 +20,9 @@ const Dashboard = () => {
     }
     if (selectedComponent !== 'scholarships') {
       setAddScholarship('');
+    }
+    if(selectedComponent!=="university"){
+      setAddUniversity('');
     }
   }, [selectedComponent]);
 
@@ -28,6 +33,9 @@ const Dashboard = () => {
     if (addScholarship) {
       return <AddNewScholarship />;
     }
+    // if(addUniversity){
+    //   return <AddNewUniversity />;
+    // }
     switch (selectedComponent) {
       case 'enquiries':
         return <EnquiryList />;
@@ -35,6 +43,8 @@ const Dashboard = () => {
         return <CourseList setAddCourse={setAddCourse} />;
       case 'scholarships':
         return <ScholarshipList setAddScholarship={setAddScholarship} />;
+        case 'university':
+          return <AddNewUniversity />;
       default:
         return <EnquiryList />; // Default case if none match
     }

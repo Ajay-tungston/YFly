@@ -39,6 +39,7 @@ const Sidebar = ({ setSelectedComponent }) => {
                     </button>
                     <button onClick={() => setSelectedComponent('courses')} className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Courses</button>
                     <button onClick={() => setSelectedComponent('scholarships')} className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Scholarships</button>
+                    <button onClick={() => setSelectedComponent('university')} className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Universities</button>
                     <button className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Services</button>
                 </div>
             </div>
