@@ -30,6 +30,14 @@ import ProficiencyExam from './components/ProficiencyExam';
 import Mattermost from './components/MattersTheMost';
 import MyProfile from './components/MyProfile';
 import EnquiryList from './components/EnquiryList';
+import WhyStudySlider from './components/WhyStudySlider';
+import StudyinComponent from './components/StudyinComponent';
+import Topcourse from './components/Topcourse'
+import Scholarships from './components/Scholarship';
+import Domain  from './components/Domain'
+import Intake from './components/Intake';
+import Sample from './pages/Sample'
+
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return isAuthenticated ? children : <Navigate to="/admin-login" />;
@@ -67,6 +75,16 @@ const App = () => {
         <Route path ='/matters' element={<Mattermost/>}/>
         <Route path='/myprofile' element={<MyProfile/>}/>
         <Route path='/enquiry' element={<EnquiryList/>}/>
+        <Route path='/slider' element={<WhyStudySlider/>}/>
+        <Route path='/studyin' element={<StudyinComponent/>} />
+        <Route path='/topcourse' element={<Topcourse />} />
+        <Route path='/scholar' element={<Scholarships />}/>
+        <Route path='/domain' element={<Domain />}/>
+        <Route path='/intake' element={<Intake />}/>
+        <Route path='/sample' element={<Sample/>} />
+        
+
+
       </Routes>
       
     </>

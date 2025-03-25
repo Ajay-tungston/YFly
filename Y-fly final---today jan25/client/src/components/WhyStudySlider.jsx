@@ -36,10 +36,10 @@ const WhyStudySlider = () => {
                 slidesPerView: 1,
             },
         }}
-        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+        modules={[Navigation, Pagination, Scrollbar, A11y,]}
         // navigation
         pagination={{ clickable: true }}
-        autoplay={{ delay: 5000, disableOnInteraction: false }} // Configure autoplay
+
         spaceBetween={50}
         slidesPerView={3}
         onSlideChange={() => console.log('slide change')}
@@ -51,10 +51,10 @@ const WhyStudySlider = () => {
     <SwiperSlide>
             <div className='  w-[90%] max-md:w-[100%]  border-[1px] py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white'>
                     <div className='flex justify-center '>
-                        <img src={whystudy1} width={300} alt='why study' className='rounded-t-[38px]' />
+                        <img src={whystudy1} width={280} alt='why study' className='rounded-t-[38px]' />
                     </div>
 
-                    <div className='px-6'>
+                    <div className='px-7'>
                         <div className='text-[#30589F] font-dela text-[15px] mt-3'>
                             World-Class Education Awaits
                         </div>
@@ -72,9 +72,9 @@ const WhyStudySlider = () => {
 <SwiperSlide>
                     <div className='  w-[90%] max-md:w-[100%] border-[1px] py-6 border-blac rounded-[38px] hover:shadow-right-bottom bg-white'>
                             <div className='flex justify-center'>
-                                <img src={whystudy2} width={300} alt='why study img' className='rounded-t-[38px]' />
+                                <img src={whystudy2} width={280} alt='why study img' className='rounded-t-[38px]' />
                             </div>
-                            <div className='px-6'>
+                            <div className='px-7'>
                                 <div className='text-[#30589F] font-dela text-[15px] mt-3 '>
                                     Diverse Learning Environment
                                 </div>
@@ -86,6 +86,29 @@ const WhyStudySlider = () => {
                                 </div>
 
                             </div>
+                        </div>
+</SwiperSlide>
+<SwiperSlide>
+
+                        <div className='  w-[90%] max-md:w-[100%] border-[1px] py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white max-xl:pb-12 '>
+                            <div className='flex justify-center '>
+                                <img src={whystudy3} width={300} alt='why study' className='rounded-t-[38px]' />
+                            </div>
+
+                            <div className='px-7'>
+                                <div className='text-[#30589F] font-dela text-[15px]  mt-3'>
+                                    Experience American Life, Build Skills
+                                </div>
+
+                                <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
+
+                                <div className='font-urban max-lg:text-[0.9rem]' >
+                                    Explore beyond the classroom in the USA. Immerse yourself in American culture, from stunning landscapes to bustling cities. Gain independence and develop lifelong skills that empower your future.
+                                </div>
+
+                            </div>
+
+
                         </div>
 </SwiperSlide>
 <SwiperSlide>
