@@ -319,7 +319,7 @@ exports.saveUserDetails = async (req, res) => {
       academic_test,
       mainCriteria,
     } = req.body;
-
+console.log(req.body)
     if (!email) {
       return res.status(400).json({ message: "Email is required to update details" });
     }

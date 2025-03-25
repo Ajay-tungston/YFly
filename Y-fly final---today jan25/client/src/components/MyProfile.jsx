@@ -36,6 +36,7 @@ const MyProfile = () => {
             <p><strong>Last Name:</strong> {profile.last_name}</p>
             <p><strong>Email:</strong> {profile.email}</p>
             <p><strong>Phone Number:</strong> {profile.phone_number}</p>
+            <p><strong>Degree:</strong> {profile.degree}</p>
             <hr className="my-4" />
             {/* Education Details */}
             <h2 className="text-xl font-semibold text-[#30589f] mb-2">Education Details</h2>

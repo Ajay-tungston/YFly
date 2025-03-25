@@ -84,7 +84,7 @@ const ScholarshipOverview = () => {
 
                     <div>
                       <div className='text-[#898C9A] font-bold font-urban max-lg:text-[0.8rem] max-md:text-[0.7rem]'>Intake year</div>
-                      <div className='font-dela text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]' >Jan 2025</div>
+                      <div className='font-dela text-[#4c4c4d] max-lg:text-[0.9rem] max-md:text-[0.8rem]' >Jan 2025</div>
                     </div>
 
                   </div>

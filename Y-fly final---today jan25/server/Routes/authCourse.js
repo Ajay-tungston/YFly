@@ -30,4 +30,12 @@ router.put('/edit/:id', courseController.updateCourse);
 // DELETE route to delete a course by ID
 router.delete('/delete/:id', courseController.deleteCourse);
 
+//Filer based Search
+router.get('/filtersearch', courseController.filterSearch);
+
+
+// Get dropdown values
+
+router.get('/getvalues', courseController.getValues);
+
 module.exports = router;

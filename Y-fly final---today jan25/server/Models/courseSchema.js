@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema(
   {
+    // Existing fields...
     course_level: {
       type: String,
       enum: ["Masters", "MBA", "Bachelors"],
@@ -77,12 +78,43 @@ const courseSchema = new mongoose.Schema(
     scholarship_applicable: [{ type: String, required: true }],
     tution_fee: {
       type: Number,
-      required: true, // Example max value
+      required: true,
     },
     funding_options: [{ type: String, required: true }],
+
+    // --- NEW FIELDS (EXAMPLE) ---
+    // 1) Program Level (e.g., "High School", "UG", "PG Diploma", etc.)
+    program_level: {
+      type: String,
+      trim: true,
+      required: false,
+    },
+    // 2) Program Name (e.g., "Short Term Programs", "Twinning Program 2+2", etc.)
+    program_name: {
+      type: String,
+      trim: true,
+      required: false,
+    },
+    // 3) Computed field combining course_level + discipline + area_of_study
+    course_title: {
+      type: String,
+      trim: true,
+      required: false,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+/**
+ * Optional: Pre-save hook to generate `course_title` automatically
+ * so you can search it as a single string if needed.
+ */
+courseSchema.pre("save", function (next) {
+  this.course_title = `${this.course_level} of ${this.discipline} in ${this.area_of_study}`;
+  next();
+});
+
+
 module.exports = mongoose.model("Course", courseSchema);
