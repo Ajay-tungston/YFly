@@ -22,14 +22,12 @@ const CoursesGrid = () => {
   return (
     <div className="p-6">
       {/* Desktop Grid (4 columns) */}
-      <div className="hidden lg:grid grid-cols-4 gap-10 w-full max-w-5xl mx-auto">
+      <div className="hidden lg:grid grid-cols-4 gap-10 w-screen max-w-5xl mx-auto  ml-52">
         {/* Loop through the courses */}
         {courses.map((course, index) => (
           <div
             key={index}
-            className={`${
-              index < 4 ? "-ml-24" : "" // Apply negative margin-left to the first 4 cards on desktop
-            }`}
+            className={`${index < 4 ? "-ml-24" : ""}`} // Apply negative margin-left to the first 4 cards on desktop
           >
             <CourseCard course={course} />
           </div>
@@ -37,28 +35,16 @@ const CoursesGrid = () => {
       </div>
 
       {/* Mobile (Small Screens) - Horizontal Scroll */}
-      <div className="lg:hidden overflow-x-auto flex p-4">
-        {/* Add a margin-left to the first 4 cards */}
-        {courses.slice(0, 4).map((course, index) => (
+      <div className="lg:hidden overflow-x-scroll flex p-4 space-x-4 w-screen mx-auto">
+        {/* Loop through the courses and display horizontally */}
+        {courses.map((course, index) => (
           <div
             key={index}
-            className="flex-shrink-0 flex items-center space-x-3 p-4 border-2 border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ml-8"
-            style={{ width: "250px", height: "100px" }}
-          >
-            <div>{course.image}</div>
-            <p className="font-semibold text-gray-800">{course.name}</p>
-          </div>
-        ))}
-
-        {/* Render the rest of the cards without margin */}
-        {courses.slice(4).map((course, index) => (
-          <div
-            key={index + 4} // Unique key
             className="flex-shrink-0 flex items-center space-x-3 p-4 border-2 border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
             style={{ width: "250px", height: "100px" }}
           >
-            <div>{course.image}</div>
-            <p className="font-semibold text-gray-800">{course.name}</p>
+            <img src={course.image} alt={course.name} className="w-12 h-12" />
+            <p className="font-urban text-gray-800">{course.name}</p>
           </div>
         ))}
       </div>

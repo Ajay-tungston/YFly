@@ -1,93 +1,148 @@
-import React from "react";
-import Navbar from "./Navbar";
+import { useState } from "react";
+import Navbar from "../components/Navbar";
+import { FaPen } from "react-icons/fa";
+import Footer from "../components/Footer";
 
 const Profile = () => {
+  const [formData, setFormData] = useState({
+    name: "Ajay M.A",
+    education: "",
+    experience: "",
+    englishTest: "",
+    degree: "",
+    country: "",
+    jobRole: "",
+  });
+
   return (
-    <div className="bg-[#0D1224] min-h-screen text-white font-sans relative text-black">
-      {/* Header */}
-      <header className="bg-white p-16 flex justify-between items-center shadow-md rounded-b-[52px] text-black">
+    <div className="bg-[#0D1224] min-h-screen text-black font-lato relative">
+      {/* Navbar */}
+      <nav className="bg-white p-6 md:p-10 flex justify-between items-center rounded-b-[70px] h-40">
         <Navbar />
-      </header>
+      </nav>
 
-      {/* Profile Section */}
-      <main className="relative">
-        <div className="bg-white w-full rounded-[100px] shadow-md p-10 mt-8 mx-auto overflow-hidden min-h-[600px] text-gray-900">
-          <div className="grid grid-cols-2 gap-6">
-            <div className="border-2 border-gray-300 p-4 rounded-xl bg-amber-950 text-black w-3/4">
-
-              <div className="flex items-center space-x-4">
-                <img
-                  src="/profile.png"
-                  alt="User Profile"
-                  className="w-12 h-12 rounded-full"
-                />
-                <div>
-                  <h2 className="text-lg font-semibold text-black">
-                    Ajay M.A
-                  </h2>
+      {/* Profile Container */}
+      <div className="bg-white w-full rounded-[100px] p-6 md:p-10 mt-8 mx-auto min-h-[700px] text-gray-900">
+        <div className="flex flex-col md:flex-row gap-8">
+          
+          {/* Left Section - Profile Details */}
+          <div className="w-full md:w-2/5 p-4 space-y-4">
+            {/* Profile Card */}
+            <div className="bg-white p-4 rounded-xl shadow flex flex-col space-y-4 border: 3px solid #E7E7E7">
+              {/* Profile Header */}
+              <div className="flex items-center justify-between space-x-4">
+                <div className="flex items-center space-x-4">
+                  <img
+                    src="https://via.placeholder.com/50"
+                    alt="Profile"
+                    className="w-18 h-12 rounded-full"
+                  />
+                  <span className="text-lg font-lato ">{formData.name}</span>
                 </div>
+                <FaPen className="text-gray-500 cursor-pointer" />
               </div>
-              <div className="text-gray-500 mt-2 ">
-                <span className="mr-4 text-black ">Test Score</span> |{" "}
-                <span className="ml-4 text-black">Qualifications</span>
-              </div>
-            </div>
-
-            {/* Right: Preferences (with 3 mini boxes) */}
-            <div className="border-2 border-gray-300 p-4 rounded-xl bg-red-700 text-black">
-              <div className="text-gray-700 font-semibold mb-2 bg-amber-300">Preferences</div>
-              Select the degree you wish to purse
-              <div className="border border-gray-300 rounded p-2 mb-2 bg-amber-800">
-                Search for Degree
-              </div>
-              Your Ideal Study Destination
-              <div className="border border-gray-300 rounded p-2 mb-2">
-                Search for Countries
-              </div>
-              Desired Job Roles
-              <div className="border border-gray-300 rounded p-2">
-                Search for Job Roles
+              <hr />
+              {/* Test Score & Qualifications */}
+              <div className="flex justify-between text-sm text-gray-700 p-4 border: 3px solid #E7E7E7">
+                <span>📖 Test Score</span>
+                <span>📜 Qualifications</span>
               </div>
             </div>
 
-            {/* Row 2 */}
-            {/* Left: Highest education level + pen icon */}
-            <div className="border-2 border-gray-300 p-4 rounded-xl flex justify-between items-center text-black ">
-              <span>Highest education level</span>
-              <img
-                src="/pen-icon.png"
-                alt="Edit"
-                className="h-4 w-4 cursor-pointer"
-              />
+            {/* Education & Work Experience */}
+            <div className="space-y-4">
+              <div className="bg-white p-6 rounded-lg shadow flex justify-between border: 3px solid #E7E7E7">
+                <span>Highest education level</span>
+                <FaPen className="text-gray-500 cursor-pointer" />
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow flex justify-between border: 3px solid #E7E7E7">
+                <span>Work experience</span>
+                <FaPen className="text-gray-500 cursor-pointer" />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Section - Preferences */}
+          <div className="w-full md:w-3/5 p-6 bg-white rounded-2xl shadow">
+            <h2 className="text-lg font-lato  mb-4">Preferences</h2>
+            <div className="space-y-4">
+              <div>
+                <p className="text-gray-500 text-sm">Preferred Programs for Your Application</p>
+                <input
+                  type="text"
+                  placeholder="Search for program"
+                  className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
+                />
+              </div>
+              <div>
+                <p className="text-gray-500 text-sm">Your Ideal Study Destination</p>
+                <input
+                  type="text"
+                  placeholder="Search for Countries"
+                  className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
+                />
+              </div>
+              <div>
+                <p className="text-gray-500 text-sm">Desired Job Roles</p>
+                <input
+                  type="text"
+                  placeholder="Search for Job Roles"
+                  className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
+                />
+              </div>
             </div>
 
-            {/* Row 3 */}
-            {/* Left: Work experience + pen icon */}
-            <div className="border-2 border-gray-300 p-4 rounded-xl flex justify-between items-center text-black">
-              <span>Work experience</span>
-              <img
-                src="/pen-icon.png"
-                alt="Edit"
-                className="h-4 w-4 cursor-pointer"
-              />
-            </div>
-
-            {/* Right: Have you taken an English test? + pen icon */}
-            <div className="border-2 border-gray-300 p-4 rounded-xl flex justify-between items-center text-black">
-              <span>Have you taken an English test?</span>
-              <img
-                src="/pen-icon.png"
-                alt="Edit"
-                className="h-4 w-4 cursor-pointer"
-              />
+            {/* English Test */}
+            <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow flex justify-between">
+              <p className="text-gray-600">Have you taken an English test?</p>
+              <FaPen className="text-gray-500 cursor-pointer" />
             </div>
           </div>
         </div>
+      </div>
 
-       
-      </main>
+     {/* Call to Action Section */}
+<section>
+  <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px] md:-mt-[150px]">
+    {/* Left Image */}
+    <div className="flex-shrink-0 w-full h-[250px] md:w-[571px] md:h-[403px] rounded-[20px] overflow-hidden">
+      <img
+        src="/images/dummy.png"
+        alt="Support Agent"
+        className="w-full h-full object-cover"
+      />
+    </div>
 
-     
+    {/* Right Text */}
+    <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
+      <h2 className="text-2xl md:text-3xl font-lato  text-[#001f3f]">
+        Ready to flight your dreams?
+      </h2>
+      <p
+        className="text-[#001f3f] text-sm md:text-base leading-relaxed"
+        style={{
+          fontFamily: "'Roboto', sans-serif",
+          fontWeight: "400",
+          lineHeight: "1.75",
+          marginBottom: "1.5rem",
+        }}
+      >
+        Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
+        placerat gravida aliquet at. Nisi urna quam massa pellentesque
+        lectus odio sagittis. Tortor massa in rhoncus purus nunc
+        scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
+        eget urna varius eu nibh in sed est.
+      </p>
+
+      <button className="bg-white text-[#001f3f] border border-[#001f3f] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#001f3f] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0">
+        Book a call →
+      </button>
+    </div>
+  </div>
+</section>
+
+
+      <Footer />
     </div>
   );
 };

@@ -24,17 +24,17 @@ const IndustryCard = ({ industry }) => (
 
     {/* Right side content */}
     <div className="flex-1">
-      <h3 className="font-semibold text-lg">{industry.name}</h3>
+      <h3 className="font-urban text-lg">{industry.name}</h3>
     </div>
   </div>
 );
 
 const IndustriesGrid = () => {
   return (
-    <div className="p-8 bg-gray-100">
+    <div className="p-5  ">
       {/* Wrapper for horizontal scrolling on small screens */}
-      <div className="overflow-x-auto md:overflow-hidden">
-        <div className="flex flex-nowrap gap-8 md:grid md:grid-cols-4 md:gap-8">
+      <div className="overflow-x-scroll md:overflow-hidden w-screen">
+        <div className="flex flex-nowrap gap-4 md:grid md:grid-cols-4 md:gap-4"> {/* Reduced gap to 4 */}
           {industries.map((industry, index) => (
             <IndustryCard key={index} industry={industry} />
           ))}

@@ -36,7 +36,8 @@ import Topcourse from './components/Topcourse'
 import Scholarships from './components/Scholarship';
 import Domain  from './components/Domain'
 import Intake from './components/Intake';
-import Sample from './pages/Sample'
+import Sample from './pages/Faqs'
+
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

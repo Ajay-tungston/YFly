@@ -49,9 +49,9 @@ export default function Scholarships() {
   border-t-2 border-r-4 border-b-4 border-l- border-gray-300 border-b-gray-700 border-l-gray-700
   hover:shadow-xl transition max-w-3xl mx-auto m-10">
         <div className="text-center md:text-left md:flex-1">
-          <h3 className="text-lg font-bold text-gray-900">Dr. Manmohan Singh Scholarships</h3>
+          <h3 className="text-lg font-Urbanist text-gray-900">Dr. Manmohan Singh Scholarships</h3>
           <hr />
-          <p className="text-sm text-gray-700 mt-1">
+          <p className="text-sm text-gray-700 mt-1 font-Urbanist">
             Scholarships for specific subjects like medicine, business, or engineering, targeting students pursuing particular careers.
           </p>
         </div>
@@ -71,9 +71,9 @@ export default function Scholarships() {
             hover:shadow-xl transition">
 
             <div className="text-center md:text-left md:flex-1">
-              <h3 className="text-lg font-bold text-gray-900">{scholarship.title}</h3>
+              <h3 className="text-lg font-Urbanist text-gray-900">{scholarship.title}</h3>
               <hr />
-              <p className="text-sm text-gray-700 mt-1">{scholarship.description}</p>
+              <p className="text-sm text-gray-700 mt-1 font-Urbanist">{scholarship.description}</p>
             </div>
             {/* Displaying image instead of logo */}
             <img
