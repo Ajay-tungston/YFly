@@ -30,6 +30,6 @@ router.put('/edit/:id', courseController.updateCourse);
 // DELETE route to delete a course by ID
 router.delete('/delete/:id', courseController.deleteCourse);
 
-router.get("/get-profileMatcher",courseController.profileMatcher)
+// router.get("/get-profileMatcher",courseController.profileMatcher)
 
 module.exports = router;

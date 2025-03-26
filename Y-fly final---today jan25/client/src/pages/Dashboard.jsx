@@ -6,6 +6,7 @@ import CourseList from '../components/CourseList'
 import AddNewCourse from '../components/AddNewCourse'
 import ScholarshipList from '../components/ScholarshipList'
 import AddNewUniversity from '../components/AddNewUniversity'
+import UniversityList from '../components/UniversityList'
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState('enquiries');
@@ -44,7 +45,8 @@ const Dashboard = () => {
       case 'scholarships':
         return <ScholarshipList setAddScholarship={setAddScholarship} />;
         case 'university':
-          return <AddNewUniversity />;
+          // return <AddNewUniversity />;
+          return <UniversityList/>
       default:
         return <EnquiryList />; // Default case if none match
     }

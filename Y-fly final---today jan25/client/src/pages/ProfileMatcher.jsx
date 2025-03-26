@@ -46,7 +46,7 @@ const Profilematcher = () => {
     const fetchResults = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/courses/get-profileMatcher"
+          "http://localhost:5000/university/profile-matcher"
         );
         console.log("result = ", response.data);
         setUniversityData(response.data);
@@ -58,9 +58,14 @@ const Profilematcher = () => {
   }, []);
 
   const [isAscendExpanded, setIsAscendExpanded] = useState(false);
+  const [isContenderExpanded, setIsContenderExpanded] = useState(false);
+  const [isFrontrunnerExpanded, setIsFrontrunnerExpanded] = useState(false);
 
-  const toggleShowMore = () => {
-    setIsAscendExpanded(!isAscendExpanded);
+  const toggleShowMore = (value) => {
+    if (value === "ascend") setIsAscendExpanded(!isAscendExpanded);
+    if (value === "contender") setIsContenderExpanded(!isContenderExpanded);
+    if (value === "frontrunner")
+      setIsFrontrunnerExpanded(!isFrontrunnerExpanded);
   };
 
   // const ascendVisibleCards = isAscendExpanded ? cards : cards.slice(0, 2);
@@ -324,87 +329,35 @@ const Profilematcher = () => {
                 </div>
               </div>
               {/* ------------------------------- Ascend Universities------------------------ */}
-              <div>
-                <div className="flex items-center mb-5">
-                  <img
-                    src={ascendorange}
-                    width={40}
-                    alt="ascend"
-                    className="max-md:w-[1.2rem]"
-                  />
-                  <div className="font-urban ml-3 text-[25px] max-md:text-[18px] font-bold">
-                    {universityData?.data?.Ascend?.count} Ascend Universities
+              {universityData?.data?.Ascend?.count > 0 && (
+                <div>
+                  <div className="flex items-center mb-5">
+                    <img
+                      src={ascendorange}
+                      width={40}
+                      alt="ascend"
+                      className="max-md:w-[1.2rem]"
+                    />
+                    <div className="font-urban ml-3 text-[25px] max-md:text-[18px] font-bold">
+                      {universityData?.data?.Ascend?.count} Ascend Universities
+                    </div>
                   </div>
-                </div>
-                {/* ------------------------------harvard university------------------------------------ */}
-                <div className="flex flex-wrap justify-between gap-4 max-md:flex-col max-md:gap-y-2">
-                  {/* <Ascend /> */}
-                  {/*----------------------------------- princeton university----------------------------- */}
-                  {isAscendExpanded
-                    ? universityData?.data?.Ascend?.universities?.map((i) => (
-                        <div className=" w-[49%] max-md:w-[100%]  bg-[#FFF0D9] border-[#C9851E] border-[1px] rounded-[30px] hover:shadow-[#C9851E] hover:shadow-right-bottom px-5 pb-6">
-                          <div className="flex justify-center pt-16 pb-5">
-                            <img
-                              src={`data:${i.university_logo?.contentType};base64,${i.university_logo?.data}`}
-                              className="h-20 max-w-40"
-                              alt={i?.university_name}
-                            />
-                          </div>
-                          <div className="bg-[#FFE0B2] inline-block px-4 py-1 rounded-[20px] font-bold text-[#C9851E] text-[14px] font-urban">
-                            {i?.location}
-                          </div>
-                          <div className="font-dela text-[13px] mt-2">
-                            {i?.university_name}
-                          </div>
-
-                          <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
-
-                          <div className="flex justify-between">
-                            <div>
-                              <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
-                                Intake Schedule
-                              </div>
-                              <div className="font-dela text-[13px] max-xl:text-[12px]">
-                                {i?.intakes[0].month} {i?.intakes[0].year}
-                              </div>
-                            </div>
-
-                            <div>
-                              <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
-                                QS Rank
-                              </div>
-                              <div className="flex font-urban max-xl:text-[12px]">
-                                QS Rank:{" "}
-                                <div className=" font-bold">#{i?.qs_rank}</div>
-                              </div>
-                            </div>
-
-                            <div className=" flex items-center">
-                              <button
-                                onClick={handleModal}
-                                className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
-                              >
-                                View courses
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    : universityData?.data?.Ascend?.universities
-                        ?.slice(0, 2)
-                        ?.map((i) => (
-                          <div className=" w-[49%] max-md:w-[100%]  bg-[#FFF0D9] border-[#C9851E] border-[1px] rounded-[30px] hover:shadow-[#C9851E] hover:shadow-right-bottom px-5 pb-6">
+                  <div className="flex flex-wrap justify-between gap-y-6 max-md:flex-col max-md:gap-y-2">
+                    {isAscendExpanded
+                      ? universityData?.data?.Ascend?.universities?.map((i) => (
+                          <div
+                            className=" w-[49%] max-md:w-[100%]  bg-[#FFF0D9] border-[#C9851E] border-[1px] rounded-[30px] hover:shadow-[#C9851E] hover:shadow-right-bottom px-5 pb-6"
+                            key={i._id}
+                          >
                             <div className="flex justify-center pt-16 pb-5">
                               <img
-                                src={`data:${i.university_logo?.contentType};base64,${i.university_logo?.data}`}
-                                // width={200}
-                                // height={128}
-                                className="h-20 max-w-40"
-                                alt={i.university_name}
+                                src={`data:${i?.university_logo?.contentType};base64,${i?.university_logo?.data}`}
+                                className="h-20 max-w-60"
+                                alt={i?.university_name}
                               />
                             </div>
                             <div className="bg-[#FFE0B2] inline-block px-4 py-1 rounded-[20px] font-bold text-[#C9851E] text-[14px] font-urban">
-                              {i?.location}
+                              {i?.state},{i?.country}
                             </div>
                             <div className="font-dela text-[13px] mt-2">
                               {i?.university_name}
@@ -415,10 +368,11 @@ const Profilematcher = () => {
                             <div className="flex justify-between">
                               <div>
                                 <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
-                                  Intake Schedule
+                                  University type
                                 </div>
                                 <div className="font-dela text-[13px] max-xl:text-[12px]">
-                                  {i?.intakes[0].month} {i?.intakes[0].year}
+                                  {/* {i?.intakes[0].month} {i?.intakes[0].year} */}
+                                  {i?.university_type}
                                 </div>
                               </div>
 
@@ -429,7 +383,7 @@ const Profilematcher = () => {
                                 <div className="flex font-urban max-xl:text-[12px]">
                                   QS Rank:{" "}
                                   <div className=" font-bold">
-                                    #{i?.qs_rank}
+                                    #{i?.university_ranking}
                                   </div>
                                 </div>
                               </div>
@@ -444,232 +398,357 @@ const Profilematcher = () => {
                               </div>
                             </div>
                           </div>
-                        ))}
-                </div>
+                        ))
+                      : universityData?.data?.Ascend?.universities
+                          ?.slice(0, 2)
+                          ?.map((i) => (
+                            <div
+                              className=" w-[49%] max-md:w-[100%]  bg-[#FFF0D9] border-[#C9851E] border-[1px] rounded-[30px] hover:shadow-[#C9851E] hover:shadow-right-bottom px-5 pb-6"
+                              key={i._id}
+                            >
+                              <div className="flex justify-center pt-16 pb-5">
+                                <img
+                                  src={`data:${i?.university_logo?.contentType};base64,${i?.university_logo?.data}`}
+                                  className="h-20 max-w-60"
+                                  alt={i?.university_name}
+                                />
+                              </div>
+                              <div className="bg-[#FFE0B2] inline-block px-4 py-1 rounded-[20px] font-bold text-[#C9851E] text-[14px] font-urban">
+                                {i?.state},{i?.country}
+                              </div>
+                              <div className="font-dela text-[13px] mt-2">
+                                {i?.university_name}
+                              </div>
 
-                <div className="flex justify-between my-12">
-                  <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
-                  <button
-                    className="text-[#30589F] font-urban font-bold"
-                    onClick={toggleShowMore}
-                  >
-                    View {isAscendExpanded ? "Less" : "More"} Universities
-                  </button>
-                  <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                              <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
+
+                              <div className="flex justify-between">
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
+                                    University type
+                                  </div>
+                                  <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                    {i?.university_type}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
+                                    QS Rank
+                                  </div>
+                                  <div className="flex font-urban max-xl:text-[12px]">
+                                    QS Rank:{" "}
+                                    <div className=" font-bold">
+                                      #{i?.university_ranking}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className=" flex items-center">
+                                  <button
+                                    onClick={handleModal}
+                                    className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
+                                  >
+                                    View courses
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                  </div>
+                  {universityData?.data?.Ascend?.count > 2 && (
+                    <div className="flex justify-between my-12">
+                      <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                      <button
+                        className="text-[#30589F] font-urban font-bold"
+                        onClick={() => toggleShowMore("ascend")}
+                      >
+                        View {isAscendExpanded ? "Less" : "More"} Universities
+                      </button>
+                      <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
 
               {/* -------------------------------Contender Universities------------------------ */}
-              <div>
-                <div className="flex items-center mb-5">
-                  <img
-                    src={contenderblue}
-                    width={40}
-                    alt="contender"
-                    className="max-md:w-[1.2rem]"
-                  />
-                  <div className="font-urban ml-3 text-[25px] max-md:text-[18px] font-bold">
-                    {universityData?.data?.Contender?.count} Contender
-                    Universities
-                  </div>
-                </div>
-                {/* ------------------------------harvard university------------------------------------ */}
-                <div className="flex justify-between max-md:flex-col max-md:gap-y-2">
-                  <div className=" w-[49%] max-md:w-[100%] bg-[#D9EBFF] border-[#2B7CD6] border-[1px] rounded-[30px] hover:shadow-[#2B7CD6] hover:shadow-right-bottom px-5 pb-6">
-                    <div className="flex justify-center pt-16 pb-5">
-                      <img src={harvard} width={200} alt="harward" />
-                    </div>
-                    <div className="bg-[#B2D7FF] inline-block px-4 py-1 rounded-[20px] font-bold text-[#2B7CD6] text-[14px] font-urban">
-                      Massachusetts, United States
-                    </div>
-                    <div className="font-dela text-[13px] mt-2">
-                      Harvard University
-                    </div>
-                    <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
-
-                    <div className="flex justify-between">
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
-                          University type
-                        </div>
-                        <div className="font-dela text-[13px] max-xl:text-[12px]">
-                          Private
-                        </div>
-                      </div>
-
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
-                          QS Rank
-                        </div>
-                        <div className="flex font-urban max-xl:text-[12px]">
-                          QS Rank: <div className=" font-bold">#5</div>
-                        </div>
-                      </div>
-
-                      <div className=" flex items-center">
-                        <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
-                          View courses
-                        </button>
-                      </div>
+              {universityData?.data?.Contender?.count > 0 && (
+                <div>
+                  <div className="flex items-center mb-5">
+                    <img
+                      src={contenderblue}
+                      width={40}
+                      alt="contender"
+                      className="max-md:w-[1.2rem]"
+                    />
+                    <div className="font-urban ml-3 text-[25px] max-md:text-[18px] font-bold">
+                      {universityData?.data?.Contender?.count} Contender
+                      Universities
                     </div>
                   </div>
 
-                  {/*----------------------------------- princeton university----------------------------- */}
-                  <div className=" w-[49%] max-md:w-[100%] bg-[#D9EBFF] border-[#2B7CD6] border-[1px] rounded-[30px] hover:shadow-[#2B7CD6] hover:shadow-right-bottom px-5 pb-6">
-                    <div className="flex justify-center pt-16 pb-5">
-                      <img src={princeton} width={200} alt="princeton" />
-                    </div>
-                    <div className="bg-[#B2D7FF] inline-block px-4 py-1 rounded-[20px] font-bold text-[#2B7CD6] text-[14px] font-urban">
-                      New Jersey, USA
-                    </div>
-                    <div className="font-dela text-[13px] mt-2">
-                      Princeton University
-                    </div>
+                  <div className="flex flex-wrap justify-between gap-y-6 max-md:flex-col max-md:gap-y-2">
+                    {isContenderExpanded
+                      ? universityData?.data?.Contender?.universities?.map(
+                          (i) => (
+                            <div
+                              className="w-[49%] max-md:w-[100%] bg-[#D9EBFF] border-[#2B7CD6] border-[1px] rounded-[30px] hover:shadow-[#2B7CD6] hover:shadow-right-bottom px-5 pb-6"
+                              key={i._id}
+                            >
+                              <div className="flex justify-center pt-16 pb-5">
+                                <img
+                                  src={`data:${i?.university_logo?.contentType};base64,${i?.university_logo?.data}`}
+                                  className="h-20 max-w-60"
+                                  alt={i?.university_name}
+                                />
+                              </div>
+                              <div className="bg-[#B2D7FF] inline-block px-4 py-1 rounded-[20px] font-bold text-[#2B7CD6] text-[14px] font-urban">
+                                {i?.state},{i?.country}
+                              </div>
+                              <div className="font-dela text-[13px] mt-2">
+                                {i?.university_name}
+                              </div>
+                              <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
 
-                    <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
+                              <div className="flex justify-between">
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
+                                    University type
+                                  </div>
+                                  <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                    {i?.university_type}
+                                  </div>
+                                </div>
 
-                    <div className="flex justify-between">
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
-                          University type
-                        </div>
-                        <div className="font-dela text-[13px] max-xl:text-[12px]">
-                          Private
-                        </div>
-                      </div>
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
+                                    QS Rank
+                                  </div>
+                                  <div className="flex font-urban max-xl:text-[12px]">
+                                    QS Rank:{" "}
+                                    <div className=" font-bold">
+                                      #{i?.university_ranking}
+                                    </div>
+                                  </div>
+                                </div>
 
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
-                          QS Rank
-                        </div>
-                        <div className="flex font-urban max-xl:text-[12px]">
-                          QS Rank: <div className=" font-bold">#5</div>
-                        </div>
-                      </div>
+                                <div className=" flex items-center">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                    View courses
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        )
+                      : universityData?.data?.Contender?.universities
+                          ?.slice(0, 2)
+                          ?.map((i) => (
+                            <div
+                              className="w-[49%] max-md:w-[100%] bg-[#D9EBFF] border-[#2B7CD6] border-[1px] rounded-[30px] hover:shadow-[#2B7CD6] hover:shadow-right-bottom px-5 pb-6"
+                              key={i._id}
+                            >
+                              <div className="flex justify-center pt-16 pb-5">
+                                <img
+                                  src={`data:${i?.university_logo?.contentType};base64,${i?.university_logo?.data}`}
+                                  className="h-20 max-w-60"
+                                  alt={i?.university_name}
+                                />
+                              </div>
+                              <div className="bg-[#B2D7FF] inline-block px-4 py-1 rounded-[20px] font-bold text-[#2B7CD6] text-[14px] font-urban">
+                                {i?.state},{i?.country}
+                              </div>
+                              <div className="font-dela text-[13px] mt-2">
+                                {i?.university_name}
+                              </div>
+                              <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
 
-                      <div className=" flex items-center">
-                        <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
-                          View courses
-                        </button>
-                      </div>
-                    </div>
+                              <div className="flex justify-between">
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
+                                    University type
+                                  </div>
+                                  <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                    {i?.university_type}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
+                                    QS Rank
+                                  </div>
+                                  <div className="flex font-urban max-xl:text-[12px]">
+                                    QS Rank:{" "}
+                                    <div className=" font-bold">
+                                      #{i?.university_ranking}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className=" flex items-center">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                    View courses
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                   </div>
+                  {universityData?.data?.Contender?.count > 2 && (
+                    <div className="flex justify-between my-12">
+                      <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                      <button
+                        className="text-[#30589F] font-urban font-bold"
+                        onClick={() => toggleShowMore("contender")}
+                      >
+                        View {isContenderExpanded ? "Less" : "More"}{" "}
+                        Universities
+                      </button>
+                      <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                    </div>
+                  )}
                 </div>
-
-                <div className="flex justify-between my-12">
-                  <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
-                  <button className="text-[#30589F] font-urban font-bold">
-                    View More Universities
-                  </button>
-                  <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
-                </div>
-              </div>
+              )}
 
               {/* -------------------------------Frontrunner Universities------------------------ */}
-              <div>
-                <div className="flex items-center mb-5">
-                  <img
-                    src={contendergreen}
-                    width={40}
-                    alt="contender"
-                    className="max-md:w-[1.2rem]"
-                  />
-                  <div className="font-urban ml-3 text-[25px] max-md:text-[18px] font-bold">
-                    {universityData?.data?.Frontrunner?.count} Frontrunner
-                    Universities
-                  </div>
-                </div>
-                {/* ------------------------------harvard university------------------------------------ */}
-                <div className="flex justify-between max-md:flex-col max-md:gap-y-2">
-                  <div className=" w-[49%] max-md:w-[100%] bg-[#D9FFF1] border-[#209F71] border-[1px] rounded-[30px] hover:shadow-[#209F71] hover:shadow-right-bottom px-5 pb-6">
-                    <div className="flex justify-center pt-16 pb-5">
-                      <img src={harvard} width={200} alt="harward" />
-                    </div>
-                    <div className="bg-[#B2FFE3] inline-block px-4 py-1 rounded-[20px] font-bold text-[#209F71] text-[14px] font-urban">
-                      Massachusetts, United States
-                    </div>
-                    <div className="font-dela text-[13px] mt-2">
-                      Harvard University
-                    </div>
-                    <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
-
-                    <div className="flex justify-between">
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
-                          University type
-                        </div>
-                        <div className="font-dela text-[13px] max-xl:text-[12px]">
-                          Private
-                        </div>
-                      </div>
-
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
-                          QS Rank
-                        </div>
-                        <div className="flex font-urban max-xl:text-[12px]">
-                          QS Rank: <div className=" font-bold">#5</div>
-                        </div>
-                      </div>
-
-                      <div className=" flex items-center">
-                        <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
-                          View courses
-                        </button>
-                      </div>
+              {universityData?.data?.Frontrunner?.count > 0 && (
+                <div>
+                  <div className="flex items-center mb-5">
+                    <img
+                      src={contendergreen}
+                      width={40}
+                      alt="contender"
+                      className="max-md:w-[1.2rem]"
+                    />
+                    <div className="font-urban ml-3 text-[25px] max-md:text-[18px] font-bold">
+                      {universityData?.data?.Frontrunner?.count} Frontrunner
+                      Universities
                     </div>
                   </div>
 
-                  {/*----------------------------------- princeton university----------------------------- */}
-                  <div className=" w-[49%] max-md:w-[100%] bg-[#D9FFF1] border-[#209F71] border-[1px] rounded-[30px] hover:shadow-[#209F71] hover:shadow-right-bottom px-5 pb-6">
-                    <div className="flex justify-center pt-16 pb-5">
-                      <img src={princeton} width={200} alt="princeton" />
-                    </div>
-                    <div className="bg-[#B2FFE3] inline-block px-4 py-1 rounded-[20px] font-bold text-[#209F71] text-[14px] font-urban">
-                      New Jersey, USA
-                    </div>
-                    <div className="font-dela text-[13px] mt-2">
-                      Princeton University
-                    </div>
+                  <div className="flex flex-wrap gap-y-6 justify-between max-md:flex-col max-md:gap-y-2">
+                    {isFrontrunnerExpanded
+                      ? universityData?.data?.Frontrunner?.universities?.map(
+                          (i) => (
+                            <div
+                              className=" w-[49%] max-md:w-[100%] bg-[#D9FFF1] border-[#209F71] border-[1px] rounded-[30px] hover:shadow-[#209F71] hover:shadow-right-bottom px-5 pb-6"
+                              key={i._id}
+                            >
+                              <div className="flex justify-center pt-16 pb-5">
+                                <img
+                                  src={`data:${i?.university_logo?.contentType};base64,${i?.university_logo?.data}`}
+                                  className="h-20 max-w-60"
+                                  alt={i?.university_name}
+                                />
+                              </div>
+                              <div className="bg-[#B2FFE3] inline-block px-4 py-1 rounded-[20px] font-bold text-[#209F71] text-[14px] font-urban">
+                                {i?.state},{i?.country}
+                              </div>
+                              <div className="font-dela text-[13px] mt-2">
+                                {i?.university_name}
+                              </div>
+                              <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
 
-                    <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
+                              <div className="flex justify-between">
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
+                                    University type
+                                  </div>
+                                  <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                    {i?.university_type}
+                                  </div>
+                                </div>
 
-                    <div className="flex justify-between">
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
-                          University type
-                        </div>
-                        <div className="font-dela text-[13px] max-xl:text-[12px]">
-                          Private
-                        </div>
-                      </div>
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
+                                    QS Rank
+                                  </div>
+                                  <div className="flex font-urban max-xl:text-[12px]">
+                                    QS Rank:{" "}
+                                    <div className=" font-bold">
+                                      #{i?.university_ranking}
+                                    </div>
+                                  </div>
+                                </div>
 
-                      <div>
-                        <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
-                          QS Rank
-                        </div>
-                        <div className="flex font-urban max-xl:text-[12px]">
-                          QS Rank: <div className=" font-bold">#5</div>
-                        </div>
-                      </div>
+                                <div className=" flex items-center">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                    View courses
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        )
+                      : universityData?.data?.Frontrunner?.universities
+                          ?.slice(0, 2)
+                          ?.map((i) => (
+                            <div
+                              className=" w-[49%] max-md:w-[100%] bg-[#D9FFF1] border-[#209F71] border-[1px] rounded-[30px] hover:shadow-[#209F71] hover:shadow-right-bottom px-5 pb-6"
+                              key={i._id}
+                            >
+                              <div className="flex justify-center pt-16 pb-5">
+                                <img
+                                  src={`data:${i?.university_logo?.contentType};base64,${i?.university_logo?.data}`}
+                                  className="h-20 max-w-60"
+                                  alt={i?.university_name}
+                                />
+                              </div>
+                              <div className="bg-[#B2FFE3] inline-block px-4 py-1 rounded-[20px] font-bold text-[#209F71] text-[14px] font-urban">
+                                {i?.state},{i?.country}
+                              </div>
+                              <div className="font-dela text-[13px] mt-2">
+                                {i?.university_name}
+                              </div>
+                              <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
 
-                      <div className=" flex items-center">
-                        <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
-                          View courses
-                        </button>
-                      </div>
-                    </div>
+                              <div className="flex justify-between">
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
+                                    University type
+                                  </div>
+                                  <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                    {i?.university_type}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px] flex justify-center">
+                                    QS Rank
+                                  </div>
+                                  <div className="flex font-urban max-xl:text-[12px]">
+                                    QS Rank:{" "}
+                                    <div className=" font-bold">
+                                      #{i?.university_ranking}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className=" flex items-center">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                    View courses
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                   </div>
-                </div>
 
-                <div className="flex justify-between mt-12">
-                  <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
-                  <button className="text-[#30589F] font-urban font-bold">
-                    View More Universities
-                  </button>
-                  <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                  {universityData?.data?.Frontrunner?.count > 2 && (
+                    <div className="flex justify-between mt-12">
+                      <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                      <button
+                        className="text-[#30589F] font-urban font-bold"
+                        onClick={() => toggleShowMore("frontrunner")}
+                      >
+                        View {isFrontrunnerExpanded ? "Less" : "More"}{" "}
+                        Universities
+                      </button>
+                      <div className="border-t-[0.5px] border-[#0E1B2C] my-4 w-[40%]"></div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
           </div>
           {/* <Contactus /> */}

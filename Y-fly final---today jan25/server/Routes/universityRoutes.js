@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const formidable = require("express-formidable");
 const fs = require("fs");
-const { createUniversity, getAllUniversity } = require("../Controllers/universityController");
+const { createUniversity, getAllUniversity, profileMatcher, getUniversitiesWithPagination, deleteUniversityById, getUniversityById, updateUniversity,  } = require("../Controllers/universityController");
 
 // Ensure upload directory exists
 const uploadDir = "./uploads/university";
@@ -21,8 +21,19 @@ router.use(
 // POST route for creating a university
 router.post("/add", createUniversity);
 
-// // GET route to retrieve all universities
+// GET route to retrieve all universities
+//for slelect box selection 
 router.get("/get-all", getAllUniversity);
+
+router.get("/get",getUniversitiesWithPagination)
+
+router.get("/get/:id",getUniversityById)
+
+router.put("/update/:id",updateUniversity)
+
+router.get("/profile-matcher",profileMatcher)
+
+router.delete("/delete/:id",deleteUniversityById)
 
 // // GET route to retrieve a single university by ID
 // router.get("/get/:id", universityController.getSingleUniversity);

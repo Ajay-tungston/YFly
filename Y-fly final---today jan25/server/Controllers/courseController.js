@@ -573,119 +573,119 @@ exports.deleteCourse = async (req, res) => {
 
 // controllers/courseController.js
 
-exports.profileMatcher = async (req, res) => {
-  try {
-    const { country, course_level, discipline, university_name } = req.query;
+// exports.profileMatcher = async (req, res) => {
+//   try {
+//     const { country, course_level, discipline, university_name } = req.query;
 
-    // Build match stage for filtering
-    let matchStage = {};
-    if (country) matchStage.country = country;
-    if (course_level) matchStage.course_level = course_level;
-    if (discipline)
-      matchStage.discipline = { $regex: discipline, $options: "i" };
-    if (university_name)
-      matchStage.university_name = { $regex: university_name, $options: "i" }; // Name search
+//     // Build match stage for filtering
+//     let matchStage = {};
+//     if (country) matchStage.country = country;
+//     if (course_level) matchStage.course_level = course_level;
+//     if (discipline)
+//       matchStage.discipline = { $regex: discipline, $options: "i" };
+//     if (university_name)
+//       matchStage.university_name = { $regex: university_name, $options: "i" }; // Name search
 
-    const pipeline = [
-      { $match: matchStage }, // Apply filters
-      {
-        $project: {
-          university_name: 1,
-          university_logo: 1,
-          university_ranking: 1,
-          country: 1,
-          // city: 1,
-          // state: 1,
-          intakes: 1, // Added intake year
-          category: {
-            $switch: {
-              branches: [
-                { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
-                {
-                  case: {
-                    $and: [
-                      { $gt: ["$university_ranking", 50] },
-                      { $lte: ["$university_ranking", 100] },
-                    ],
-                  },
-                  then: "Contender",
-                },
-                {
-                  case: {
-                    $and: [
-                      { $gt: ["$university_ranking", 100] },
-                      { $lte: ["$university_ranking", 200] },
-                    ],
-                  },
-                  then: "Frontrunner",
-                },
-              ],
-              default: null, // No "Others" category
-            },
-          },
-        },
-      },
-      {
-        $match: { category: { $ne: null } }, // Remove "Others" category
-      },
-      {
-        $project: {
-          university_name: 1,
-          university_logo: 1,
-          university_ranking: 1,
-          country: 1,
-          intakes: {
-            $map: {
-              input: "$intakes",
-              as: "intake",
-              in: {
-                month: "$$intake.month",
-                year: "$$intake.year",
-              },
-            },
-          },
-          category: 1,
-        },
-      },
-      {
-        $group: {
-          _id: "$category",
-          universities: {
-            $push: {
-              university_name: "$university_name",
-              university_logo: "$university_logo",
-              qs_rank: "$university_ranking",
-              intakes: "$intakes",
-              location: "$country",
-            },
-          },
-          count: { $sum: 1 },
-        },
-      },
-    ];
+//     const pipeline = [
+//       { $match: matchStage }, // Apply filters
+//       {
+//         $project: {
+//           university_name: 1,
+//           university_logo: 1,
+//           university_ranking: 1,
+//           country: 1,
+//           // city: 1,
+//           // state: 1,
+//           intakes: 1, // Added intake year
+//           category: {
+//             $switch: {
+//               branches: [
+//                 { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
+//                 {
+//                   case: {
+//                     $and: [
+//                       { $gt: ["$university_ranking", 50] },
+//                       { $lte: ["$university_ranking", 100] },
+//                     ],
+//                   },
+//                   then: "Contender",
+//                 },
+//                 {
+//                   case: {
+//                     $and: [
+//                       { $gt: ["$university_ranking", 100] },
+//                       { $lte: ["$university_ranking", 200] },
+//                     ],
+//                   },
+//                   then: "Frontrunner",
+//                 },
+//               ],
+//               default: null, // No "Others" category
+//             },
+//           },
+//         },
+//       },
+//       {
+//         $match: { category: { $ne: null } }, // Remove "Others" category
+//       },
+//       {
+//         $project: {
+//           university_name: 1,
+//           university_logo: 1,
+//           university_ranking: 1,
+//           country: 1,
+//           intakes: {
+//             $map: {
+//               input: "$intakes",
+//               as: "intake",
+//               in: {
+//                 month: "$$intake.month",
+//                 year: "$$intake.year",
+//               },
+//             },
+//           },
+//           category: 1,
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$category",
+//           universities: {
+//             $push: {
+//               university_name: "$university_name",
+//               university_logo: "$university_logo",
+//               qs_rank: "$university_ranking",
+//               intakes: "$intakes",
+//               location: "$country",
+//             },
+//           },
+//           count: { $sum: 1 },
+//         },
+//       },
+//     ];
 
-    const results = await Course.aggregate(pipeline);
+//     const results = await Course.aggregate(pipeline);
 
-    // Prepare structured response
-    const data = {
-      Ascend: { count: 0, universities: [] },
-      Contender: { count: 0, universities: [] },
-      Frontrunner: { count: 0, universities: [] },
-    };
+//     // Prepare structured response
+//     const data = {
+//       Ascend: { count: 0, universities: [] },
+//       Contender: { count: 0, universities: [] },
+//       Frontrunner: { count: 0, universities: [] },
+//     };
 
-    results.forEach((group) => {
-      data[group._id] = {
-        count: group.count,
-        universities: group.universities,
-      };
-    });
+//     results.forEach((group) => {
+//       data[group._id] = {
+//         count: group.count,
+//         universities: group.universities,
+//       };
+//     });
 
-    res.status(200).json({
-      success: true,
-      data,
-    });
-  } catch (error) {
-    console.error("Error in profileMatcher:", error);
-    res.status(500).json({ success: false, message: "Server Error", error });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       data,
+//     });
+//   } catch (error) {
+//     console.error("Error in profileMatcher:", error);
+//     res.status(500).json({ success: false, message: "Server Error", error });
+//   }
+// };
