@@ -221,7 +221,7 @@ const Coursefinder = () => {
     courses.map((course) => (
       <div
         key={course._id}
-        className="border-[1px] border-black rounded-[38px] shadow-right-bottom p-6 bg-white max-md:w-full"
+        className="border-[1px] border-black rounded-[38px] shadow-right-bottom p-6 bg-[#fff] h-[400px] max-md:w-full"
         onClick={() => navigate(`/courseoverview/${course._id}`)}
       >
         {/* University Logo and Name */}

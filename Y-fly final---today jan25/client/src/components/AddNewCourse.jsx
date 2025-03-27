@@ -1020,7 +1020,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     ],
     application_requirements: [{ requirement: "", isRequired: false }],
     job_roles: [{ jobrole: "" }],
-    top_recruiters: [{ recruiters_name: "", logo: null }],
+    top_recruiters: [{ recruiters_name: "",   recruiters_logo: "" }],
     scholarship_applicable: [{ scholarship: "" }],
     tution_fee: "",
     funding_options: [{ fundingOption: "" }],
@@ -1145,7 +1145,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
         ],
         application_requirements: [{ requirement: "", isRequired: false }],
         job_roles: [{ jobrole: "" }],
-        top_recruiters: [{ recruiters_name: "", logo: null }],
+        top_recruiters: [{ recruiters_name: "",recruiters_logo:"" }],
         scholarship_applicable: [{ scholarship: "" }],
         tution_fee: "",
         funding_options: [{ fundingOption: "" }],
@@ -1417,21 +1417,31 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
 
   const handleTopRecruitersFileChange = (index, e) => {
     if (e.target.files[0]) {
-      const updatedRecruiters = [...addCourseData.top_recruiters];
-      updatedRecruiters[index].logo = e.target.files[0];
-      setAddCourseData((prevData) => ({
-        ...prevData,
-        top_recruiters: updatedRecruiters,
-      }));
+      const file = e.target.files[0];
+  
+      // Convert the file to a Base64 string
+      const reader = new FileReader();
+      reader.onload = () => {
+        const updatedRecruiters = [...addCourseData.top_recruiters];
+        updatedRecruiters[index].recruiters_logo = {
+          data: reader.result.split(",")[1], // Base64 string
+          contentType: file.type, // MIME type (e.g., image/png)
+        };
+        setAddCourseData((prevData) => ({
+          ...prevData,
+          top_recruiters: updatedRecruiters,
+        }));
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
     }
   };
-
+  
   const handleAddTopRecruiters = () => {
     setAddCourseData((prevData) => ({
       ...prevData,
       top_recruiters: [
         ...prevData.top_recruiters,
-        { recruiters_name: "", logo: null },
+        { recruiters_name: "", recruiters_logo:"" },
       ],
     }));
   };
@@ -2137,14 +2147,14 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
       </div>
       <div className="border-[#BFBFBF] border-b-[1px] my-5"></div>
       <div className="font-urban mr-10 max-xl:mr-0">
-        {addCourseData?.top_recruiters?.map((recruiter, index) => (
+        {addCourseData?.top_recruiters?.map((recruiters, index) => (
           <div key={index} className="flex items-center text-[0.9rem] mt-4">
             {/* Recruiter Name Input */}
             <div className="w-[20%] max-xl:w-[15%]">Top Recruiters</div>
             <input
               className="w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.8rem]"
               placeholder="Enter Recruiter Name"
-              value={recruiter.recruiters_name}
+              value={recruiters.recruiters_name}
               onChange={(e) =>
                 handleTopRecruitersInputChange(
                   index,
@@ -2163,13 +2173,13 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
                 className="cursor-pointer flex border max-xl:text-[0.8rem] border-[#898C9A] text-[#30589F] px-5 py-2 rounded-md"
               >
                 <img src={add} alt="add" width={17} className="mr-2" />
-                {recruiter.logo ? recruiter.logo.name : "Upload Logo"}
+                {recruiters.logo ? recruiters.logo.name : "Upload Logo"}
               </label>
               <input
                 id={`recruiter-${index}`}
                 type="file"
                 accept=".jpg, .jpeg, .png"
-                className="hidden"
+                className=""
                 onChange={(e) => handleTopRecruitersFileChange(index, e)}
               />
             </div>

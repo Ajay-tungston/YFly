@@ -133,7 +133,7 @@ const CourseDropdown = ({
     </button>
     {openDropdown === "country" && (
       <div
-        className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-white text-black shadow-lg rounded-lg z-50"
+        className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-[white] text-black shadow-lg rounded-lg z-50"
         onClick={() => setOpenDropdown(null)}
       >
         {dbValues.countries &&

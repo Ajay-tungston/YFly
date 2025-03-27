@@ -43,9 +43,10 @@ exports.createCourse = async (req, res) => {
       overview,
       tution_fee,
     } = req.fields;
-
+   console.log(req.files);
+   console.log(req.fields);
     const university_logo = req.files ? req.files.university_logo : null;
-
+    const recruiters_logo= req.files? req.files.recruiters_logo : null;
     // Validate required fields
     if (
       !course_level ||
@@ -199,6 +200,23 @@ exports.createCourse = async (req, res) => {
       fs.unlinkSync(university_logo.path); // Clean up file after processing
     }
 
+    let recruitersLogoData;
+    if (recruiters_logo) {
+      if (!["image/jpeg", "image/png"].includes(recruiters_logo.type)) {
+        throw new Error("Recruiters logo must be a JPEG or PNG image.");
+      }
+      if (recruiters_logo.size > 5000000) {
+        throw new Error("Recruiters logo size must be less than 5MB.");
+      }
+      if (!fs.existsSync(recruiters_logo.path)) {
+        throw new Error("Uploaded recruiters logo file does not exist.");
+      }
+      recruitersLogoData = {
+        data: fs.readFileSync(recruiters_logo.path),
+        contentType: recruiters_logo.type,
+      };
+      fs.unlinkSync(recruiters_logo.path); // Clean up file after processing
+    }
     // Date validation for application deadline
     const deadlineDate = new Date(application_deadline);
     if (isNaN(deadlineDate.getTime()) || deadlineDate < new Date()) {
@@ -226,6 +244,7 @@ exports.createCourse = async (req, res) => {
       scholarship_applicable,
       job_roles,
       funding_options,
+      recruiters_logo: recruitersLogoData,
     });
 
     await course.save();
@@ -242,7 +261,9 @@ exports.createCourse = async (req, res) => {
 // Example in your controller
 exports.getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find(); // Assume each course has university_logo_path
+    const courses = await Course.find(); 
+    console.log("Top Recruiters:", req.fields.top_recruiters);
+   // Assume each course has university_logo_path
     const modifiedCourses = courses.map(course => {
       course = course.toObject(); // Convert Mongoose document to plain object
       if (course.university_logo_path) {
@@ -254,7 +275,9 @@ exports.getAllCourses = async (req, res) => {
     res.status(200).json({ success: true, courses: modifiedCourses });
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error)
   }
+  
 };
 
 
@@ -268,6 +291,7 @@ exports.getSingleCourse = async (req, res) => {
     res.status(200).json({ success: true, course });
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error)
   }
 };
 
