@@ -335,107 +335,107 @@ const deleteUniversityById = async (req, res) => {
   };
   
 
-const profileMatcher = async (req, res) => {
-  try {
-    const { country, university_name } = req.query;
+// const profileMatcher = async (req, res) => {
+//   try {
+//     const { country, university_name } = req.query;
 
-    // Build match filter
-    let matchStage = {};
-    if (country) matchStage.country = country;
-    if (university_name)
-      matchStage.university_name = { $regex: university_name, $options: "i" };
+//     // Build match filter
+//     let matchStage = {};
+//     if (country) matchStage.country = country;
+//     if (university_name)
+//       matchStage.university_name = { $regex: university_name, $options: "i" };
 
-    // Aggregation pipeline
-    const pipeline = [
-      { $match: matchStage }, // Apply filters
-      {
-        $lookup: {
-          from: "courses", // Name of the Course collection
-          localField: "courses",
-          foreignField: "_id",
-          as: "courses",
-        },
-      },
-      {
-        $addFields: {
-          category: {
-            $switch: {
-              branches: [
-                { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
-                {
-                  case: {
-                    $and: [
-                      { $gt: ["$university_ranking", 50] },
-                      { $lte: ["$university_ranking", 100] },
-                    ],
-                  },
-                  then: "Contender",
-                },
-                {
-                  case: {
-                    $and: [
-                      { $gt: ["$university_ranking", 100] },
-                      { $lte: ["$university_ranking", 200] },
-                    ],
-                  },
-                  then: "Frontrunner",
-                },
-              ],
-              default: null, // Ignore universities ranked above 200
-            },
-          },
-        },
-      },
-      { $match: { category: { $ne: null } } }, // Remove universities with no category
-      {
-        $group: {
-          _id: "$category",
-          universities: {
-            $push: {
-              university_name: "$university_name",
-              university_logo: "$university_logo",
-              university_ranking: "$university_ranking",
-              country: "$country",
-              state: "$state",
-              university_type: "$university_type",
-              courses: "$courses",
-            },
-          },
-          count: { $sum: 1 },
-        },
-      },
-    ];
+//     // Aggregation pipeline
+//     const pipeline = [
+//       { $match: matchStage }, // Apply filters
+//       {
+//         $lookup: {
+//           from: "courses", // Name of the Course collection
+//           localField: "courses",
+//           foreignField: "_id",
+//           as: "courses",
+//         },
+//       },
+//       {
+//         $addFields: {
+//           category: {
+//             $switch: {
+//               branches: [
+//                 { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
+//                 {
+//                   case: {
+//                     $and: [
+//                       { $gt: ["$university_ranking", 50] },
+//                       { $lte: ["$university_ranking", 100] },
+//                     ],
+//                   },
+//                   then: "Contender",
+//                 },
+//                 {
+//                   case: {
+//                     $and: [
+//                       { $gt: ["$university_ranking", 100] },
+//                       { $lte: ["$university_ranking", 200] },
+//                     ],
+//                   },
+//                   then: "Frontrunner",
+//                 },
+//               ],
+//               default: null, // Ignore universities ranked above 200
+//             },
+//           },
+//         },
+//       },
+//       { $match: { category: { $ne: null } } }, // Remove universities with no category
+//       {
+//         $group: {
+//           _id: "$category",
+//           universities: {
+//             $push: {
+//               university_name: "$university_name",
+//               university_logo: "$university_logo",
+//               university_ranking: "$university_ranking",
+//               country: "$country",
+//               state: "$state",
+//               university_type: "$university_type",
+//               courses: "$courses",
+//             },
+//           },
+//           count: { $sum: 1 },
+//         },
+//       },
+//     ];
 
-    const results = await University.aggregate(pipeline);
+//     const results = await University.aggregate(pipeline);
 
-    // Prepare structured response
-    const data = {
-      Ascend: { count: 0, universities: [] },
-      Contender: { count: 0, universities: [] },
-      Frontrunner: { count: 0, universities: [] },
-    };
+//     // Prepare structured response
+//     const data = {
+//       Ascend: { count: 0, universities: [] },
+//       Contender: { count: 0, universities: [] },
+//       Frontrunner: { count: 0, universities: [] },
+//     };
 
-    results.forEach((group) => {
-      data[group._id] = {
-        count: group.count,
-        universities: group.universities,
-      };
-    });
+//     results.forEach((group) => {
+//       data[group._id] = {
+//         count: group.count,
+//         universities: group.universities,
+//       };
+//     });
 
-    res.status(200).json({
-      success: true,
-      data,
-    });
-  } catch (error) {
-    console.error("Error in profileMatcher:", error);
-    res.status(500).json({ success: false, message: "Server Error", error });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       data,
+//     });
+//   } catch (error) {
+//     console.error("Error in profileMatcher:", error);
+//     res.status(500).json({ success: false, message: "Server Error", error });
+//   }
+// };
+
 
 module.exports = {
   createUniversity,
   getAllUniversity,
-  profileMatcher,
   getUniversitiesWithPagination,
   deleteUniversityById,
   getUniversityById,

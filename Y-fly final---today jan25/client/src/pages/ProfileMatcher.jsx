@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import grid from "../assets/images/image/grid.svg";
 import CourseSearchbar from "../components/CourseSearchbar";
@@ -21,10 +21,23 @@ import Footer from "../components/Footer";
 import Ascend from "../components/Ascend";
 import ResponsiveSearchBar from "../components/ResponsiveSearchBar";
 import axios from "axios";
+import { debounce } from "lodash";
+
 const Profilematcher = () => {
   const [userData, setUserData] = useState([]);
   const [universityData, setUniversityData] = useState([]);
-  console.log(userData);
+  const [filters, setFilters] = useState([]);
+
+  const [courseLevel, setCourseLevel] = useState("");
+  const [country, setCountry] = useState("");
+  const [areasOfStudy, setAreasOfStudy] = useState("");
+  const [minAmount, setMinAmount] = useState(null);
+  const [maxAmount, setMaxAmount] = useState(null);
+  const [intake, setIntake] = useState({month:"",year:""});
+  const [duration, setDuration] = useState("");
+const [searchQuery, setSearchQuery] = useState("");
+  console.log(filters);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -43,19 +56,57 @@ const Profilematcher = () => {
   }, []);
 
   useEffect(() => {
-    const fetchResults = async () => {
+    const fetchFilters = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/university/profile-matcher"
+          `http://localhost:5000/profile-matcher/filters`
         );
-        console.log("result = ", response.data);
-        setUniversityData(response.data);
+        setFilters(response?.data?.filters);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchResults();
+    fetchFilters();
   }, []);
+
+  const fetchResults = useCallback(async () => {
+    const min = minAmount !== null ? Number(minAmount) : undefined;
+      const max = maxAmount !== null ? Number(maxAmount) : undefined;
+    try {
+      // setIsLoading(true);
+
+      const response = await axios.get(
+        "http://localhost:5000/profile-matcher/result",
+        {
+          params: {
+            university_name:searchQuery,
+            course_level: courseLevel,
+            country,
+            area_of_study: areasOfStudy,
+            max_tution_fee:max,
+            min_tution_fee:min,
+            intake_month:intake?.month,
+            intake_year:intake?.year,
+            course_duration:duration,
+
+          },
+        }
+      );
+
+      setUniversityData(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setIsLoading(false);
+    }
+  }, [courseLevel, country, areasOfStudy,minAmount,maxAmount,intake,duration,searchQuery]);
+
+  useEffect(() => {
+    const debouncedFetch = debounce(fetchResults, 300);
+    debouncedFetch();
+
+    return () => debouncedFetch.cancel();
+  }, [fetchResults]);
 
   const [isAscendExpanded, setIsAscendExpanded] = useState(false);
   const [isContenderExpanded, setIsContenderExpanded] = useState(false);
@@ -228,7 +279,21 @@ const Profilematcher = () => {
           style={{ backgroundImage: `url(${grid})` }}
         >
           <div className="flex justify-between">
-            <CourseSearchbar />
+            <CourseSearchbar
+              filters={filters}
+              courseLevel={courseLevel}
+              setCourseLevel={setCourseLevel}
+              country={country}
+              setCountry={setCountry}
+              areasOfStudy={areasOfStudy}
+              setAreasOfStudy={setAreasOfStudy}
+              minAmount={minAmount}
+              maxAmount={maxAmount}
+              setMaxAmount={setMaxAmount}
+              setMinAmount={setMinAmount}
+              intake={intake} setIntake={setIntake}
+              duration={duration} setDuration={setDuration}
+            />
 
             <div className=" w-[72%] max-lg:w-[100%]">
               {/* ------------------search bar----------------------- */}
@@ -238,6 +303,8 @@ const Profilematcher = () => {
                     type="text"
                     placeholder="Search for scholarships"
                     className="pl-12 py-3 pr-4  border-black border rounded-[40px] placeholder-[#BFBFBF] font-urban max-md:text-[0.8rem]"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   <div className="absolute inset-y-4 left-6">
                     <img src={search} width={18} alt="search" />

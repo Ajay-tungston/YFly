@@ -31,7 +31,6 @@ router.get("/get/:id",getUniversityById)
 
 router.put("/update/:id",updateUniversity)
 
-router.get("/profile-matcher",profileMatcher)
 
 router.delete("/delete/:id",deleteUniversityById)
 
