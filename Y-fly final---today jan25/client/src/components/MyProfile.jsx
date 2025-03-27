@@ -22,7 +22,9 @@ const Profile = () => {
       </nav>
 
       {/* Profile Container */}
-      <div className="bg-white w-full rounded-[100px] p-6 md:p-10 mt-8 mx-auto min-h-[700px] text-gray-900">
+      <div className="bg-white w-full rounded-[100px] p-6 md:p-10 mt-8 mx-auto min-h-[1000px] md:min-h-[800px] text-gray-900">
+
+ 
         <div className="flex flex-col md:flex-row gap-8">
           
           {/* Left Section - Profile Details */}
@@ -103,7 +105,7 @@ const Profile = () => {
 
      {/* Call to Action Section */}
 <section>
-  <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px] md:-mt-[150px]">
+<div className="bg-[#5cc7f1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto -mt-32 md:-mt-[150px]">
     {/* Left Image */}
     <div className="flex-shrink-0 w-full h-[250px] md:w-[571px] md:h-[403px] rounded-[20px] overflow-hidden">
       <img
