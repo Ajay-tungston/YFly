@@ -1,107 +1,335 @@
 const courseSchema = require("../Models/courseSchema");
 const University = require("../Models/University");
 
+// const profileMatcher = async (req, res) => {
+//   try {
+//     const {
+//       country, 
+//       university_name,
+//       course_level, 
+//       area_of_study,
+//       intake_month,
+//       intake_year,
+//       min_tution_fee,
+//       max_tution_fee,
+//       course_duration,
+//       test_requirement, 
+//       min_score, 
+//       max_score,
+//       scholarship, 
+//     } = req.query;
+// console.log(intake_month,intake_year)
+//     // Convert single selection fields to arrays if needed
+//     let countryFilter = Array.isArray(country) ? country : country ? [country] : [];
+//     let areaOfStudyFilter = Array.isArray(area_of_study) ? area_of_study : area_of_study ? [area_of_study] : [];
+//     let intakeMonthFilter = Array.isArray(intake_month) ? intake_month : intake_month ? [intake_month] : [];
+//     let intakeYearFilter = Array.isArray(intake_year) ? intake_year.map(Number) : intake_year ? [parseInt(intake_year)] : [];
+//     let scholarshipFilter = Array.isArray(scholarship) ? scholarship : scholarship ? [scholarship] : [];
+//     let courseDurationFilter = Array.isArray(course_duration) ? course_duration : course_duration ? [course_duration] : [];
+
+//     // Build university filter
+//     let matchStage = {};
+//     if (countryFilter.length > 0) matchStage.country = { $in: countryFilter };
+//     if (university_name)
+//       matchStage.university_name = { $regex: university_name, $options: "i" };
+
+//     // Aggregation pipeline
+//     const pipeline = [
+//       { $match: matchStage }, // Apply university filters
+//       {
+//         $lookup: {
+//           from: "courses",
+//           localField: "courses",
+//           foreignField: "_id",
+//           as: "courses",
+//         },
+//       },
+//       {
+//         $addFields: {
+//           courses: {
+//             $cond: {
+//               if: {
+//                 $or: [
+//                   course_level,
+//                   areaOfStudyFilter.length,
+//                   intakeMonthFilter.length,
+//                   intakeYearFilter.length,
+//                   min_tution_fee,
+//                   max_tution_fee,
+//                   courseDurationFilter.length,
+//                   test_requirement,
+//                   scholarshipFilter.length,
+//                 ],
+//               },
+//               then: {
+//                 $filter: {
+//                   input: "$courses",
+//                   as: "course",
+//                   cond: {
+//                     $and: [
+//                       course_level
+//                         ? { $eq: ["$$course.course_level", course_level] } // Single selection
+//                         : { $const: true },
+//                       areaOfStudyFilter.length
+//                         ? { $in: ["$$course.area_of_study", areaOfStudyFilter] }
+//                         : { $const: true },
+//                       min_tution_fee
+//                         ? {
+//                             $gte: [
+//                               "$$course.tution_fee",
+//                               parseInt(min_tution_fee),
+//                             ],
+//                           }
+//                         : { $const: true },
+//                       max_tution_fee
+//                         ? {
+//                             $lte: [
+//                               "$$course.tution_fee",
+//                               parseInt(max_tution_fee),
+//                             ],
+//                           }
+//                         : { $const: true },
+//                       courseDurationFilter.length
+//                         ? { $in: ["$$course.course_duration", courseDurationFilter] }
+//                         : { $const: true },
+//                       intakeMonthFilter.length
+//                         ? { $in: ["$$course.intakes.month", intakeMonthFilter] }
+//                         : { $const: true },
+//                       intakeYearFilter.length
+//                         ? { $in: ["$$course.intakes.year", intakeYearFilter] }
+//                         : { $const: true },
+//                       test_requirement
+//                         ? {
+//                             $gt: [
+//                               {
+//                                 $size: {
+//                                   $filter: {
+//                                     input: "$$course.testRequirements",
+//                                     as: "test",
+//                                     cond: {
+//                                       $and: [
+//                                         { $eq: ["$$test.testRequirementName", test_requirement] },
+//                                         min_score
+//                                           ? {
+//                                               $gte: [
+//                                                 { $toDouble: "$$test.overallScore" },
+//                                                 parseFloat(min_score),
+//                                               ],
+//                                             }
+//                                           : { $const: true },
+//                                         max_score
+//                                           ? {
+//                                               $lte: [
+//                                                 { $toDouble: "$$test.overallScore" },
+//                                                 parseFloat(max_score),
+//                                               ],
+//                                             }
+//                                           : { $const: true },
+//                                       ],
+//                                     },
+//                                   },
+//                                 },
+//                               },
+//                               0,
+//                             ],
+//                           }
+//                         : { $const: true },
+//                       scholarshipFilter.length
+//                         ? { $gt: [{ $size: { $setIntersection: ["$$course.scholarship_applicable", scholarshipFilter] } }, 0] }
+//                         : { $const: true },
+//                     ],
+//                   },
+//                 },
+//               },
+//               else: "$courses",
+//             },
+//           },
+//         },
+//       },
+//       { $match: { "courses.0": { $exists: true } } }, // Remove universities without courses
+//       {
+//         $addFields: {
+//           category: {
+//             $switch: {
+//               branches: [
+//                 { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
+//                 {
+//                   case: {
+//                     $and: [
+//                       { $gt: ["$university_ranking", 50] },
+//                       { $lte: ["$university_ranking", 100] },
+//                     ],
+//                   },
+//                   then: "Contender",
+//                 },
+//                 {
+//                   case: { $gt: ["$university_ranking", 100] },
+//                   then: "Frontrunner",
+//                 },
+//               ],
+//               default: null,
+//             },
+//           },
+//         },
+//       },
+//       { $match: { category: { $ne: null } } }, // Remove universities with no category
+//       {
+//         $group: {
+//           _id: "$category",
+//           universities: {
+//             $push: {
+//               university_name: "$university_name",
+//               university_logo: "$university_logo",
+//               university_ranking: "$university_ranking",
+//               country: "$country",
+//               state: "$state",
+//               university_type: "$university_type",
+//               courses: "$courses",
+//             },
+//           },
+//           count: { $sum: 1 },
+//         },
+//       },
+//     ];
+
+//     const results = await University.aggregate(pipeline);
+
+//     // Prepare structured response
+//     const data = {
+//       Ascend: { count: 0, universities: [] },
+//       Contender: { count: 0, universities: [] },
+//       Frontrunner: { count: 0, universities: [] },
+//     };
+
+//     results.forEach((group) => {
+//       data[group._id] = {
+//         count: group.count,
+//         universities: group.universities,
+//       };
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       data,
+//     });
+//   } catch (error) {
+//     console.error("Error in profileMatcher:", error);
+//     res.status(500).json({ success: false, message: "Server Error", error });
+//   }
+// };
+
 const profileMatcher = async (req, res) => {
   try {
     const {
-      country,
+      country, 
       university_name,
-      course_level,
+      course_level, 
       area_of_study,
       intake_month,
       intake_year,
       min_tution_fee,
       max_tution_fee,
       course_duration,
+      test_requirement, 
+      min_score, 
+      max_score,
+      scholarship, 
     } = req.query;
 
-    // Build university filter
-    let matchStage = {};
-    if (country) matchStage.country = country;
-    if (university_name)
-      matchStage.university_name = { $regex: university_name, $options: "i" };
+    console.log(intake_month, intake_year);
 
-    // Aggregation pipeline
+    // Convert single values to arrays
+    let countryFilter = country ? (Array.isArray(country) ? country : [country]) : [];
+    let areaOfStudyFilter = area_of_study ? (Array.isArray(area_of_study) ? area_of_study : [area_of_study]) : [];
+    let intakeMonthFilter = intake_month ? (Array.isArray(intake_month) ? intake_month : [intake_month]) : [];
+    let intakeYearFilter = intake_year ? (Array.isArray(intake_year) ? intake_year.map(Number) : [Number(intake_year)]) : [];
+    let scholarshipFilter = scholarship ? (Array.isArray(scholarship) ? scholarship : [scholarship]) : [];
+    let courseDurationFilter = course_duration ? (Array.isArray(course_duration) ? course_duration : [course_duration]) : [];
+
+    // University Match Stage
+    let matchStage = {};
+    if (countryFilter.length) matchStage.country = { $in: countryFilter };
+    if (university_name) matchStage.university_name = { $regex: university_name, $options: "i" };
+
+    // Aggregation Pipeline
     const pipeline = [
-      { $match: matchStage }, // Apply university filters
+      { $match: matchStage }, 
       {
         $lookup: {
-          from: "courses", // Course collection
+          from: "courses",
           localField: "courses",
           foreignField: "_id",
           as: "courses",
         },
       },
-      // Only filter courses if a filter is provided
       {
         $addFields: {
           courses: {
-            $cond: {
-              if: {
-                $or: [
-                  course_level,
-                  area_of_study,
-                  intake_month,
-                  intake_year,
-                  min_tution_fee,
-                  max_tution_fee,
-                  course_duration,
+            $filter: {
+              input: "$courses",
+              as: "course",
+              cond: {
+                $and: [
+                  course_level ? { $eq: ["$$course.course_level", course_level] } : { $const: true },
+                  areaOfStudyFilter.length ? { $in: ["$$course.area_of_study", areaOfStudyFilter] } : { $const: true },
+                  min_tution_fee ? { $gte: ["$$course.tution_fee", parseInt(min_tution_fee)] } : { $const: true },
+                  max_tution_fee ? { $lte: ["$$course.tution_fee", parseInt(max_tution_fee)] } : { $const: true },
+                  courseDurationFilter.length ? { $in: ["$$course.course_duration", courseDurationFilter] } : { $const: true },
+                  test_requirement
+                    ? {
+                        $gt: [
+                          {
+                            $size: {
+                              $filter: {
+                                input: "$$course.testRequirements",
+                                as: "test",
+                                cond: {
+                                  $and: [
+                                    { $eq: ["$$test.testRequirementName", test_requirement] },
+                                    min_score ? { $gte: [{ $toDouble: "$$test.overallScore" }, parseFloat(min_score)] } : { $const: true },
+                                    max_score ? { $lte: [{ $toDouble: "$$test.overallScore" }, parseFloat(max_score)] } : { $const: true },
+                                  ],
+                                },
+                              },
+                            },
+                          },
+                          0,
+                        ],
+                      }
+                    : { $const: true },
+                  scholarshipFilter.length ? { $gt: [{ $size: { $setIntersection: ["$$course.scholarship_applicable", scholarshipFilter] } }, 0] } : { $const: true },
+                  
+                  // ✅ Fixed Intake Filtering
+                  intakeMonthFilter.length && intakeYearFilter.length
+                    ? {
+                        $gt: [
+                          {
+                            $size: {
+                              $filter: {
+                                input: "$$course.intakes",
+                                as: "intake",
+                                cond: {
+                                  $or: intakeMonthFilter.map((month, index) => ({
+                                    $and: [
+                                      { $eq: ["$$intake.month", month] },
+                                      { $eq: ["$$intake.year", intakeYearFilter[index]] },
+                                    ],
+                                  })),
+                                },
+                              },
+                            },
+                          },
+                          0,
+                        ],
+                      }
+                    : { $const: true },
                 ],
-              }, // Apply filter only if any filter exists
-              then: {
-                $filter: {
-                  input: "$courses",
-                  as: "course",
-                  cond: {
-                    $and: [
-                      course_level
-                        ? { $eq: ["$$course.course_level", course_level] }
-                        : { $const: true },
-                      area_of_study
-                        ? { $eq: ["$$course.area_of_study", area_of_study] }
-                        : { $const: true },
-                      min_tution_fee
-                        ? {
-                            $gte: [
-                              "$$course.tution_fee",
-                              parseInt(min_tution_fee),
-                            ],
-                          }
-                        : { $const: true },
-                      max_tution_fee
-                        ? {
-                            $lte: [
-                              "$$course.tution_fee",
-                              parseInt(max_tution_fee),
-                            ],
-                          }
-                        : { $const: true },
-                      course_duration
-                        ? { $eq: ["$$course.course_duration", course_duration] }
-                        : { $const: true },
-                      intake_month
-                        ? { $in: [intake_month, "$$course.intakes.month"] }
-                        : { $const: true },
-                      intake_year
-                        ? {
-                            $in: [
-                              parseInt(intake_year),
-                              "$$course.intakes.year",
-                            ],
-                          }
-                        : { $const: true },
-                    ],
-                  },
-                },
               },
-              else: "$courses", // Keep all courses if no filter is applied
             },
           },
         },
       },
-      // Remove universities where 'courses' array is empty
-      { $match: { "courses.0": { $exists: true } } },
-
+      { $match: { "courses.0": { $exists: true } } }, 
       {
         $addFields: {
           category: {
@@ -109,31 +337,17 @@ const profileMatcher = async (req, res) => {
               branches: [
                 { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
                 {
-                  case: {
-                    $and: [
-                      { $gt: ["$university_ranking", 50] },
-                      { $lte: ["$university_ranking", 100] },
-                    ],
-                  },
+                  case: { $and: [{ $gt: ["$university_ranking", 50] }, { $lte: ["$university_ranking", 100] }] },
                   then: "Contender",
                 },
-                {
-                  // case: {
-                  //   $and: [
-                  //     { $gt: ["$university_ranking", 100] },
-                  //     { $lte: ["$university_ranking", 200] },
-                  //   ],
-                  // },
-                  case: { $gt: ["$university_ranking", 100] },
-                  then: "Frontrunner",
-                },
+                { case: { $gt: ["$university_ranking", 100] }, then: "Frontrunner" },
               ],
               default: null,
             },
           },
         },
       },
-      { $match: { category: { $ne: null } } }, // Remove universities with no category
+      { $match: { category: { $ne: null } } },
       {
         $group: {
           _id: "$category",
@@ -145,7 +359,7 @@ const profileMatcher = async (req, res) => {
               country: "$country",
               state: "$state",
               university_type: "$university_type",
-              courses: "$courses", // Include filtered courses
+              courses: "$courses",
             },
           },
           count: { $sum: 1 },
@@ -183,6 +397,8 @@ const getProfileMatcherFilters = async (req, res) => {
   try {
     const filters = await courseSchema.aggregate([
       { $unwind: "$intakes" },
+      { $unwind: { path: "$testRequirements", preserveNullAndEmptyArrays: true } },
+
       {
         $group: {
           _id: null,
@@ -190,35 +406,72 @@ const getProfileMatcherFilters = async (req, res) => {
           disciplines: { $addToSet: "$discipline" },
           areas_of_study: { $addToSet: "$area_of_study" },
           course_durations: { $addToSet: "$course_duration" },
+          scholarships: { $addToSet: "$scholarship_applicable" }, 
           intakes: {
             $addToSet: { month: "$intakes.month", year: "$intakes.year" },
           },
-          min_tuition_fee: { $min: "$tution_fee" }, // Fetch minimum tuition fee
+          min_tuition_fee: { $min: "$tution_fee" },
           max_tuition_fee: { $max: "$tution_fee" },
-          // country: { $addToSet: "$country" },
+          test_requirements: { $addToSet: "$testRequirements.testRequirementName" },
         },
       },
+
+      // Flatten scholarship array to remove potential nested arrays
+      {
+        $addFields: {
+          scholarships: {
+            $reduce: {
+              input: "$scholarships",
+              initialValue: [],
+              in: { $setUnion: ["$$value", "$$this"] }, // Ensures unique scholarship values
+            },
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "courses",
+          pipeline: [
+            { $unwind: "$testRequirements" },
+            {
+              $group: {
+                _id: "$testRequirements.testRequirementName",
+                max_overall_score: { $max: { $toDouble: "$testRequirements.overallScore" } },
+              },
+            },
+          ],
+          as: "test_requirements_max_scores",
+        },
+      },
+
       {
         $addFields: {
           intakes: {
             $sortArray: {
               input: "$intakes",
-              sortBy: { year: 1, month: 1 }, // Sort by year first, then month
+              sortBy: { year: 1, month: 1 },
             },
           },
         },
       },
       { $project: { _id: 0 } },
     ]);
+
     const countries = await University.distinct("country");
+
     res.status(200).json({
       success: true,
-      filters: filters.length > 0 ? { ...filters[0], country: countries } : { country: countries },
+      filters: filters.length > 0
+        ? { ...filters[0], country: countries }
+        : { country: countries },
     });
   } catch (error) {
     console.error("Error fetching course filters:", error);
     res.status(500).json({ success: false, message: "Server Error", error });
   }
 };
+
+
 
 module.exports = { profileMatcher, getProfileMatcherFilters };

@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import Navbar from "../components/Navbar";
 import grid from "../assets/images/image/grid.svg";
 import CourseSearchbar from "../components/CourseSearchbar";
@@ -27,16 +33,19 @@ const Profilematcher = () => {
   const [userData, setUserData] = useState([]);
   const [universityData, setUniversityData] = useState([]);
   const [filters, setFilters] = useState([]);
-
+  const [isFiltered, setIsFiltered] = useState(false);
   const [courseLevel, setCourseLevel] = useState("");
-  const [country, setCountry] = useState("");
-  const [areasOfStudy, setAreasOfStudy] = useState("");
+  const [country, setCountry] = useState([]);
+  const [areasOfStudy, setAreasOfStudy] = useState([]);
   const [minAmount, setMinAmount] = useState(null);
   const [maxAmount, setMaxAmount] = useState(null);
-  const [intake, setIntake] = useState({month:"",year:""});
+  const [intake, setIntake] = useState([]);
   const [duration, setDuration] = useState("");
-const [searchQuery, setSearchQuery] = useState("");
-  console.log(filters);
+  const [testRequirement, setTestRequirement] = useState("");
+  const [minScore, setMinScore] = useState(null);
+  const [maxScore, setMaxScore] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [scholarship, setScholarship] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -71,7 +80,25 @@ const [searchQuery, setSearchQuery] = useState("");
 
   const fetchResults = useCallback(async () => {
     const min = minAmount !== null ? Number(minAmount) : undefined;
-      const max = maxAmount !== null ? Number(maxAmount) : undefined;
+    const max = maxAmount !== null ? Number(maxAmount) : undefined;
+
+    //for display the values
+    const hasFilters =
+      courseLevel ||
+      country ||
+      areasOfStudy ||
+      minAmount !== null ||
+      maxAmount !== null ||
+      intake.month ||
+      intake.year ||
+      duration ||
+      testRequirement ||
+      minScore !== null ||
+      maxScore !== null ||
+      searchQuery ||
+      scholarship;
+
+    setIsFiltered(!!hasFilters);
     try {
       // setIsLoading(true);
 
@@ -79,16 +106,19 @@ const [searchQuery, setSearchQuery] = useState("");
         "http://localhost:5000/profile-matcher/result",
         {
           params: {
-            university_name:searchQuery,
+            university_name: searchQuery,
             course_level: courseLevel,
-            country,
-            area_of_study: areasOfStudy,
-            max_tution_fee:max,
-            min_tution_fee:min,
-            intake_month:intake?.month,
-            intake_year:intake?.year,
-            course_duration:duration,
-
+            country:Array.isArray(country) ? country : [country],
+            area_of_study: Array.isArray(areasOfStudy) ? areasOfStudy : [areasOfStudy],
+            max_tution_fee: max,
+            min_tution_fee: min,
+            intake_month: intake.map((i) => i.month), 
+            intake_year: intake.map((i) => i.year), 
+            course_duration: duration,
+            test_requirement: testRequirement,
+            min_score: minScore,
+            max_score: maxScore,
+            scholarship,
           },
         }
       );
@@ -99,7 +129,20 @@ const [searchQuery, setSearchQuery] = useState("");
     } finally {
       // setIsLoading(false);
     }
-  }, [courseLevel, country, areasOfStudy,minAmount,maxAmount,intake,duration,searchQuery]);
+  }, [
+    courseLevel,
+    country,
+    areasOfStudy,
+    minAmount,
+    maxAmount,
+    intake,
+    duration,
+    searchQuery,
+    testRequirement,
+    minScore,
+    maxScore,
+    scholarship,
+  ]);
 
   useEffect(() => {
     const debouncedFetch = debounce(fetchResults, 300);
@@ -118,8 +161,6 @@ const [searchQuery, setSearchQuery] = useState("");
     if (value === "frontrunner")
       setIsFrontrunnerExpanded(!isFrontrunnerExpanded);
   };
-
-  // const ascendVisibleCards = isAscendExpanded ? cards : cards.slice(0, 2);
 
   const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
@@ -229,49 +270,75 @@ const [searchQuery, setSearchQuery] = useState("");
 
         {/*---------------------------------- second section--------------------- */}
         <div className="flex justify-center mt-10 max-lg:hidden">
-          {userData && (
+          {isFiltered && (
             <div className="bg-bluegradient w-[90%] rounded-full py-12 px-20 flex flex-wrap justify-between">
-              <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                <div className="">{userData?.degree}</div>
-              </button>
-
-              <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                <div className="">
-                  {userData?.countries && userData?.countries[0]}
+              {courseLevel && (
+                <div>
+                  <label className=" text-white">Course Level</label>
+                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+                    <div className="">{courseLevel}</div>
+                  </button>
                 </div>
-              </button>
+              )}
+              {country && (
+                <div>
+                  <label className=" text-white">Country</label>
 
-              <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                <div className="">Computer Science & IT</div>
-              </button>
+                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+                    <div className="">{country}</div>
+                  </button>
+                </div>
+              )}
+              {areasOfStudy && (
+                <div>
+                  <label className=" text-white">Area Of Study</label>
 
-              <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                <div className="">Aug - Nov 2024</div>
-              </button>
-
-              <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                <div className="">₹30L</div>
-              </button>
-              {userData?.work_experience?.has_experience && (
-                <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                  <div className="">
-                    {userData?.work_experience?.months_of_experience} months
-                  </div>
-                </button>
+                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+                    <div className="">{areasOfStudy}</div>
+                  </button>
+                </div>
+              )}
+              {intake.year && intake.month && (
+                <div className="text-center">
+                  <label className=" text-white">Intake</label>
+                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+                    <div className="">
+                      {intake.month}-{intake.year}
+                    </div>
+                  </button>
+                </div>
               )}
 
-              <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                <div className="">
-                  {userData?.proficiency_exam?.exam_name} Exam{" "}
-                  {userData?.proficiency_exam?.score &&
-                    `Score ${userData?.proficiency_exam?.score}`}
+              {scholarship && (
+                <div>
+                  <label className=" text-white">Scholarship</label>
+                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+                    <div className="">{scholarship}</div>
+                  </button>
                 </div>
-              </button>
+              )}
+              {duration && (
+                <div>
+                  <label className=" text-white">Course Duration</label>
+                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+                    <div className="">{duration}</div>
+                  </button>
+                </div>
+              )}
+
+              {testRequirement && (
+                <div>
+                  <label className=" text-white">Course Duration</label>
+                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+                    <div className="">{testRequirement}</div>
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        <ResponsiveSearchBar />
+        <ResponsiveSearchBar filters={filters} />
 
         {/*--------------------------------- white grid section------------------------------------------ */}
         <div
@@ -291,8 +358,18 @@ const [searchQuery, setSearchQuery] = useState("");
               maxAmount={maxAmount}
               setMaxAmount={setMaxAmount}
               setMinAmount={setMinAmount}
-              intake={intake} setIntake={setIntake}
-              duration={duration} setDuration={setDuration}
+              intake={intake}
+              setIntake={setIntake}
+              duration={duration}
+              setDuration={setDuration}
+              testRequirement={testRequirement}
+              setTestRequirement={setTestRequirement}
+              minScore={minScore}
+              setMinScore={setMinScore}
+              maxScore={maxScore}
+              setMaxScore={setMaxScore}
+              scholarship={scholarship}
+              setScholarship={setScholarship}
             />
 
             <div className=" w-[72%] max-lg:w-[100%]">

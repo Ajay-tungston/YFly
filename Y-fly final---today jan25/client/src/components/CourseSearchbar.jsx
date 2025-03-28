@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import filter from "../assets/images/image/filter.svg";
 import dropdown from "../assets/images/image/down.svg";
 import bluesearch from "../assets/images/image/bluesearch.svg";
@@ -8,6 +8,7 @@ import ScoreSlider from "../components/ScoreSlider";
 import FeeBudgetSlider from "../components/FeeBudgetSlider";
 import CourseDurationSlider from "../components/CourseDuration";
 import { debounce } from "lodash";
+import { a } from "@react-spring/web";
 
 const CourseSearchbar = ({
   filters,
@@ -20,8 +21,28 @@ const CourseSearchbar = ({
   minAmount,
   maxAmount,
   setMaxAmount,
-  setMinAmount,intake, setIntake,duration, setDuration
+  setMinAmount,
+  intake,
+  setIntake,
+  duration,
+  setDuration,
+  testRequirement,
+  setTestRequirement,
+  minScore,
+  setMinScore,
+  maxScore,
+  setMaxScore,
+  scholarship,
+  setScholarship,
 }) => {
+  useEffect(() => {
+    setMinScore(null);
+    setMaxScore(null);
+  }, [testRequirement]);
+
+  const [countrySearch, setCountrySearch] = useState("");
+  const [areaSearch, setAreaSearch] = useState("");
+
   // for desired course
   const [isOneOpen, setIsOneOpen] = useState(false);
   const courseLevelDropdown = () => {
@@ -83,7 +104,13 @@ const CourseSearchbar = ({
     }, 500), // 500ms debounce
     []
   );
-
+  const debouncedSetScore = useCallback(
+    debounce((min, max) => {
+      setMinScore(min);
+      setMaxScore(max);
+    }, 500), // 500ms debounce
+    []
+  );
   return (
     <>
       <div className="w-[24%] font-urban  bg-[#ffffff] rounded-[50px] border-[1px] border-black flex flex-col max-lg:hidden">
@@ -189,6 +216,8 @@ const CourseSearchbar = ({
                 <input
                   type="text"
                   placeholder="Search"
+                  value={countrySearch}
+                  onChange={(e) => setCountrySearch(e.target.value)}
                   className="py-1 px-12 w-full border-[#bfbfbf] border rounded-[40px] placeholder-[#BFBFBF] font-urban focus:outline-none active:outline-none"
                 />
                 <div className="absolute inset-y-2 left-[1.5rem]">
@@ -197,51 +226,60 @@ const CourseSearchbar = ({
               </div>
               {/* chleckboxes */}
               <div className="flex flex-col mt-3 px-1 max-h-[300px] overflow-y-scroll">
-                {filters?.country?.map((i) => (
-                  <div className="inline-flex items-center px-5" key={i}>
-                    <label
-                      data-ripple-dark="true"
-                      htmlFor={i}
-                      className="relative flex cursor-pointer items-center rounded-full p-3"
-                    >
-                      <input
-                        id={i}
-                        className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute                  
-                                    before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0
-                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
-                        type="checkbox"
-                        value={i}
-                        checked={country === i}
-                        onChange={() =>
-                          setCountry((prev) => (prev === i ? "" : i))
-                        }
-                      />
-                      <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
-                        <svg
-                          strokeWidth="1"
-                          stroke="currentColor"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          className="h-3.5 w-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            clipRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            fillRule="evenodd"
-                          ></path>
-                        </svg>
-                      </span>
-                    </label>
+                {filters?.country
+                  ?.filter((i) =>
+                    i.toLowerCase().includes(countrySearch.toLowerCase())
+                  ) 
+                  .map((i) => (
+                    <div className="inline-flex items-center px-5" key={i}>
+                      <label
+                        data-ripple-dark="true"
+                        htmlFor={i}
+                        className="relative flex cursor-pointer items-center rounded-full p-3"
+                      >
+                        <input
+                          id={i}
+                          className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute                  
+                              before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0
+                              before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
+                          type="checkbox"
+                          value={i}
+                          checked={country.includes(i)}
+                          onChange={() =>
+                            setCountry(
+                              (prev) =>
+                                prev.includes(i)
+                                  ? prev.filter((c) => c !== i) 
+                                  : [...prev, i] 
+                            )
+                          }
+                        />
+                        <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                          <svg
+                            strokeWidth="1"
+                            stroke="currentColor"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            className="h-3.5 w-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              clipRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              fillRule="evenodd"
+                            ></path>
+                          </svg>
+                        </span>
+                      </label>
 
-                    <label
-                      htmlFor={i}
-                      className=" cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
-                    >
-                      {i}
-                    </label>
-                  </div>
-                ))}
+                      <label
+                        htmlFor={i}
+                        className="cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
+                      >
+                        {i}
+                      </label>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
@@ -271,6 +309,8 @@ const CourseSearchbar = ({
                   type="text"
                   placeholder="Search"
                   className="py-1 px-12 w-full border-[#bfbfbf] border rounded-[40px] placeholder-[#BFBFBF] font-urban focus:outline-none active:outline-none"
+                  value={areaSearch}
+                  onChange={(e) => setAreaSearch(e.target.value)}
                 />
                 <div className="absolute inset-y-2 left-[1.5rem]">
                   <img src={bluesearch} width={18} alt="search" />
@@ -279,7 +319,12 @@ const CourseSearchbar = ({
 
               {/* chleckboxes */}
               <div className="flex flex-col mt-5 px-0 h-[29.5vh]  overflow-y-auto w-[19vw]">
-                {filters?.areas_of_study?.map((i) => (
+              {filters?.areas_of_study
+                  ?.filter((i) =>
+                    i.toLowerCase().includes(areaSearch.toLowerCase())
+                  ) 
+                  .map((i) => (
+                // {filters?.areas_of_study?.map((i) => (
                   <div
                     className="inline-flex items-center px-5 max-xl:px-3 mt-2"
                     key={i}
@@ -296,10 +341,15 @@ const CourseSearchbar = ({
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                         type="checkbox"
                         value={i}
-                        checked={areasOfStudy === i}
-                        onChange={() =>
-                          setAreasOfStudy((prev) => (prev === i ? "" : i))
-                        }
+                          checked={areasOfStudy.includes(i)}
+                          onChange={() =>
+                            setAreasOfStudy(
+                              (prev) =>
+                                prev.includes(i)
+                                  ? prev.filter((c) => c !== i) 
+                                  : [...prev, i] 
+                            )
+                          }
                       />
                       <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                         <svg
@@ -335,51 +385,124 @@ const CourseSearchbar = ({
 
         {/* Intake year */}
         <div className="flex flex-col">
+    <button
+      className="flex justify-between items-center py-4 font-bold text-black text-[1.1rem] max-xl:text-[1rem] px-8"
+      onClick={IntakeYearDropdown}
+    >
+      Intake
+      <img
+        src={dropdown}
+        alt="dropdown"
+        width={14}
+        className={isFourOpen ? "rotate-180" : ""}
+      />
+    </button>
+    {isFourOpen && (
+      <div className="flex flex-col mb-6">
+        {/* Search Bar */}
+        <div className="relative rounded-[40px] mx-7">
+          <input
+            type="text"
+            placeholder="Search"
+            className="py-1 px-12 w-full border-[#bfbfbf] border rounded-[40px] placeholder-[#BFBFBF] font-urban focus:outline-none active:outline-none"
+          />
+          <div className="absolute inset-y-2 left-[1.5rem]">
+            <img src={bluesearch} width={18} alt="search" />
+          </div>
+        </div>
+
+        {/* Checkboxes */}
+        <div className="flex flex-col mt-3 px-1 max-h-[200px] overflow-y-scroll">
+          {filters?.intakes?.map((i, index) => (
+            <div key={index} className="inline-flex items-center px-5">
+              <label
+                data-ripple-dark="true"
+                htmlFor={`intake-${index}`}
+                className="relative flex cursor-pointer items-center rounded-full p-3"
+              >
+                <input
+                  id={`intake-${index}`}
+                  className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute                  
+                  before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0
+                  before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
+                  type="checkbox"
+                  value={`${i.month} ${i.year}`}
+                  checked={intake.some((item) => item.month === i.month && item.year === i.year)}
+                  onChange={() => {
+                    setIntake((prev) => {
+                      const exists = prev.some((item) => item.month === i.month && item.year === i.year);
+                      return exists
+                        ? prev.filter((item) => !(item.month === i.month && item.year === i.year)) // Remove if already selected
+                        : [...prev, i]; // Add new selection
+                    });
+                  }}
+                />
+                <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                  <svg
+                    strokeWidth="1"
+                    stroke="currentColor"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    className="h-3.5 w-3.5"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clipRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      fillRule="evenodd"
+                    ></path>
+                  </svg>
+                </span>
+              </label>
+
+              <label
+                htmlFor={`intake-${index}`}
+                className="cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
+              >
+                {i?.month} {i?.year}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+    <hr className="border-[1px] border-[#bfbfbf]" />
+  </div>
+
+        {/* Scholarship */}
+        <div className="flex flex-col">
           <button
             className="flex justify-between items-center py-4 font-bold text-black text-[1.1rem] max-xl:text-[1rem] px-8"
-            onClick={IntakeYearDropdown}
+            onClick={SpecialRestrictionDropdown}
           >
-            Intake year{" "}
+            Scholarship{" "}
             <img
               src={dropdown}
               alt="dropdown"
               width={14}
-              className={isFourOpen ? "rotate-180" : ""}
+              className={isSixOpen ? "rotate-180" : ""}
             />
           </button>
-          {isFourOpen && (
-            <div className=" flex flex-col mb-6">
-              {/* search bar */}
-              <div className=" relative  rounded-[40px] mx-7">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="py-1 px-12 w-full border-[#bfbfbf] border rounded-[40px] placeholder-[#BFBFBF] font-urban focus:outline-none active:outline-none"
-                />
-                <div className="absolute inset-y-2 left-[1.5rem]">
-                  <img src={bluesearch} width={18} alt="search" />
-                </div>
-              </div>
-              {/* chleckboxes */}
-              <div className="flex flex-col mt-3 px-1 max-h-[200px] overflow-y-scroll">
-
-                {filters?.intakes?.map((i,index)=><div className="inline-flex items-center px-5">
+          {isSixOpen && filters?.scholarships?.length > 0 && (
+            <div className="flex flex-col mb-6">
+              {filters?.scholarships?.map((i) => (
+                <div className="inline-flex items-center px-5">
                   <label
                     data-ripple-dark="true"
-                    htmlFor={index}
+                    htmlFor={i}
                     className="relative flex cursor-pointer items-center rounded-full p-3"
                   >
                     <input
-                      id={index}
+                      id={i}
                       className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute                  
                                     before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                       type="checkbox"
                       value={i}
-                        checked={intake === i}
-                        onChange={() =>
-                          setIntake((prev) => (prev === i ? "" : i))
-                        }
+                      checked={scholarship === i}
+                      onChange={() =>
+                        setScholarship((prev) => (prev === i ? "" : i))
+                      }
                     />
                     <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                       <svg
@@ -400,74 +523,13 @@ const CourseSearchbar = ({
                   </label>
 
                   <label
-                    htmlFor={index}
+                    htmlFor={i}
                     className=" cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
                   >
-                    {i?.month} {i?.year}
+                    {i}
                   </label>
-                </div>)}
-                
-              </div>
-            </div>
-          )}
-          <hr className="border-[1px] border-[#bfbfbf] " />
-        </div>
-
-        {/* Scholarship */}
-        <div className="flex flex-col">
-          <button
-            className="flex justify-between items-center py-4 font-bold text-black text-[1.1rem] max-xl:text-[1rem] px-8"
-            onClick={SpecialRestrictionDropdown}
-          >
-            Scholarship{" "}
-            <img
-              src={dropdown}
-              alt="dropdown"
-              width={14}
-              className={isSixOpen ? "rotate-180" : ""}
-            />
-          </button>
-          {isSixOpen && (
-            <div className="flex flex-col mb-6">
-              {/* CHECHBOX 1 */}
-              <div className="inline-flex items-center px-5">
-                <label
-                  data-ripple-dark="true"
-                  htmlFor="checkbox1"
-                  className="relative flex cursor-pointer items-center rounded-full p-3"
-                >
-                  <input
-                    id="checkbox1"
-                    className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute                  
-                                    before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0
-                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
-                    type="checkbox"
-                  />
-                  <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
-                    <svg
-                      strokeWidth="1"
-                      stroke="currentColor"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      className="h-3.5 w-3.5"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        clipRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        fillRule="evenodd"
-                      ></path>
-                    </svg>
-                  </span>
-                </label>
-
-                <label
-                  htmlFor="checkbox1"
-                  className=" cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
-                >
-                  Scholarship Available
-                </label>
-              </div>
+                </div>
+              ))}
             </div>
           )}
 
@@ -495,9 +557,12 @@ const CourseSearchbar = ({
                 <FeeBudgetSlider
                   minAmount={minAmount}
                   maxAmount={maxAmount}
-                  amount={{minAmount:filters?.min_tuition_fee,maxAmount:filters?.max_tuition_fee}}
+                  amount={{
+                    minAmount: filters?.min_tuition_fee,
+                    maxAmount: filters?.max_tuition_fee,
+                  }}
                   handleAmountRange={debouncedSetAmount}
-                /> 
+                />
               </div>
             </div>
           )}
@@ -589,13 +654,13 @@ const CourseSearchbar = ({
           <hr className="border-[1px] border-[#bfbfbf]" />
         </div>
 
-        {/* English Proficiency Exam*/}
+        {/* Test Requirements*/}
         <div className="flex flex-col">
           <button
             className="flex justify-between items-center py-4 font-bold text-black text-[1.1rem] max-xl:text-[1rem] px-8"
             onClick={EnglishExamDropdown}
           >
-            English Proficiency Exam{" "}
+            Test Requirements{" "}
             <img
               src={dropdown}
               alt="dropdown"
@@ -603,46 +668,72 @@ const CourseSearchbar = ({
               className={isNineOpen ? "rotate-180" : ""}
             />
           </button>
-          {isNineOpen && (
-            <div className="flex flex-col mb-6">
-              <div className="mx-8 max-xl:mx-6">
-                <select className="w-full rounded-full text-[0.9rem]">
-                  <option value="ILETS">IELTS Exam Score</option>
-                  <option value="TOEFL">TOEFL Exam Score</option>
-                  <option value="PTE">PTE Exam Score</option>
-                </select>
-              </div>
-              <div className="my-4">
-                {/* tution fee range */}
-                <ScoreSlider />
-              </div>
-            </div>
-          )}
 
-          <hr className="border-[1px] border-[#bfbfbf] " />
-        </div>
+          {isNineOpen && filters?.test_requirements_max_scores?.length > 0 && (
+            <div className=" flex flex-col mb-6 ">
+              {/* chleckboxes */}
+              <div className="flex flex-col mt-5 px-0 max-h-[200px] overflow-y-auto w-[19vw]">
+                {filters?.test_requirements_max_scores?.map((i) => (
+                  <>
+                    <div
+                      className="inline-flex items-center px-5 max-xl:px-3 mt-2"
+                      key={i._id}
+                    >
+                      <label
+                        data-ripple-dark="true"
+                        htmlFor={i._id}
+                        className="relative flex cursor-pointer items-center rounded-full p-3"
+                      >
+                        <input
+                          id={i._id}
+                          className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute                  
+                                    before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0
+                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
+                          type="checkbox"
+                          value={i._id}
+                          checked={testRequirement === i._id}
+                          onChange={() =>
+                            setTestRequirement((prev) =>
+                              prev === i._id ? "" : i._id
+                            )
+                          }
+                        />
+                        <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                          <svg
+                            strokeWidth="1"
+                            stroke="currentColor"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            className="h-3.5 w-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              clipRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              fillRule="evenodd"
+                            ></path>
+                          </svg>
+                        </span>
+                      </label>
 
-        {/* Academic Exam*/}
-        <div className="flex flex-col">
-          <button
-            className="flex justify-between items-center py-4 font-bold text-black text-[1.1rem] max-xl:text-[1rem] px-8"
-            onClick={AcademicExamDropdown}
-          >
-            Academic Exam{" "}
-            <img
-              src={dropdown}
-              alt="dropdown"
-              width={14}
-              className={isTenOpen ? "rotate-180" : ""}
-            />
-          </button>
-          {isTenOpen && (
-            <div className="flex flex-col mb-6">
-              <div className="mx-8 max-xl:mx-6 ">
-                <select className="w-full rounded-full text-[0.9rem]">
-                  <option value="GRE">GRE</option>
-                  <option value="GMAT">GMAT</option>
-                </select>
+                      <label
+                        htmlFor={i._id}
+                        className=" cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
+                      >
+                        {i._id}
+                      </label>
+                    </div>
+                    {testRequirement === i._id && (
+                      <ScoreSlider
+                        minScore={minScore}
+                        maxScore={maxScore}
+                        score={i?.max_overall_score}
+                        handleScoreRange={debouncedSetScore}
+                        testRequirement={testRequirement}
+                      />
+                    )}
+                  </>
+                ))}
               </div>
             </div>
           )}
