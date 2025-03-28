@@ -31,8 +31,8 @@ import Mattermost from './components/MattersTheMost';
 import MyProfile from './components/MyProfile';
 import EnquiryList from './components/EnquiryList';
 import CourseOverview from './pages/CourseOverview';
-import Sample from './pages/Sample';
-import Example from './pages/Example';
+
+
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return isAuthenticated ? children : <Navigate to="/admin-login" />;
@@ -71,8 +71,7 @@ const App = () => {
         <Route path='/myprofile' element={<MyProfile/>}/>
         <Route path='/enquiry' element={<EnquiryList/>}/>
         <Route path='/courseoverview/:id' element={<CourseOverview/>}/>
-        <Route path='/sample' element ={<Sample/>}/>
-        <Route path='/example' element ={<Example/>}/>
+        
         
       </Routes>
       

@@ -88,7 +88,7 @@ const CourseSideBar = ({
   console.log("dbValues =", dbValues);
   return (
     <>
-      <div className="w-[15%] max-xl:w-[27%] font-urban  bg-[#ffffff] rounded-[50px] border-[1px] border-black flex flex-col max-lg:hidden">
+      <div className="w-[15%] max-xl:w-[27%] font-urban  bg-[#fff] rounded-[50px] border-[1px] max-h-[1000px] border-black flex flex-col max-lg:hidden overflow-y-auto">
         {/* filter */}
         <div className="font-urban text-[1.2rem] text-black flex gap-3 items-center px-8 pt-7 pb-5 tracking-wide">
           <img src={filter} alt="filter" />
