@@ -56,8 +56,9 @@ const CourseOverview = () => {
 
   // Navigate to another course
   const handleCourseClick = (courseId) => {
-    navigate(`/course-overview/${courseId}`);
+    navigate(`/courseoverview/${courseId}`);
   };
+  
 
   if (loading) {
     return (
@@ -74,7 +75,19 @@ const CourseOverview = () => {
       </div>
     );
   }
-
+  const getRecruiterLogo = (recruiter) => {
+    if (
+      recruiter.recruiters_logo &&
+      recruiter.recruiters_logo.data &&
+      recruiter.recruiters_logo.contentType
+    ) {
+      // Ensure that the stored data is a base64 encoded string.
+      // If your backend sends raw Buffer data, convert it on the backend using .toString('base64')
+      return `data:${recruiter.recruiters_logo.contentType};base64,${recruiter.recruiters_logo.data}`;
+    }
+    console.log(recruiter)
+    return "https://via.placeholder.com/80"; // Fallback image URL
+  };
   const similarCourses = getSimilarCourses();
   return (
     <div className="bg-[#0E1B2C] pb-10">
@@ -315,38 +328,31 @@ const CourseOverview = () => {
                 )}
               </div>
             </div>
-
-            <div className="mt-12 text-[#1e40af] text-lg sm:text-2xl md:text-3xl font-black font-['Urbanist'] leading-8 sm:leading-10">
-              Top Recruiters
-            </div>
             <div className="mt-8 bg-white rounded-[48px] shadow-[3px_3px_0px_0px_rgba(0,20,38,1.00)] outline outline-1 outline-slate-900 p-8 flex flex-col gap-8">
-              <div className="flex flex-wrap justify-start gap-6">
-                {course.top_recruiters && course.top_recruiters.length > 0 ? (
-                  course.top_recruiters.map((recruiter, index) => (
-                    <div
-                      key={recruiter._id || index}
-                      className="px-8 py-6 bg-white rounded-3xl shadow-[3px_3px_0px_0px_rgba(0,20,38,1.00)] outline outline-1 outline-slate-900 flex flex-col justify-center items-center gap-4"
-                    >
-                      <img
-                        src={
-                          recruiter.recruiters_logo ||
-                          "https://via.placeholder.com/80" // Placeholder if logo is missing
-                        }
-                        alt={recruiter.recruiters_name || "Recruiter Logo"}
-                        className="w-20 h-20 object-contain rounded-full border border-gray-300"
-                      />
-                      <div className="text-slate-900 text-2xl font-normal font-['Urbanist'] leading-loose">
-                        {recruiter.recruiters_name || "Unknown Recruiter"}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-slate-900 text-lg">
-                    No recruiters available.
+          <div className="flex flex-wrap justify-start gap-6">
+            {course.top_recruiters && course.top_recruiters.length > 0 ? (
+              course.top_recruiters.map((recruiter, index) => (
+                <div
+                  key={recruiter._id || index}
+                  className="px-8 py-6 bg-white rounded-3xl shadow-[3px_3px_0px_0px_rgba(0,20,38,1.00)] outline outline-1 outline-slate-900 flex flex-col justify-center items-center gap-4"
+                >
+                  <img
+                    src={getRecruiterLogo(recruiter)}
+                    alt={recruiter.recruiters_logo || "Recruiter Logo"}
+                    className="w-20 h-20 object-contain rounded-full border border-gray-300"
+                  />
+                  <div className="text-slate-900 text-2xl font-normal font-['Urbanist'] leading-loose">
+                    {recruiter.recruiters_name || "Unknown Recruiter"}
                   </div>
-                )}
+                </div>
+              ))
+            ) : (
+              <div className="text-slate-900 text-lg">
+                No recruiters available.
               </div>
-            </div>
+            )}
+          </div>
+        </div>
 
             <div className="justify-start text-[#2563eb] text-4xl sm:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight sm:leading-[62.40px] mt-12">
               Fees & Scholarships
@@ -470,71 +476,75 @@ const CourseOverview = () => {
 
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {similarCourses.map((similarCourse) => (
-                  <div
-                    key={similarCourse._id}
-                    className="w-[792px] p-8 bg-white rounded-[48px] shadow-[3px_3px_0px_0px_rgba(0,20,38,1.00)] outline outline-1 outline-slate-900 inline-flex flex-col justify-end items-start gap-6 overflow-hidden cursor-pointer"
-                    onClick={() => handleCourseClick(similarCourse._id)}
-                  >
-                    {/* Course Image */}
-                    <img
-                      className="self-stretch w-full h-30 relative rounded-3xl border border-slate-900 object-cover"
-                      src={
-                        similarCourse.imageUrl
-                          ? similarCourse.imageUrl
-                          : similarCourse.university_logo?.data
-                          ? `data:${similarCourse.university_logo.contentType};base64,${similarCourse.university_logo.data}`
-                          : "https://placehold.co/728x240"
-                      }
-                      alt={similarCourse.university_name || "Course Thumbnail"}
-                    />
-
-                    {/* University Name, QS Rank, and Course Title */}
-                    <div className="self-stretch flex flex-col justify-start items-start gap-1">
-                      <div className="self-stretch inline-flex justify-between items-center">
-                        <div className="px-4 py-1 bg-sky-100 rounded-3xl flex justify-center items-center gap-2.5">
-                          <div className="text-blue-800 text-base font-normal font-['Urbanist'] leading-loose">
-                            {similarCourse.university_name ||
-                              "Unknown University"}
-                          </div>
-                        </div>
-                        <div className="text-slate-900 text-lg font-black font-['Urbanist'] leading-loose">
-                          QS Rank:{" "}
-                          {similarCourse.university_ranking
-                            ? `#${similarCourse.university_ranking}`
-                            : "N/A"}
-                        </div>
-                      </div>
-                      <div className="text-slate-900 text-xl font-normal font-['Dela_Gothic_One'] leading-loose">
-                        {similarCourse.course_title || "Course Title"}
-                      </div>
-                    </div>
-
-                    {/* Application Deadline and Total Cost */}
-                    <div className="self-stretch pt-6 border-t border-zinc-400 inline-flex justify-between items-center">
-                      <div className="flex flex-col items-start">
-                        <div className="text-slate-900 text-lg font-normal font-['Dela_Gothic_One'] leading-loose">
-                          {new Date(
-                            similarCourse.application_deadline
-                          ).toLocaleDateString("en-US", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                          }) || "N/A"}
-                        </div>
-                        <div className="text-zinc-400 text-lg font-bold font-['Urbanist'] leading-loose">
-                          Deadline
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-start">
-                        <div className="text-slate-900 text-lg font-normal font-['Dela_Gothic_One'] leading-loose">
-                          ${similarCourse.tution_fee || "N/A"}
-                        </div>
-                        <div className="text-zinc-400 text-lg font-bold font-['Urbanist'] leading-loose">
-                          Total cost
-                        </div>
-                      </div>
+                <div
+                key={similarCourse._id}
+                className="border-[1px] border-black rounded-[38px] shadow-right-bottom p-6 bg-white h-[400px] max-md:w-full cursor-pointer"
+                onClick={() => handleCourseClick(similarCourse._id)}
+              >
+                {/* University Logo and Name */}
+                <div className="border-[1px] py-10 border-black rounded-[30px] bg-white flex flex-col sm:flex-row sm:justify-center items-center">
+                  <div className="flex flex-col sm:flex-row w-full justify-evenly items-center gap-4">
+                    {similarCourse.university_logo && similarCourse.university_logo.data ? (
+                      <img
+                        src={`data:${similarCourse.university_logo.contentType};base64,${similarCourse.university_logo.data}`}
+                        alt={similarCourse.university_name}
+                        className="w-[80px] max-sm:w-[60px] max-md:w-[100px]"
+                      />
+                    ) : (
+                      <img
+                        src="https://placehold.co/80x80"
+                        alt="Placeholder"
+                        className="w-[80px] max-sm:w-[60px] max-md:w-[100px]"
+                      />
+                    )}
+                    <div className="text-xl sm:text-2xl lg:text-4xl text-center">
+                      {similarCourse.university_name || "Unknown University"}
                     </div>
                   </div>
+                </div>
+              
+                {/* University Name Tag and QS Rank */}
+                <div className="flex justify-between mt-6 items-center gap-2 max-sm:flex-col">
+                  <div className="text-[#30589F] bg-[#E5F1FF] rounded-full font-urban text-[13px] px-3 py-1 text-center">
+                    {similarCourse.university_name || "Unknown University"}
+                  </div>
+                  <div className="font-urban font-bold max-xl:text-[12px] text-center">
+                    QS Rank:{" "}
+                    {similarCourse.university_ranking
+                      ? `#${similarCourse.university_ranking}`
+                      : "N/A"}
+                  </div>
+                </div>
+              
+                {/* Course Info */}
+                <div className="mt-4 font-dela text-[15px] max-sm:text-[13px] text-center">
+                  {similarCourse.course_level} in {similarCourse.discipline} -{" "}
+                  {similarCourse.area_of_study}
+                </div>
+              
+                <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
+              
+                {/* Deadline and Total Cost */}
+                <div className="flex justify-between items-center gap-4 max-sm:flex-col">
+                  <div>
+                    <div className="text-[#898C9A] font-urban font-bold text-center max-sm:text-[14px]">
+                      Deadline
+                    </div>
+                    <div className="font-dela text-[15px] max-sm:text-[13px] text-center">
+                      {new Date(similarCourse.application_deadline).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[#898C9A] font-urban font-bold text-center max-sm:text-[14px]">
+                      Total cost
+                    </div>
+                    <div className="font-dela text-[15px] max-sm:text-[13px] text-center">
+                      ${similarCourse.tution_fee || "N/A"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
                 ))}
               </div>
             </div>

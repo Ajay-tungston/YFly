@@ -498,15 +498,45 @@ exports.filterSearch = async (req, res) => {
       searchTerm,
       disciplinesearch,
       testOverallScore,
-      page, 
-      limit,
+      page = 1, 
+      limit = 9,
+      sort,
       program_level,    
       program_name,    
       course_title,     
     } = req.query;
-  
+    // page = isNaN(page) || page < 1 ? 1 : parseInt(page);
+    // limit = isNaN(limit) || limit < 1 || limit > 100 ? 10 : parseInt(limit);
+    
     let filter = {};
- 
+    
+    // Define sorting options
+    let sortOptions = {};
+    if (sort) {
+      switch (sort) {
+        case "newest":
+          sortOptions.createdAt = -1;
+          break;
+        case "oldest":
+          sortOptions.createdAt = 1;
+          break;
+        case "deadline_earliest":
+          sortOptions.application_deadline = 1;
+          break;
+        case "deadline_latest":
+          sortOptions.application_deadline = -1;
+          break;
+        case "amount_low_high":
+          sortOptions.tution_fee = 1;
+          break;
+        case "amount_high_low":
+          sortOptions.tution_fee = -1;
+          break;
+        default:
+          break;
+      }
+    }
+
     // 1) Country
     if (country) filter.country = country;
 
@@ -530,35 +560,35 @@ exports.filterSearch = async (req, res) => {
       };
     }
 
-    // 5) Discipline
-    // if (discipline) {
-    //   filter.discipline = {
-    //     $regex: new RegExp(`^${discipline}$`, "i"),
-    //   };
-    // }
-  
-    // 6) Scholarship
+    // 5) Scholarship
     if (scholarship_applicable) {
       filter.scholarship_applicable = {
         $in: [new RegExp(`^${scholarship_applicable}$`, "i")],
       };
     }
 
-    // 7) Tuition Fee Range
+    // 6) Tuition Fee Range
     if (tuition_fee_min || tuition_fee_max) {
       filter.tution_fee = {};
       if (tuition_fee_min) filter.tution_fee.$gte = Number(tuition_fee_min);
       if (tuition_fee_max) filter.tution_fee.$lte = Number(tuition_fee_max);
     }
 
-    // 8) Intake (month-year)
+    // 7) Intake (month-year)
     if (intake) {
       const parts = intake.split("-");
-      const year = parts.length === 2 ? parts[1] : intake;
-      filter.intakes = { $elemMatch: { year: Number(year) } };
+      const year = parts.length === 2 ? parts[1].trim() : intake.trim();
+      const month = parts.length === 2 ? parts[0].trim() : null;
+
+      filter.intakes = {
+        $elemMatch: {
+          ...(month && { month: { $regex: new RegExp(`^${month}$`, "i") } }),
+          ...(year && { year: Number(year) }),
+        },
+      };
     }
 
-    // 9) University Ranking
+    // 8) University Ranking
     if (university_ranking) {
       const rankingNum = Number(university_ranking);
       if (!isNaN(rankingNum)) {
@@ -566,7 +596,7 @@ exports.filterSearch = async (req, res) => {
       }
     }
 
-    // 10) Backlogs (eligibilityRequirements)
+    // 9) Backlogs (eligibilityRequirements)
     if (backlogs) {
       filter.eligibilityRequirements = {
         $elemMatch: {
@@ -575,7 +605,7 @@ exports.filterSearch = async (req, res) => {
       };
     }
 
-    // 11) Test Requirements
+    // 10) Test Requirements
     if (testRequirementName || testOverallScore) {
       let testReqCondition = {};
       if (testRequirementName) {
@@ -589,25 +619,23 @@ exports.filterSearch = async (req, res) => {
       filter.testRequirements = { $elemMatch: testReqCondition };
     }
 
-    // 12) University Name
+    // 11) University Name
     if (university_name) {
       filter.university_name = {
         $regex: new RegExp(`^${university_name}$`, "i"),
       };
     }
 
-    // 13) Search Term (simple example searching only by university_name)
+    // 12) Search Term (simple example searching only by university_name)
     if (searchTerm) {
       filter.$or = [
         { course_title: { $regex: searchTerm, $options: "i" } },
         { university_name: { $regex: searchTerm, $options: "i" } },
-        
       ];
     }
     if (disciplinesearch) {
       filter.discipline = { $regex: disciplinesearch, $options: "i" };
     }
-    
 
     // --- NEW FIELDS from screenshot / changes ---
     // program_level
@@ -631,18 +659,16 @@ exports.filterSearch = async (req, res) => {
       };
     }
 
-    
-   
-    const pageNum = parseInt(page) || 1;
-    const limitNum = parseInt(limit) || 10;
-    const skip = (pageNum - 1) * limitNum;
+    const skip = (page - 1) * limit;
 
-    const totalCount = await Course.countDocuments(filter);
+    const total = await Course.countDocuments(filter);
 
-   
+    // Apply sorting here by chaining .sort(sortOptions) to your query
     const courses = await Course.find(filter)
+      // .select('-university_logo')
+      .sort(sortOptions)
       .skip(skip)
-      .limit(limitNum);
+      .limit(limit);
 
     // Modify courses (e.g., add university_logo_url)
     const modifiedCourses = courses.map((course) => {
@@ -654,16 +680,22 @@ exports.filterSearch = async (req, res) => {
     });
 
     res.status(200).json({
-      page: pageNum,
-      limit: limitNum,
-      totalCount,
+      success: true,
+      data: courses,
       results: modifiedCourses,
+      pagination: { 
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      },
     });
   } catch (error) {
     console.error("Error filtering courses:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 

@@ -30,4 +30,9 @@ router.put('/edit/:id', scholarshipController.updateScholarship);
 // DELETE route to delete a scholarship by ID
 router.delete('/delete/:id', scholarshipController.deleteScholarship);
 
+
+router.get('/search', scholarshipController.searchScholarships);
+router.get('/get-filters', scholarshipController.getScholarshipFilters);
+
+
 module.exports = router;
