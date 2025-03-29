@@ -10,12 +10,13 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Local state for editing
+  // Local state for inline editing (copy of formData)
   const [localFormData, setLocalFormData] = useState(formData);
   const [editMode, setEditMode] = useState({
     name: false,
     educationLevel: false,
     workExperience: false,
+    proficiencyExam: false,
   });
 
   // When formData changes (after fetching), update localFormData
@@ -58,35 +59,70 @@ const Profile = () => {
       </div>
     );
 
-
-  // Handlers for saving individual fields
-  const saveName = () => {
-    updateFormData({
-      first_name: localFormData.first_name,
-      last_name: localFormData.last_name,
-    });
-    setEditMode({ ...editMode, name: false });
+  // API call to update the user details on the backend.
+  const persistUpdate = async (updateData) => {
+    try {
+      const email = localStorage.getItem("email");
+      const res = await axios.post(`http://localhost:5000/user/profile/${email}`, updateData);
+      if (res.data && res.data.user) {
+        updateFormData(res.data.user);
+      }
+    } catch (err) {
+      console.error("Error updating user details:", err);
+      setError(err.message);
+    }
   };
 
-  const saveEducationLevel = () => {
-    updateFormData({
+  // Handlers for saving individual fields
+  const saveName = async () => {
+    const updateData = {
+      first_name: localFormData.first_name,
+      last_name: localFormData.last_name,
+    };
+    await persistUpdate(updateData);
+    setEditMode((prev) => ({ ...prev, name: false }));
+  };
+
+  const saveEducationLevel = async () => {
+    const updateData = {
       education_details: {
         ...formData.education_details,
         education_level: localFormData.education_details.education_level,
       },
-    });
-    setEditMode({ ...editMode, educationLevel: false });
+    };
+    await persistUpdate(updateData);
+    setEditMode((prev) => ({ ...prev, educationLevel: false }));
   };
 
-  const saveWorkExperience = () => {
-    updateFormData({
+  const saveWorkExperience = async () => {
+    const updateData = {
       work_experience: {
         ...formData.work_experience,
         months_of_experience: localFormData.work_experience.months_of_experience,
       },
-    });
-    setEditMode({ ...editMode, workExperience: false });
+    };
+    await persistUpdate(updateData);
+    setEditMode((prev) => ({ ...prev, workExperience: false }));
   };
+
+  const saveProficiencyExam = async () => {
+    const updateData = {
+      proficiency_exam: {
+        exam_name: localFormData.proficiency_exam.exam_name,
+        score: localFormData.proficiency_exam.score,
+      },
+    };
+    await persistUpdate(updateData);
+    setEditMode((prev) => ({ ...prev, proficiencyExam: false }));
+  };
+
+  // Convert array fields to comma-separated strings for display
+  const displayCountries =
+    formData.countries && formData.countries.length ? formData.countries.join(", ") : "N/A";
+  const displayMajors =
+    formData.majors && formData.majors.length ? formData.majors.join(", ") : "N/A";
+  const displayMainCriteria =
+    formData.mainCriteria && formData.mainCriteria.length ? formData.mainCriteria.join(", ") : "N/A";
 
   return (
     <div className="bg-[#0D1224] min-h-screen text-black font-lato relative">
@@ -136,7 +172,7 @@ const Profile = () => {
                       />
                     </>
                   ) : (
-                    <span className="text-lg font-lato ">
+                    <span className="text-lg font-lato">
                       {formData.first_name || formData.last_name
                         ? `${formData.first_name} ${formData.last_name}`
                         : "No Name"}
@@ -144,15 +180,9 @@ const Profile = () => {
                   )}
                 </div>
                 {editMode.name ? (
-                  <FaSave
-                    onClick={saveName}
-                    className="text-gray-500 cursor-pointer"
-                  />
+                  <FaSave onClick={saveName} className="text-gray-500 cursor-pointer" />
                 ) : (
-                  <FaPen
-                    onClick={() => setEditMode({ ...editMode, name: true })}
-                    className="text-gray-500 cursor-pointer"
-                  />
+                  <FaPen onClick={() => setEditMode({ ...editMode, name: true })} className="text-gray-500 cursor-pointer" />
                 )}
               </div>
               <hr />
@@ -188,17 +218,9 @@ const Profile = () => {
                   )}
                 </span>
                 {editMode.educationLevel ? (
-                  <FaSave
-                    onClick={saveEducationLevel}
-                    className="text-gray-500 cursor-pointer"
-                  />
+                  <FaSave onClick={saveEducationLevel} className="text-gray-500 cursor-pointer" />
                 ) : (
-                  <FaPen
-                    onClick={() =>
-                      setEditMode({ ...editMode, educationLevel: true })
-                    }
-                    className="text-gray-500 cursor-pointer"
-                  />
+                  <FaPen onClick={() => setEditMode({ ...editMode, educationLevel: true })} className="text-gray-500 cursor-pointer" />
                 )}
               </div>
               <div className="bg-white p-6 rounded-lg shadow flex justify-between border border-[#E7E7E7]">
@@ -226,17 +248,9 @@ const Profile = () => {
                   )}
                 </span>
                 {editMode.workExperience ? (
-                  <FaSave
-                    onClick={saveWorkExperience}
-                    className="text-gray-500 cursor-pointer"
-                  />
+                  <FaSave onClick={saveWorkExperience} className="text-gray-500 cursor-pointer" />
                 ) : (
-                  <FaPen
-                    onClick={() =>
-                      setEditMode({ ...editMode, workExperience: true })
-                    }
-                    className="text-gray-500 cursor-pointer"
-                  />
+                  <FaPen onClick={() => setEditMode({ ...editMode, workExperience: true })} className="text-gray-500 cursor-pointer" />
                 )}
               </div>
             </div>
@@ -248,7 +262,6 @@ const Profile = () => {
             <div className="space-y-4">
               <div>
                 <p className="text-gray-500 text-sm">
-                  {/* Replaced "Preferred Programs" with a field from your schema */}
                   Your Ideal Study Destination (Country)
                 </p>
                 <input
@@ -263,10 +276,7 @@ const Profile = () => {
                 />
               </div>
               <div>
-                <p className="text-gray-500 text-sm">
-                  {/* Replaced Preferred Majors with "Area of Study" if available */}
-                  Your Preferred majors
-                </p>
+                <p className="text-gray-500 text-sm">Your Preferred majors</p>
                 <input
                   type="text"
                   placeholder="Search for Major/Area"
@@ -280,10 +290,59 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* English Test */}
-            <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow flex justify-between">
-              <p className="text-gray-600">Have you taken an English test?</p>
-              <FaPen className="text-gray-500 cursor-pointer" />
+            {/* English Test & Proficiency Exam Section */}
+            <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow">
+              <div className="flex justify-between items-center">
+                <p className="text-gray-600">Have you taken an English test?</p>
+                {editMode.proficiencyExam ? (
+                  <FaSave onClick={saveProficiencyExam} className="text-gray-500 cursor-pointer" />
+                ) : (
+                  <FaPen onClick={() => setEditMode({ ...editMode, proficiencyExam: true })} className="text-gray-500 cursor-pointer" />
+                )}
+              </div>
+              <div className="mt-4">
+                {editMode.proficiencyExam ? (
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <input
+                      type="text"
+                      value={localFormData.proficiency_exam.exam_name}
+                      onChange={(e) =>
+                        setLocalFormData({
+                          ...localFormData,
+                          proficiency_exam: {
+                            ...localFormData.proficiency_exam,
+                            exam_name: e.target.value,
+                          },
+                        })
+                      }
+                      placeholder="Exam Name (e.g., IELTS)"
+                      className="w-full border border-gray-300 rounded px-2 py-1"
+                    />
+                    <input
+                      type="text"
+                      value={localFormData.proficiency_exam.score}
+                      onChange={(e) =>
+                        setLocalFormData({
+                          ...localFormData,
+                          proficiency_exam: {
+                            ...localFormData.proficiency_exam,
+                            score: e.target.value,
+                          },
+                        })
+                      }
+                      placeholder="Score"
+                      className="w-full border border-gray-300 rounded px-2 py-1"
+                    />
+                  </div>
+                ) : formData.proficiency_exam.exam_name ? (
+                  <p className="mt-2 text-gray-700">
+                    {formData.proficiency_exam.exam_name} (
+                    {formData.proficiency_exam.score})
+                  </p>
+                ) : (
+                  <p className="mt-2 text-gray-700">N/A</p>
+                )}
+              </div>
             </div>
           </div>
         </div>

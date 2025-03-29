@@ -61,7 +61,6 @@ const CourseSideBar = ({
     setIsFiveOpen(!isFiveOpen);
   };
 
-
   //special restrictions
   const [isSixOpen, setIsSixOpen] = useState(false);
   const courseDurationDropdown = () => {
@@ -129,8 +128,10 @@ const CourseSideBar = ({
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                       type="checkbox"
                       value={i}
-                      onChange={(e) => setCountry((prv)=>(prv===i?"":i))}
-                      checked={country===i}
+                      onChange={(e) =>
+                        setCountry((prv) => (prv === i ? "" : i))
+                      }
+                      checked={country === i}
                     />
                     <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                       <svg
@@ -197,8 +198,10 @@ const CourseSideBar = ({
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                       type="checkbox"
                       value={index}
-                      onChange={(e) => setIntake((prv)=>(prv===index?"":index))}
-                      checked={intake===index}
+                      onChange={(e) =>
+                        setIntake((prv) => (prv === index ? "" : index))
+                      }
+                      checked={intake === index}
                     />
                     <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                       <svg
@@ -265,8 +268,10 @@ const CourseSideBar = ({
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                       type="checkbox"
                       value={lvl}
-                      onChange={(e) => setCourseLevel((prv)=>(prv===lvl?"":lvl))}
-                      checked={courseLevel===lvl}
+                      onChange={(e) =>
+                        setCourseLevel((prv) => (prv === lvl ? "" : lvl))
+                      }
+                      checked={courseLevel === lvl}
                     />
                     <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                       <svg
@@ -350,8 +355,10 @@ const CourseSideBar = ({
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                         type="checkbox"
                         value={aof}
-                        onChange={(e) => setAreaOfStudy((prv)=>(prv===aof?"":aof))}
-                        checked={areaOfStudy===aof}
+                        onChange={(e) =>
+                          setAreaOfStudy((prv) => (prv === aof ? "" : aof))
+                        }
+                        checked={areaOfStudy === aof}
                       />
                       <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                         <svg
@@ -444,7 +451,7 @@ const CourseSideBar = ({
           {isSixOpen && (
             <div className="flex flex-col mb-6">
               {/* CHECHBOX 1 */}
-              {dbValues.courseDurations.map((dur) => (
+              {dbValues.courseDuration.map((dur) => (
                 <div className="inline-flex items-center px-5">
                   <label
                     data-ripple-dark="true"
@@ -458,8 +465,10 @@ const CourseSideBar = ({
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                       type="checkbox"
                       value={dur}
-                      onChange={(e) => setCourseDuration((prv)=>(prv===dur?"":dur))}
-                      checked={courseDuration===dur}
+                      onChange={(e) =>
+                        setCourseDuration((prv) => (prv === dur ? "" : dur))
+                      }
+                      checked={courseDuration === dur}
                     />
                     <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                       <svg
@@ -507,24 +516,23 @@ const CourseSideBar = ({
           </button>
           {isSevenOpen && (
             <div className="flex flex-col mb-6">
-              <div className="flex flex-col mt-2 px-3  h-[11.5vh]  overflow-y-auto ">
-                {/* CHECHBOX 1 */}
-                {dbValues.eligibilityRequirements.map((back) => (
-                  <div className="inline-flex items-center px-5">
+              <div className="flex flex-col mt-2 px-3 h-[11.5vh] overflow-y-auto">
+                {(dbValues.backlogs || []).map((back, idx) => (
+                  <div key={idx} className="inline-flex items-center px-5">
                     <label
                       data-ripple-dark="true"
-                      htmlFor="checkbox1"
+                      htmlFor={`backlog-checkbox-${idx}`}
                       className="relative flex cursor-pointer items-center rounded-full p-3"
                     >
                       <input
-                        id="checkbox1"
-                        className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute 				 
-                                    before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 
-                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
+                        id={`backlog-checkbox-${idx}`}
+                        className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                         type="checkbox"
                         value={back}
-                        onChange={(e) => setBacklogs((prv)=>(prv===back?"":back))}
-                        checked={backlogs===back}
+                        onChange={() =>
+                          setBacklogs((prev) => (prev === back ? "" : back))
+                        }
+                        checked={backlogs === back}
                       />
                       <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                         <svg
@@ -543,10 +551,9 @@ const CourseSideBar = ({
                         </svg>
                       </span>
                     </label>
-
                     <label
-                      htmlFor="back"
-                      className=" cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
+                      htmlFor={`backlog-checkbox-${idx}`}
+                      className="cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
                     >
                       {back}
                     </label>
@@ -556,6 +563,7 @@ const CourseSideBar = ({
             </div>
           )}
         </div>
+
         {/* ****************************************************************************************************************************************************************************************************  */}
         <hr className="border-[1px] border-[#bfbfbf]" />
         {/* ****************************************************************************************************************************************************************************************************  */}
@@ -566,7 +574,13 @@ const CourseSideBar = ({
             className="flex justify-between items-center py-4 font-bold text-black text-[1.1rem] px-8"
             onClick={tuitionFeesDropdown}
           >
-            Tuition Fees
+            Tuition Fees{" "}
+            {tuitionFeeMin || tuitionFeeMax ? (
+              <span>
+                ({tuitionFeeMin ? tuitionFeeMin : 0} -{" "}
+                {tuitionFeeMax ? tuitionFeeMax : "∞"})
+              </span>
+            ) : null}
             <img
               src={dropdown}
               alt="dropdown"
@@ -576,52 +590,35 @@ const CourseSideBar = ({
           </button>
           {isEightOpen && (
             <div className="flex flex-col mb-6">
-              <div className="flex flex-col mt-2 px-3  h-[11.5vh]  overflow-y-auto ">
-                {/* CHECHBOX 1 */}
-                {dbValues.tuitionFees.map((fee) => (
-                  <div className="inline-flex items-center px-5">
-                    <label
-                      data-ripple-dark="true"
-                      htmlFor="checkbox1"
-                      className="relative flex cursor-pointer items-center rounded-full p-3"
-                    >
-                      <input
-                        id="checkbox1"
-                        className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute 				 
-                                    before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 
-                                    before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
-                        type="checkbox"
-                        value={fee}
-                        onChange={(e) => setTuitionFees((prv)=>(prv===fee?"":fee))}
-                        checked={tuitionFees===fee}
-                      />
-                      <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
-                        <svg
-                          strokeWidth="1"
-                          stroke="currentColor"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          className="h-3.5 w-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            clipRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            fillRule="evenodd"
-                          ></path>
-                        </svg>
-                      </span>
-                    </label>
-
-                    <label
-                      htmlFor="fee"
-                      className=" cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
-                    >
-                      {fee}
-                    </label>
-                  </div>
-                ))}
+              <div className="flex flex-col gap-2 mt-2 px-3">
+                <label className="text-sm font-medium mb-1">Min Fee</label>
+                <input
+                  type="number"
+                  placeholder="Min Fee"
+                  value={tuitionFeeMin}
+                  onChange={(e) => setTuitionFeeMin(e.target.value)}
+                  className="border rounded px-2 py-1 w-full"
+                />
+                <label className="text-sm font-medium mt-2 mb-1">Max Fee</label>
+                <input
+                  type="number"
+                  placeholder="Max Fee"
+                  value={tuitionFeeMax}
+                  onChange={(e) => setTuitionFeeMax(e.target.value)}
+                  className="border rounded px-2 py-1 w-full"
+                />
               </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setTuitionFeeMin("");
+                  setTuitionFeeMax("");
+                  setIsEightOpen(false);
+                }}
+                className="mt-4 w-full text-center text-sm text-blue-500 hover:underline py-1"
+              >
+                Clear Range
+              </button>
             </div>
           )}
         </div>
@@ -662,8 +659,10 @@ const CourseSideBar = ({
                                     before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                         type="checkbox"
                         value={tst}
-                        onChange={(e) => setTestRequirement((prv)=>(prv===tst?"":tst))}
-                        checked={testRequirement===tst}
+                        onChange={(e) =>
+                          setTestRequirement((prv) => (prv === tst ? "" : tst))
+                        }
+                        checked={testRequirement === tst}
                       />
                       <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                         <svg
