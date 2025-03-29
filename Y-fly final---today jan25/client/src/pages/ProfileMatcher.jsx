@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import grid from "../assets/images/image/grid.svg";
 import CourseSearchbar from "../components/CourseSearchbar";
@@ -40,12 +34,12 @@ const Profilematcher = () => {
   const [minAmount, setMinAmount] = useState(null);
   const [maxAmount, setMaxAmount] = useState(null);
   const [intake, setIntake] = useState([]);
-  const [duration, setDuration] = useState("");
+  const [duration, setDuration] = useState([]);
   const [testRequirement, setTestRequirement] = useState("");
   const [minScore, setMinScore] = useState(null);
   const [maxScore, setMaxScore] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [scholarship, setScholarship] = useState("");
+  const [scholarship, setScholarship] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -108,12 +102,14 @@ const Profilematcher = () => {
           params: {
             university_name: searchQuery,
             course_level: courseLevel,
-            country:Array.isArray(country) ? country : [country],
-            area_of_study: Array.isArray(areasOfStudy) ? areasOfStudy : [areasOfStudy],
+            country: Array.isArray(country) ? country : [country],
+            area_of_study: Array.isArray(areasOfStudy)
+              ? areasOfStudy
+              : [areasOfStudy],
             max_tution_fee: max,
             min_tution_fee: min,
-            intake_month: intake.map((i) => i.month), 
-            intake_year: intake.map((i) => i.year), 
+            intake_month: intake.map((i) => i.month),
+            intake_year: intake.map((i) => i.year),
             course_duration: duration,
             test_requirement: testRequirement,
             min_score: minScore,
@@ -155,6 +151,9 @@ const Profilematcher = () => {
   const [isContenderExpanded, setIsContenderExpanded] = useState(false);
   const [isFrontrunnerExpanded, setIsFrontrunnerExpanded] = useState(false);
 
+  const[selectedUniversity, setSelectedUniversity] = useState(null);
+  const[selectedCourse , setSelectedCourse] = useState(null);
+  
   const toggleShowMore = (value) => {
     if (value === "ascend") setIsAscendExpanded(!isAscendExpanded);
     if (value === "contender") setIsContenderExpanded(!isContenderExpanded);
@@ -163,21 +162,27 @@ const Profilematcher = () => {
   };
 
   const [openModal, setOpenModal] = useState(false);
-  const handleModal = () => {
+  const handleModal = (univeristy) => {
     setOpenModal(!openModal);
     if (details) {
       setDetails(false);
     }
+    if(univeristy){
+      setSelectedUniversity(univeristy)
+    }
   };
 
   const [details, setDetails] = useState(false);
-  const handleDetails = () => {
+  const handleDetails = (course) => {
     setDetails(!details);
     if (openModal) {
       setOpenModal(false);
     }
     if (apply) {
       setApply(false);
+    }
+    if(course){
+      setSelectedCourse(course)
     }
   };
 
@@ -270,75 +275,63 @@ const Profilematcher = () => {
 
         {/*---------------------------------- second section--------------------- */}
         <div className="flex justify-center mt-10 max-lg:hidden">
-          {isFiltered && (
-            <div className="bg-bluegradient w-[90%] rounded-full py-12 px-20 flex flex-wrap justify-between">
-              {courseLevel && (
-                <div>
-                  <label className=" text-white">Course Level</label>
-                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                    <div className="">{courseLevel}</div>
-                  </button>
-                </div>
+          <div className="bg-bluegradient w-[90%] rounded-full py-12 px-20 flex flex-wrap justify-between">
+            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+              {!courseLevel ? (
+                <div className="">Masters</div>
+              ) : (
+                <div>{courseLevel}</div>
               )}
-              {country && (
-                <div>
-                  <label className=" text-white">Country</label>
+            </button>
 
-                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                    <div className="">{country}</div>
-                  </button>
-                </div>
-              )}
-              {areasOfStudy && (
+            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+              {country.length > 0 ? (
                 <div>
-                  <label className=" text-white">Area Of Study</label>
+                  {country.map((c, index) => (
+                    <div key={index}>{c}</div> // Each country appears on a new line
+                  ))}
+                </div>
+              ) : (
+                <div>USA</div>
+              )}
+            </button>
 
-                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                    <div className="">{areasOfStudy}</div>
-                  </button>
-                </div>
-              )}
-              {intake.year && intake.month && (
-                <div className="text-center">
-                  <label className=" text-white">Intake</label>
-                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                    <div className="">
-                      {intake.month}-{intake.year}
-                    </div>
-                  </button>
-                </div>
-              )}
+            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+              <div className="">Computer Science & IT</div>
+            </button>
 
-              {scholarship && (
-                <div>
-                  <label className=" text-white">Scholarship</label>
-                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                    <div className="">{scholarship}</div>
-                  </button>
-                </div>
-              )}
-              {duration && (
-                <div>
-                  <label className=" text-white">Course Duration</label>
-                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                    <div className="">{duration}</div>
-                  </button>
-                </div>
-              )}
+            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+              <div className="">Aug - Nov 2024</div>
+            </button>
 
-              {testRequirement && (
-                <div>
-                  <label className=" text-white">Course Duration</label>
-                  <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-                    <div className="">{testRequirement}</div>
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+              <div className="">₹30L</div>
+            </button>
+
+            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+              <div className="">48 months</div>
+            </button>
+
+            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
+              <div className="">IELTS Exam Score 9</div>
+            </button>
+          </div>
         </div>
 
-        <ResponsiveSearchBar filters={filters} />
+        <ResponsiveSearchBar
+          filters={filters}
+          setCourseLevel={setCourseLevel}
+          setCountry={setCountry}
+          setAreasOfStudy={setAreasOfStudy}
+          setIntake={setIntake}
+          setScholarship={setScholarship}
+          setMaxAmount={setMaxAmount}
+          setMinAmount={setMinAmount}
+          setDuration={setDuration}
+          setMinScore={setMinScore}
+          setMaxScore={setMaxScore}
+          setTestRequirement={setTestRequirement}
+        />
 
         {/*--------------------------------- white grid section------------------------------------------ */}
         <div
@@ -534,7 +527,7 @@ const Profilematcher = () => {
 
                               <div className=" flex items-center">
                                 <button
-                                  onClick={handleModal}
+                                  onClick={()=>handleModal(i)}
                                   className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
                                 >
                                   View courses
@@ -590,7 +583,7 @@ const Profilematcher = () => {
 
                                 <div className=" flex items-center">
                                   <button
-                                    onClick={handleModal}
+                                    onClick={()=>handleModal(i)}
                                     className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
                                   >
                                     View courses
@@ -677,7 +670,8 @@ const Profilematcher = () => {
                                 </div>
 
                                 <div className=" flex items-center">
-                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
+                                  onClick={()=>handleModal(i)}>
                                     View courses
                                   </button>
                                 </div>
@@ -730,7 +724,8 @@ const Profilematcher = () => {
                                 </div>
 
                                 <div className=" flex items-center">
-                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
+                                  onClick={()=>handleModal(i)}>
                                     View courses
                                   </button>
                                 </div>
@@ -816,7 +811,8 @@ const Profilematcher = () => {
                                 </div>
 
                                 <div className=" flex items-center">
-                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
+                                  onClick={()=>handleModal(i)}>
                                     View courses
                                   </button>
                                 </div>
@@ -869,7 +865,8 @@ const Profilematcher = () => {
                                 </div>
 
                                 <div className=" flex items-center">
-                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]">
+                                  <button className="bg-white px-4 max-xl:px-3 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] max-xl:text-[12px] font-urban border-[2px] rounded-[20px]"
+                                  onClick={()=>handleModal(i)}>
                                     View courses
                                   </button>
                                 </div>
@@ -910,67 +907,19 @@ const Profilematcher = () => {
                     </button>
                   </div>
 
-                  <div className="overflow-y-auto h-[30vh] ">
+                  <div className="overflow-y-auto max-h-[30vh] ">
+                    {selectedUniversity?.courses?.length>0&&
+                  selectedUniversity?.courses?.map(i=>
                     <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>Bachelor of Arts in Biomedical Engineering</div>
-                      <button
-                        onClick={handleDetails}
-                        className="text-[#2B7CD6] text-[14px] font-semibold"
-                      >
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>Bachelors in Mathematics</div>
-                      <button className="text-[#2B7CD6] text-[14px] font-semibold">
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>
-                        Bachelors in Molecular and Cellular Biology (MCB)
-                      </div>
-                      <button className="text-[#2B7CD6] text-[14px] font-semibold">
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>Bachelors of Arts in Computer Science</div>
-                      <button className="text-[#2B7CD6] text-[14px] font-semibold">
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>Bachelor of Science in Electrical Engineering</div>
-                      <button className="text-[#2B7CD6] text-[14px] font-semibold">
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>Bachelor of Science in Engineering Sciences</div>
-                      <button className="text-[#2B7CD6] text-[14px] font-semibold">
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>Bachelor of Science in Mechanical Engineering</div>
-                      <button className="text-[#2B7CD6] text-[14px] font-semibold">
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex justify-between font-urban mb-3 mr-4">
-                      <div>Bachelors in Philosophy</div>
-                      <button className="text-[#2B7CD6] text-[14px] font-semibold">
-                        View Details
-                      </button>
-                    </div>
+                    <div>{i?.course_level} of {i?.discipline} in {i?.area_of_study}</div>
+                    <button
+                      onClick={()=>handleDetails(i)}
+                      className="text-[#2B7CD6] text-[14px] font-semibold"
+                    >
+                      View Details
+                    </button>
+                  </div>
+                  )}
                   </div>
                 </div>
               </div>
@@ -983,10 +932,12 @@ const Profilematcher = () => {
                 <div className="bg-white w-[40%] max-md:w-[95%] absolute top-[20%] rounded-[30px] p-8">
                   <div className="border-black border-[1px] p-5 rounded-[20px]">
                     <div className="flex justify-center pt-4 pb-7">
-                      <img src={harvard} width={250} alt="harward" />
+                      <img 
+                      src={`data:${selectedUniversity?.university_logo?.contentType};base64,${selectedUniversity?.university_logo?.data}`}
+                       className="max-w-60 h-32" alt="harward" />
                     </div>
                     <div className="font-dela text-[13px]">
-                      Bachelor of Science in Engineering Sciences
+                    {selectedCourse?.course_level} of {selectedCourse?.discipline} in {selectedCourse?.area_of_study}
                     </div>
                   </div>
 
@@ -1003,7 +954,7 @@ const Profilematcher = () => {
                             Tuition Fee
                           </div>
                           <div className="font-dela text-[13px]">
-                            USD 49,653/year
+                            ${selectedCourse?.tution_fee}
                           </div>
                         </div>
                       </div>
@@ -1014,7 +965,8 @@ const Profilematcher = () => {
                           <div className="font-urban text-[14px]">
                             Eligibility
                           </div>
-                          <div className="font-dela text-[13px]">Min. 80%</div>
+                          {selectedCourse?.eligibilityRequirements?.filter(i=>i.requirementType==="Min GPA")?.map(i=><div className="font-dela text-[13px]">{i.gpaRange}</div>)
+                          }
                         </div>
                       </div>
                     </div>
@@ -1024,15 +976,15 @@ const Profilematcher = () => {
                         <img src={wallet} alt="wallet" />
                         <div className="ml-3">
                           <div className="font-urban text-[14px]">Duration</div>
-                          <div className="font-dela text-[13px]">48 Months</div>
+                          <div className="font-dela text-[13px]">{selectedCourse?.course_duration}</div>
                         </div>
                       </div>
 
                       <div className="flex w-[40%]">
                         <img src={wallet} alt="wallet" />
                         <div className="ml-3">
-                          <div className="font-urban text-[14px]">Duration</div>
-                          <div className="font-dela text-[13px]">48 Months</div>
+                          <div className="font-urban text-[14px]">Intake</div>
+                          <div className="font-dela text-[13px]">{selectedCourse?.intakes?.map((i,index)=><><span className="hidden md:flex">{i.month}-{i.year}{selectedCourse?.intakes?.length!==index?"":","}</span><span className="md:hidden" >{i.month}-<br/>{i.year}{selectedCourse?.intakes?.length!==index?"":","}</span></>)}</div>
                         </div>
                       </div>
                     </div>
@@ -1042,18 +994,19 @@ const Profilematcher = () => {
                         <img src={wallet} alt="wallet" />
                         <div className="ml-3">
                           <div className="font-urban text-[14px]">
-                            English Proficiency Requirement
+                            Requirement
                           </div>
-                          <div className="font-dela text-[13px]">
-                            Overall score of 7, with min. 7 in each band (IELTS)
-                          </div>
+                          {selectedCourse?.testRequirements?.map(i=><div className="font-dela text-[13px]">
+                            Overall score of {i?.overallScore}, for ({i?.testRequirementName})
+                          </div>)}
+                          
                         </div>
                       </div>
                     </div>
 
                     <div className="mt-8 flex justify-between">
                       <button
-                        onClick={handleModal}
+                        onClick={()=>handleModal()}
                         className="bg-white px-4 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] font-urban border-[2px] rounded-[20px]"
                       >
                         Back to results
@@ -1139,7 +1092,7 @@ const Profilematcher = () => {
 
                   <div className="flex justify-between ">
                     <button
-                      onClick={handleDetails}
+                      onClick={()=>handleDetails()}
                       className="bg-white px-4 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] font-urban border-[2px] rounded-[20px]"
                     >
                       Back to details

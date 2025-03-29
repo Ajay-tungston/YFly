@@ -41,7 +41,7 @@ const courseSchema = new mongoose.Schema(
     },
     application_deadline: { type: Date, required: true },
     overview: { type: String, required: true, trim: true },
-    intakes: [
+    intakes: [  
       {
         month: { type: String, required: true },
         year: { type: Number, required: true },
