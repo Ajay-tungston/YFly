@@ -25,6 +25,9 @@ app.use('/admin', authAdmin);
 app.use('/user', authUser);
 app.use('/scholarships', scholarshipRoutes);
 app.use('/courses', courseRoutes);
+app.use('/university', require("./Routes/universityRoutes"));
+app.use('/profile-matcher', require("./Routes/profileMatcherRoutes"));
+
 // Connect to the database
 mongoose
   .connect(dbConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })

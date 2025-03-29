@@ -37,10 +37,14 @@ const CourseDropdown = ({
   // New state variables for dropdown search filters
   const [intakeDropdownSearch, setIntakeDropdownSearch] = useState("");
   const [countryDropdownSearch, setCountryDropdownSearch] = useState("");
-  const [courseTitleDropdownSearch, setCourseTitleDropdownSearch] = useState("");
-  const [courseLevelDropdownSearch, setCourseLevelDropdownSearch] = useState("");
-  const [areaOfStudyDropdownSearch, setAreaOfStudyDropdownSearch] = useState("");
-  const [universityRankingDropdownSearch, setUniversityRankingDropdownSearch] = useState("");
+  const [courseTitleDropdownSearch, setCourseTitleDropdownSearch] =
+    useState("");
+  const [courseLevelDropdownSearch, setCourseLevelDropdownSearch] =
+    useState("");
+  const [areaOfStudyDropdownSearch, setAreaOfStudyDropdownSearch] =
+    useState("");
+  const [universityRankingDropdownSearch, setUniversityRankingDropdownSearch] =
+    useState("");
 
   // Close any open dropdown when clicking outside the card
   useEffect(() => {
@@ -97,11 +101,12 @@ const CourseDropdown = ({
                 <ChevronDown className="w-4 h-4" />
               </button>
               {openDropdown === "intakes" && (
-                <div
-                  className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-white text-black shadow-lg rounded-lg z-50 border border-gray-300"
-                >
+                <div className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-white text-black shadow-lg rounded-lg z-50 border border-gray-300">
                   {/* Intake Dropdown Search */}
-                  <div className="px-3 py-1" onClick={(e) => e.stopPropagation()}>
+                  <div
+                    className="px-3 py-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <input
                       type="text"
                       placeholder="Search Intake..."
@@ -113,7 +118,10 @@ const CourseDropdown = ({
                   {dbValues.intakeYears &&
                     dbValues.intakeYears
                       .filter((opt) =>
-                        opt.toString().toLowerCase().includes(intakeDropdownSearch.toLowerCase())
+                        opt
+                          .toString()
+                          .toLowerCase()
+                          .includes(intakeDropdownSearch.toLowerCase())
                       )
                       .map((opt, idx) => (
                         <label
@@ -154,11 +162,12 @@ const CourseDropdown = ({
                 <ChevronDown className="w-4 h-4" />
               </button>
               {openDropdown === "country" && (
-                <div
-                  className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-white text-black shadow-lg rounded-lg z-50"
-                >
+                <div className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-white text-black shadow-lg rounded-lg z-50">
                   {/* Country Dropdown Search */}
-                  <div className="px-3 py-1" onClick={(e) => e.stopPropagation()}>
+                  <div
+                    className="px-3 py-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <input
                       type="text"
                       placeholder="Search Country..."
@@ -170,7 +179,9 @@ const CourseDropdown = ({
                   {dbValues.countries &&
                     dbValues.countries
                       .filter((ctry) =>
-                        ctry.toLowerCase().includes(countryDropdownSearch.toLowerCase())
+                        ctry
+                          .toLowerCase()
+                          .includes(countryDropdownSearch.toLowerCase())
                       )
                       .map((ctry, idx) => (
                         <label
@@ -211,11 +222,12 @@ const CourseDropdown = ({
                 <ChevronDown className="w-4 h-4" />
               </button>
               {openDropdown === "courseTitle" && (
-                <div
-                  className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-white text-black shadow-lg rounded-lg z-50"
-                >
+                <div className="absolute top-full left-0 mt-1 w-full sm:w-48 bg-white text-black shadow-lg rounded-lg z-50">
                   {/* Course Title Dropdown Search */}
-                  <div className="px-3 py-1" onClick={(e) => e.stopPropagation()}>
+                  <div
+                    className="px-3 py-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <input
                       type="text"
                       placeholder="Search Title..."
@@ -229,7 +241,9 @@ const CourseDropdown = ({
                   {dbValues.courseTitle &&
                     dbValues.courseTitle
                       .filter((title) =>
-                        title.toLowerCase().includes(courseTitleDropdownSearch.toLowerCase())
+                        title
+                          .toLowerCase()
+                          .includes(courseTitleDropdownSearch.toLowerCase())
                       )
                       .map((title, idx) => (
                         <label
@@ -286,15 +300,15 @@ const CourseDropdown = ({
                       <ChevronDown className="w-4 h-4" />
                     </button>
                     {openDropdown === "courseLevel" && (
-                      <div
-                        className="absolute top-full left-0 mt-1 w-full bg-white text-black shadow-lg rounded-lg z-10"
-                      >
-                     
-                    
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white text-black shadow-lg rounded-lg z-10">
                         {dbValues.courseLevels &&
                           dbValues.courseLevels
                             .filter((lvl) =>
-                              lvl.toLowerCase().includes(courseLevelDropdownSearch.toLowerCase())
+                              lvl
+                                .toLowerCase()
+                                .includes(
+                                  courseLevelDropdownSearch.toLowerCase()
+                                )
                             )
                             .map((lvl, idx) => (
                               <label
@@ -308,7 +322,9 @@ const CourseDropdown = ({
                                   id="checkbox2"
                                   className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                                   type="checkbox"
-                                  onChange={() => handleSelect(setCourseLevel, lvl)}
+                                  onChange={() =>
+                                    handleSelect(setCourseLevel, lvl)
+                                  }
                                   checked={courseLevel === lvl}
                                 />
                                 <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
@@ -354,11 +370,12 @@ const CourseDropdown = ({
                       <ChevronDown className="w-4 h-4" />
                     </button>
                     {openDropdown === "areaOfStudy" && (
-                      <div
-                        className="absolute top-full left-0 mt-1 w-full bg-white text-black shadow-lg rounded-lg z-10"
-                      >
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white text-black shadow-lg rounded-lg z-10">
                         {/* Area of Study Dropdown Search */}
-                        <div className="px-3 py-1" onClick={(e) => e.stopPropagation()}>
+                        <div
+                          className="px-3 py-1"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <input
                             type="text"
                             placeholder="Search Area of Study..."
@@ -372,7 +389,11 @@ const CourseDropdown = ({
                         {dbValues.areasOfStudy &&
                           dbValues.areasOfStudy
                             .filter((study) =>
-                              study.toLowerCase().includes(areaOfStudyDropdownSearch.toLowerCase())
+                              study
+                                .toLowerCase()
+                                .includes(
+                                  areaOfStudyDropdownSearch.toLowerCase()
+                                )
                             )
                             .map((study, idx) => (
                               <label
@@ -386,7 +407,9 @@ const CourseDropdown = ({
                                   id="checkbox2"
                                   className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                                   type="checkbox"
-                                  onChange={() => handleSelect(setAreaOfStudy, study)}
+                                  onChange={() =>
+                                    handleSelect(setAreaOfStudy, study)
+                                  }
                                   checked={areaOfStudy === study}
                                 />
                                 <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
@@ -423,7 +446,7 @@ const CourseDropdown = ({
                   </div>
 
                   {/* Discipline */}
-                  <div className="bg-white rounded-lg shadow-md p-4 text-black">
+                  <div className="bg-white rounded-3xl shadow-md p-4 text-black">
                     <label className="block text-sm text-black mb-2">
                       Discipline Area
                     </label>
@@ -443,20 +466,27 @@ const CourseDropdown = ({
                   <div className="bg-white text-black p-4 rounded-3xl">
                     <h3 className="text-lg font-semibold mb-2">Backlogs</h3>
                     <div className="space-y-2">
-                      {dbValues.eligibilityRequirements &&
-                        dbValues.eligibilityRequirements.map((back, idx) => (
+                      {(dbValues.backlogs || []).map((back, idx) => (
+                        <div
+                          key={idx}
+                          className="inline-flex items-center px-5"
+                        >
                           <label
-                            key={idx}
                             data-ripple-dark="true"
-                            htmlFor="checkbox2"
+                            htmlFor={`backlog-checkbox-${idx}`}
                             className="relative flex cursor-pointer items-center rounded-full p-3"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <input
-                              id="checkbox2"
+                              id={`backlog-checkbox-${idx}`}
                               className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                               type="checkbox"
-                              onChange={() => handleSelect(setBacklogs, back)}
+                              value={back}
+                              onChange={() =>
+                                setBacklogs((prev) =>
+                                  prev === back ? "" : back
+                                )
+                              }
                               checked={backlogs === back}
                             />
                             <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
@@ -475,9 +505,15 @@ const CourseDropdown = ({
                                 ></path>
                               </svg>
                             </span>
-                            <span className="px-2">{back}</span>
                           </label>
-                        ))}
+                          <label
+                            htmlFor={`backlog-checkbox-${idx}`}
+                            className="cursor-pointer select-none font-normal text-[#0e1b2c] tracking-wider text-[1rem] max-xl:text-[0.9rem]"
+                          >
+                            {back}
+                          </label>
+                        </div>
+                      ))}
                     </div>
                     <button
                       onClick={(e) => {
@@ -485,7 +521,7 @@ const CourseDropdown = ({
                         setBacklogs("");
                         setOpenDropdown(null);
                       }}
-                      className="mt-4 w-full text-center text-sm text-blue-500 hover:underline"
+                      className="mt-4 w-full text-center text-sm text-blue-500 hover:underline py-1"
                     >
                       Clear Selection
                     </button>
@@ -501,11 +537,12 @@ const CourseDropdown = ({
                       <ChevronDown className="w-4 h-4" />
                     </button>
                     {openDropdown === "universityRanking" && (
-                      <div
-                        className="absolute top-full left-0 mt-1 w-full bg-white text-black shadow-lg rounded-lg z-10"
-                      >
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white text-black shadow-lg rounded-lg z-10">
                         {/* University Ranking Dropdown Search */}
-                        <div className="px-3 py-1" onClick={(e) => e.stopPropagation()}>
+                        <div
+                          className="px-3 py-1"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <input
                             type="text"
                             placeholder="Search Ranking..."
@@ -516,50 +553,51 @@ const CourseDropdown = ({
                             className="w-full px-2 py-1 border border-gray-300 rounded"
                           />
                         </div>
-                        {dbValues.universityRankings &&
-                          dbValues.universityRankings
-                            .filter((rank) =>
-                              rank
-                                .toString()
-                                .toLowerCase()
-                                .includes(universityRankingDropdownSearch.toLowerCase())
-                            )
-                            .map((rank, idx) => (
-                              <label
-                                key={idx}
-                                data-ripple-dark="true"
-                                htmlFor="checkbox2"
-                                className="relative flex cursor-pointer items-center rounded-full p-3"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <input
-                                  id="checkbox2"
-                                  className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
-                                  type="checkbox"
-                                  onChange={() =>
-                                    handleSelect(setUniversityRanking, rank)
-                                  }
-                                  checked={universityRanking === rank.toString()}
-                                />
-                                <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
-                                  <svg
-                                    strokeWidth="1"
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    className="h-3.5 w-3.5"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      clipRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      fillRule="evenodd"
-                                    ></path>
-                                  </svg>
-                                </span>
-                                <span className="px-2">{rank}</span>
-                              </label>
-                            ))}
+                        {(dbValues.universityRankings || [])
+                          .filter((rank) =>
+                            rank
+                              .toString()
+                              .toLowerCase()
+                              .includes(
+                                universityRankingDropdownSearch.toLowerCase()
+                              )
+                          )
+                          .map((rank, idx) => (
+                            <label
+                              key={idx}
+                              data-ripple-dark="true"
+                              htmlFor={`ranking-checkbox-${idx}`}
+                              className="relative flex cursor-pointer items-center rounded-full p-3"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <input
+                                id={`ranking-checkbox-${idx}`}
+                                className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
+                                type="checkbox"
+                                onChange={() =>
+                                  handleSelect(setUniversityRanking, rank)
+                                }
+                                checked={universityRanking === rank.toString()}
+                              />
+                              <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                                <svg
+                                  strokeWidth="1"
+                                  stroke="currentColor"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                  className="h-3.5 w-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    clipRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    fillRule="evenodd"
+                                  ></path>
+                                </svg>
+                              </span>
+                              <span className="px-2">{rank}</span>
+                            </label>
+                          ))}
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -637,7 +675,9 @@ const CourseDropdown = ({
                           id="checkbox2"
                           className="before:content[''] peer relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-[#2b7cd6] before:opacity-0 before:transition-opacity checked:border-[#2b7cd6] checked:bg-[#2b7cd6] checked:before:bg-[#2b7cd6] hover:before:opacity-10"
                           type="checkbox"
-                          onChange={() => handleSelect(setTestRequirement, test)}
+                          onChange={() =>
+                            handleSelect(setTestRequirement, test)
+                          }
                           checked={testRequirement === test}
                         />
                         <span className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">

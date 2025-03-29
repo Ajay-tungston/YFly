@@ -12,6 +12,61 @@ import { useNavigate } from "react-router-dom";
 import PaginationBar from "../components/pagination/PaginationBar";
 import coin from "../assets/images/coin.svg";
 
+// Function to transform courses array into an object of distinct values for filters
+const transformCoursesToDropdownOptions = (courses) => {
+  const intakeYears = Array.from(
+    new Set(
+      courses.flatMap((course) => course.intakes.map((intake) => intake.year))
+    )
+  );
+  const countries = Array.from(new Set(courses.map((course) => course.country)));
+  const courseTitles = Array.from(new Set(courses.map((course) => course.course_title)));
+  const courseLevels = Array.from(new Set(courses.map((course) => course.course_level)));
+  const areasOfStudy = Array.from(new Set(courses.map((course) => course.area_of_study)));
+  const courseDurations = Array.from(new Set(courses.map((course) => course.course_duration)));
+  const universityNames = Array.from(new Set(courses.map((course) => course.university_name.university_name)));
+  const tuitionFees = Array.from(new Set(courses.map((course) => course.tution_fee)));
+  
+  const testRequirements = Array.from(new Set(courses.flatMap((course) =>
+        course.testRequirements.map((test) => test.testRequirementName)
+      )
+    )
+  );
+  const backlogs = Array.from(
+    new Set(
+      courses.flatMap((course) =>
+        course.eligibilityRequirements.map((req) => req.backlogRange).filter(Boolean)
+      )
+    )
+  );
+
+  return {
+    intakeYears,
+    countries,
+    courseTitle: courseTitles, // matching the key expected in the dropdown component
+    courseLevels,
+    areasOfStudy,
+    universityNames,
+    testRequirements,
+    courseDuration:courseDurations,
+    backlogs,
+    tuitionFees
+  };
+};
+
+// Helper to convert a Buffer object (with nested array) to a base64 string
+function convertBufferObjectToBase64(bufferObj) {
+  if (bufferObj && Array.isArray(bufferObj)) {
+    const uint8Arr = new Uint8Array(bufferObj);
+    let binary = "";
+    for (let i = 0; i < uint8Arr.length; i++) {
+      binary += String.fromCharCode(uint8Arr[i]);
+    }
+    return window.btoa(binary);
+  }
+  return "";
+}
+
 const Coursefinder = () => {
   // State variables for filters
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,31 +93,30 @@ const Coursefinder = () => {
   const [sort, setSort] = useState("");
 
   const navigate = useNavigate();
-  // useEffect to fetch courses based on all filters
 
+  // useEffect to fetch courses based on all filters
   useEffect(() => {
     const fetchSearch = async () => {
       try {
         const query =
-          `?searchTerm=${searchTerm}` +
+          `?search=${searchTerm}` +
           `&page=${currentPage}` +
           `&country=${country}` +
           `&disciplineSearch=${disciplineSearch}` +
-          `&intake=${intake}` +
+          `&intakeYear=${intake}` +
           `&course_title=${courseTitle}` +
           `&area_of_study=${areaOfStudy}` +
-          `&tution_fee=${tuitionFees}` +
+          `&min_tuition_fee=${tuitionFeeMin}` +
+          `&max_tuition_fee=${tuitionFeeMax}` +
           `&scholarship_applicable=${scholarship}` +
           `&course_duration=${courseDuration}` +
-          `&backlogs=${backlogs}` +
+          `&backlog=${backlogs}` +
           `&course_level=${courseLevel}` +
-          `&disciplinesearch=${disciplineSearch}` +
           `&testRequirementName=${testRequirement}` +
           `&university_name=${universityName}` +
-          `&university_ranking=${universityRanking}` +
           `&sort=${sort}`;
         const response = await axios.get(
-          `http://localhost:5000/courses/filtersearch${query}`
+          `http://localhost:5000/courses/filters${query}`
         );
         setCourses(response.data.results);
         setTotalPages(response?.data?.pagination?.totalPages);
@@ -85,26 +139,30 @@ const Coursefinder = () => {
     courseLevel,
     testRequirement,
     universityName,
-    universityRanking,
-    tuitionFees,
-    sort, // Added sort to dependency array
+    tuitionFeeMin,
+    tuitionFeeMax,
+    sort,
   ]);
 
+  // useEffect to fetch all courses (or any other db values if needed) and transform for dropdowns
   useEffect(() => {
-    fetch("http://localhost:5000/courses/getValues")
+    fetch("http://localhost:5000/courses/getall")
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setDbValues(data.data);
-          console.log("Database Values:", data.data);
+          const transformedOptions = transformCoursesToDropdownOptions(
+            data.data
+          );
+          setDbValues(transformedOptions);
+          console.log("Database Values (transformed):", transformedOptions);
         }
       })
       .catch((error) =>
         console.error("Error fetching database values:", error)
       );
   }, []);
-  console.log("form par", disciplineSearch);
 
+  console.log(courses);
   return (
     <div className="bg-[#0E1B2C] pb-10">
       {/* -------------------------Header Section-------------------------- */}
@@ -142,6 +200,8 @@ const Coursefinder = () => {
         backlogs={backlogs}
         setBacklogs={setBacklogs}
         tuitionFeeMin={tuitionFeeMin}
+        setTuitionFeeMin={setTuitionFeeMin}
+        tuitionFeeMax={tuitionFeeMax}
         setTuitionFeeMax={setTuitionFeeMax}
         courseLevel={courseLevel}
         setCourseLevel={setCourseLevel}
@@ -199,18 +259,10 @@ const Coursefinder = () => {
               <option value="">Sort By</option>
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
-              <option value="deadline_earliest">
-                Deadline (Earliest First)
-              </option>
-              <option value="deadline_latest">
-                Deadline (Latest First)
-              </option>
-              <option value="amount_low_high">
-                Amount (Low to High)
-              </option>
-              <option value="amount_high_low">
-                Amount (High to Low)
-              </option>
+              <option value="deadline_asc">Deadline (Earliest First)</option>
+              <option value="deadline_desc">Deadline (Latest First)</option>
+              <option value="tuition_asc">Tuition (Low to High)</option>
+              <option value="tuition_desc">Tuition (High to Low)</option>
             </select>
           </div>
 
@@ -251,22 +303,43 @@ const Coursefinder = () => {
                 courses.map((course) => (
                   <div
                     key={course._id}
-                    className="border-[1px] border-black rounded-[38px] shadow-right-bottom p-6 bg-[#fff] h-[400px] max-md:w-full"
+                    className="border-[1px] border-black rounded-[38px] shadow-right-bottom p-6 bg-[#fff]  md:h-[400px] max-md:w-full"
                     onClick={() => navigate(`/courseoverview/${course._id}`)}
                   >
                     {/* University Logo and Name */}
                     <div className="border-[1px] py-10 border-black rounded-[30px] bg-white flex flex-col sm:flex-row sm:justify-center items-center">
                       <div className="flex flex-col sm:flex-row w-full justify-evenly items-center gap-4">
-                        {course.university_logo &&
-                        course.university_logo.data ? (
+                        {course.university_name?.university_logo?.data?.data ? (
+                          (() => {
+                            const { contentType, data } =
+                              course.university_name.university_logo;
+                            // data.data is the actual array of numbers
+                            const base64String = convertBufferObjectToBase64(
+                              data.data
+                            );
+                            const logoSrc = `data:${contentType};base64,${base64String}`;
+                            console.log("Logo src:", logoSrc); // Debug log
+                            return (
+                              <img
+                                src={logoSrc}
+                                alt={
+                                  course.university_name?.university_name ||
+                                  "University Logo"
+                                }
+                                className="w-[80px] max-sm:w-[60px] max-md:w-[100px]"
+                              />
+                            );
+                          })()
+                        ) : (
                           <img
-                            src={`data:${course.university_logo.contentType};base64,${course.university_logo.data}`}
-                            alt={course.university_name}
+                            src="/images/placeholder.png"
+                            alt="No Logo Available"
                             className="w-[80px] max-sm:w-[60px] max-md:w-[100px]"
                           />
-                        ) : null}
+                        )}
+
                         <div className="text-xl sm:text-2xl lg:text-4xl text-center">
-                          {course.university_name}
+                          {course.university_name?.university_name}
                         </div>
                       </div>
                     </div>
@@ -274,14 +347,14 @@ const Coursefinder = () => {
                     {/* University Name Tag and QS Rank */}
                     <div className="flex justify-between mt-6 items-center gap-2 max-sm:flex-col">
                       <div className="text-[#30589F] bg-[#E5F1FF] rounded-full font-urban text-[13px] px-3 py-1 text-center">
-                        {course.university_name}
+                        {course.university_name?.university_name}
                       </div>
                       <div className="font-urban font-bold max-xl:text-[12px] text-center">
                         QS Rank: {course.university_ranking}
                       </div>
                     </div>
 
-                    {/* Course Info */}
+                    {/* Additional Course Details */}
                     <div className="mt-4 font-dela text-[15px] max-sm:text-[13px] text-center">
                       {course.course_level} in {course.discipline} -{" "}
                       {course.area_of_study}
@@ -289,7 +362,6 @@ const Coursefinder = () => {
 
                     <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
 
-                    {/* Deadline and Total Cost */}
                     <div className="flex justify-between items-center gap-4 max-sm:flex-col">
                       <div>
                         <div className="text-[#898C9A] font-urban font-bold text-center max-sm:text-[14px]">
@@ -334,7 +406,7 @@ const Coursefinder = () => {
           <img
             src="/images/dummy.png" // replace with your actual image path
             alt="Support Agent"
-            className="w-full h-full object-cover" // Makes the image take the full size of the container
+            className="w-full h-full object-cover"
           />
         </div>
 

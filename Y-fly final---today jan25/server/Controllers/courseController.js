@@ -1,23 +1,7 @@
 const Course = require("../Models/courseSchema");
 const fs = require("fs");
-const multer = require("multer");
-const path = require("path");
-const { resetPassword } = require("./userController");
+const University = require("../Models/University");
 
-const storage = multer.diskStorage({
-  destination: (req, res, cb) => {
-    cb(null, "/uploads");
-  },
-
-  filename: (req, file, cb) => {
-    // Create a unique file name
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-const upload = multer({ storage: storage });
 // Utility functions for validation
 const validateArrayField = (field, errorMessage) => {
   if (!Array.isArray(field)) {
@@ -36,7 +20,7 @@ exports.createCourse = async (req, res) => {
       discipline,
       area_of_study,
       country,
-      university_ranking,
+      // university_ranking,
       university_name,
       course_duration,
       application_deadline,
@@ -44,7 +28,7 @@ exports.createCourse = async (req, res) => {
       tution_fee,
     } = req.fields;
 
-    const university_logo = req.files ? req.files.university_logo : null;
+    // const university_logo = req.files ? req.files.university_logo : null;
 
     // Validate required fields
     if (
@@ -52,7 +36,7 @@ exports.createCourse = async (req, res) => {
       !discipline ||
       !area_of_study ||
       !country ||
-      !university_ranking ||
+      // !university_ranking ||
       !university_name ||
       !course_duration ||
       !application_deadline ||
@@ -66,6 +50,10 @@ exports.createCourse = async (req, res) => {
 
     console.log("here 2: ", req.fields.testRequirements);
 
+    const university = await University.findOne({ university_name });
+    if (!university) {
+      return res.status(400).json({ error: "University not found." });
+    }
     // Inline formatting functions
     const formatIntakes = (intakesArray) => {
       return intakesArray.map((intake) => {
@@ -181,23 +169,23 @@ exports.createCourse = async (req, res) => {
     }
 
     // Validate and process university logo
-    let universityLogoData;
-    if (university_logo) {
-      if (!["image/jpeg", "image/png"].includes(university_logo.type)) {
-        throw new Error("University logo must be a JPEG or PNG image.");
-      }
-      if (university_logo.size > 5000000) {
-        throw new Error("University logo size must be less than 5MB.");
-      }
-      if (!fs.existsSync(university_logo.path)) {
-        throw new Error("Uploaded university logo file does not exist.");
-      }
-      universityLogoData = {
-        data: fs.readFileSync(university_logo.path),
-        contentType: university_logo.type,
-      };
-      fs.unlinkSync(university_logo.path); // Clean up file after processing
-    }
+    // let universityLogoData;
+    // if (university_logo) {
+    //     if (!['image/jpeg', 'image/png'].includes(university_logo.type)) {
+    //         throw new Error('University logo must be a JPEG or PNG image.');
+    //     }
+    //     if (university_logo.size > 5000000) {
+    //         throw new Error('University logo size must be less than 5MB.');
+    //     }
+    //     if (!fs.existsSync(university_logo.path)) {
+    //         throw new Error('Uploaded university logo file does not exist.');
+    //     }
+    //     universityLogoData = {
+    //         data: fs.readFileSync(university_logo.path),
+    //         contentType: university_logo.type,
+    //     };
+    //     fs.unlinkSync(university_logo.path); // Clean up file after processing
+    // }
 
     // Date validation for application deadline
     const deadlineDate = new Date(application_deadline);
@@ -211,13 +199,13 @@ exports.createCourse = async (req, res) => {
       discipline,
       area_of_study,
       country,
-      university_ranking,
-      university_name,
+      // university_ranking,
+      university_name: university._id,
       course_duration,
       application_deadline: deadlineDate,
       overview,
       tution_fee,
-      university_logo: universityLogoData,
+      // university_logo: universityLogoData,
       intakes,
       testRequirements,
       eligibilityRequirements,
@@ -229,6 +217,8 @@ exports.createCourse = async (req, res) => {
     });
 
     await course.save();
+    university.courses.push(course._id);
+    await university.save();
     res
       .status(201)
       .json({ success: true, message: "Course created successfully.", course });
@@ -242,26 +232,23 @@ exports.createCourse = async (req, res) => {
 // Example in your controller
 exports.getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find(); // Assume each course has university_logo_path
-    const modifiedCourses = courses.map(course => {
-      course = course.toObject(); // Convert Mongoose document to plain object
-      if (course.university_logo_path) {
-        // Construct the URL to the image (adjust the base URL as needed)
-        course.university_logo_url = `http://localhost:5000/uploads/${course.university_logo_path}`;
-      }
-      return course;
-    });
-    res.status(200).json({ success: true, courses: modifiedCourses });
+    const courses = await Course.find().populate(
+      "university_name",
+      "university_name"
+    );
+    res.status(200).json({ success: true, courses });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-
 // Get a single course by ID
 exports.getSingleCourse = async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id);
+    const course = await Course.findById(req.params.id).populate(
+      "university_name",
+      "university_name university_ranking"
+    );
     if (!course) {
       return res.status(404).json({ error: "Course not found." });
     }
@@ -282,7 +269,7 @@ exports.updateCourse = async (req, res) => {
       discipline,
       area_of_study,
       country,
-      university_ranking,
+      //  university_ranking,
       university_name,
       course_duration,
       application_deadline,
@@ -290,7 +277,7 @@ exports.updateCourse = async (req, res) => {
       tution_fee,
     } = req.fields;
 
-    const university_logo = req.files ? req.files.university_logo : null;
+    // const university_logo = req.files ? req.files.university_logo : null;
 
     // Helper function to parse JSON fields
     const safeParseJson = (field, fieldName) => {
@@ -352,14 +339,24 @@ exports.updateCourse = async (req, res) => {
       return res.status(404).json({ error: "Course not found." });
     }
 
+    const university = await University.findOne({ university_name });
+    if (!university) {
+      return res.status(400).json({ error: "University not found." });
+    }
+
     // Update fields if provided
     if (course_level) course.course_level = course_level;
     if (discipline) course.discipline = discipline;
     if (area_of_study) course.area_of_study = area_of_study;
     if (country) course.country = country;
-    if (university_ranking)
-      course.university_ranking = parseInt(university_ranking, 10);
-    if (university_name) course.university_name = university_name;
+    // if (university_ranking) course.university_ranking = parseInt(university_ranking, 10);
+    if (university_name) {
+      const university = await University.findOne({ university_name });
+      if (!university) {
+        return res.status(400).json({ error: "University not found." });
+      }
+      course.university_name = university._id;
+    }
     if (course_duration) course.course_duration = course_duration;
     if (application_deadline)
       course.application_deadline = new Date(application_deadline);
@@ -452,22 +449,22 @@ exports.updateCourse = async (req, res) => {
       );
 
     // Update university logo if provided
-    if (university_logo) {
-      if (!["image/jpeg", "image/png"].includes(university_logo.type)) {
-        throw new Error("University logo must be a JPEG or PNG image.");
-      }
-      if (university_logo.size > 5000000) {
-        throw new Error("University logo size must be less than 5MB.");
-      }
-      if (!fs.existsSync(university_logo.path)) {
-        throw new Error("Uploaded university logo file does not exist.");
-      }
-      course.university_logo = {
-        data: fs.readFileSync(university_logo.path),
-        contentType: university_logo.type,
-      };
-      fs.unlinkSync(university_logo.path); // Clean up the file
-    }
+    // if (university_logo) {
+    //     if (!['image/jpeg', 'image/png'].includes(university_logo.type)) {
+    //         throw new Error('University logo must be a JPEG or PNG image.');
+    //     }
+    //     if (university_logo.size > 5000000) {
+    //         throw new Error('University logo size must be less than 5MB.');
+    //     }
+    //     if (!fs.existsSync(university_logo.path)) {
+    //         throw new Error('Uploaded university logo file does not exist.');
+    //     }
+    //     course.university_logo = {
+    //         data: fs.readFileSync(university_logo.path),
+    //         contentType: university_logo.type,
+    //     };
+    //     fs.unlinkSync(university_logo.path); // Clean up the file
+    // }
 
     await course.save();
     res
@@ -479,269 +476,205 @@ exports.updateCourse = async (req, res) => {
   }
 };
 
-exports.filterSearch = async (req, res) => {
+exports.getFilteredCourses = async (req, res) => {
   try {
-    // Destructure query parameters
-    const {
-      country,
-      intake,
-      area_of_study,
-      scholarship_applicable,
-      course_duration,
-      backlogs,
-      tuition_fee_min,
-      tuition_fee_max,
+    // Fetch all courses and populate the referenced fields from the University collection
+    const courses = await Course.find()
+      .populate({
+        path: "university_name",
+        select: "university_name university_logo university_rank", // Specify fields to fetch from University collection
+      })
+      .exec();
+
+    // Send the fetched courses as a response
+    res.status(200).json({
+      success: true,
+      message: "Courses retrieved successfully",
+      data: courses,
+    });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching courses",
+      error: error.message,
+    });
+  }
+};
+
+exports.filterCourses = async (req, res) => {
+  try {
+    // (Extract query parameters and build your filter object here...)
+    let {
+      page = 1,
+      limit = 10,
+      search = "",
       course_level,
-      testRequirementName,
+      discipline,            // if provided directly
+      disciplineSearch,      // alternate query parameter name from frontend
+      area_of_study,
+      country,
       university_name,
-      university_ranking,
-      searchTerm,
-      disciplinesearch,
-      testOverallScore,
-      page = 1, 
-      limit = 9,
-      sort,
-      program_level,    
-      program_name,    
-      course_title,     
+      course_duration,
+      min_tuition_fee,
+      max_tuition_fee,
+      application_deadline,
+      intakeYear,            // can be either "2025" or "September-2025"
+      program_level,
+      program_name,
+     
+      backlog,               // filter for eligibilityRequirements backlogRange
+      testRequirementName,   // filter for testRequirements name
+      testOverallScore,      // filter for testRequirements overall score
+      course_title,          // filter directly on course_title field
+      sort: sortBy = "",     // using "sort" from query string (frontend sends sort)
+      scholarship_applicable // optional: filter on scholarship_applicable field
     } = req.query;
-    // page = isNaN(page) || page < 1 ? 1 : parseInt(page);
-    // limit = isNaN(limit) || limit < 1 || limit > 100 ? 10 : parseInt(limit);
-    
-    let filter = {};
-    
-    // Define sorting options
-    let sortOptions = {};
-    if (sort) {
-      switch (sort) {
-        case "newest":
-          sortOptions.createdAt = -1;
-          break;
-        case "oldest":
-          sortOptions.createdAt = 1;
-          break;
-        case "deadline_earliest":
-          sortOptions.application_deadline = 1;
-          break;
-        case "deadline_latest":
-          sortOptions.application_deadline = -1;
-          break;
-        case "amount_low_high":
-          sortOptions.tution_fee = 1;
-          break;
-        case "amount_high_low":
-          sortOptions.tution_fee = -1;
-          break;
-        default:
-          break;
-      }
-    }
 
-    // 1) Country
-    if (country) filter.country = country;
+    page = isNaN(page) || page < 1 ? 1 : parseInt(page);
+    limit = isNaN(limit) || limit < 1 || limit > 100 ? 10 : parseInt(limit);
 
-    // 2) Course Level
-    if (course_level) filter.course_level = course_level;
+    // Build filter object dynamically
+    const filter = {};
 
-    // 3) Course Duration (unchanged)
-    if (course_duration) {
-      let durationValue = course_duration.trim();
-      if (!/year/i.test(durationValue)) {
-        durationValue += " year";
-      }
-      const durationRegex = new RegExp(`^${durationValue}\\s*(s)?$`, "i");
-      filter.course_duration = { $regex: durationRegex };
-    }
-
-    // 4) Area of Study
-    if (area_of_study) {
-      filter.area_of_study = {
-        $regex: new RegExp(`^${area_of_study}$`, "i"),
-      };
-    }
-
-    // 5) Scholarship
-    if (scholarship_applicable) {
-      filter.scholarship_applicable = {
-        $in: [new RegExp(`^${scholarship_applicable}$`, "i")],
-      };
-    }
-
-    // 6) Tuition Fee Range
-    if (tuition_fee_min || tuition_fee_max) {
-      filter.tution_fee = {};
-      if (tuition_fee_min) filter.tution_fee.$gte = Number(tuition_fee_min);
-      if (tuition_fee_max) filter.tution_fee.$lte = Number(tuition_fee_max);
-    }
-
-    // 7) Intake (month-year)
-    if (intake) {
-      const parts = intake.split("-");
-      const year = parts.length === 2 ? parts[1].trim() : intake.trim();
-      const month = parts.length === 2 ? parts[0].trim() : null;
-
-      filter.intakes = {
-        $elemMatch: {
-          ...(month && { month: { $regex: new RegExp(`^${month}$`, "i") } }),
-          ...(year && { year: Number(year) }),
-        },
-      };
-    }
-
-    // 8) University Ranking
-    if (university_ranking) {
-      const rankingNum = Number(university_ranking);
-      if (!isNaN(rankingNum)) {
-        filter.university_ranking = rankingNum;
-      }
-    }
-
-    // 9) Backlogs (eligibilityRequirements)
-    if (backlogs) {
-      filter.eligibilityRequirements = {
-        $elemMatch: {
-          backlogRange: { $regex: new RegExp(`^${backlogs}$`, "i") },
-        },
-      };
-    }
-
-    // 10) Test Requirements
-    if (testRequirementName || testOverallScore) {
-      let testReqCondition = {};
-      if (testRequirementName) {
-        testReqCondition.testRequirementName = {
-          $regex: new RegExp(`^${testRequirementName}$`, "i"),
-        };
-      }
-      if (testOverallScore) {
-        testReqCondition.overallScore = testOverallScore;
-      }
-      filter.testRequirements = { $elemMatch: testReqCondition };
-    }
-
-    // 11) University Name
-    if (university_name) {
-      filter.university_name = {
-        $regex: new RegExp(`^${university_name}$`, "i"),
-      };
-    }
-
-    // 12) Search Term (simple example searching only by university_name)
-    if (searchTerm) {
+    // Keyword search: search in computed course_title and overview fields
+    if (search) {
       filter.$or = [
-        { course_title: { $regex: searchTerm, $options: "i" } },
-        { university_name: { $regex: searchTerm, $options: "i" } },
+        { course_title: { $regex: search, $options: "i" } },
+        { overview: { $regex: search, $options: "i" } }
       ];
     }
-    if (disciplinesearch) {
-      filter.discipline = { $regex: disciplinesearch, $options: "i" };
-    }
 
-    // --- NEW FIELDS from screenshot / changes ---
-    // program_level
-    if (program_level) {
-      filter.program_level = {
-        $regex: new RegExp(`^${program_level}$`, "i"),
-      };
-    }
-
-    // program_name
-    if (program_name) {
-      filter.program_name = {
-        $regex: new RegExp(`^${program_name}$`, "i"),
-      };
-    }
-
-    // course_title (if you want direct searching on the combined field)
     if (course_title) {
-      filter.course_title = {
-        $regex: new RegExp(`${course_title}`, "i"),
+      filter.course_title = { $regex: course_title, $options: "i" };
+    }
+    if (course_level) {
+      filter.course_level = { $regex: course_level, $options: "i" };
+    }
+
+    if (disciplineSearch || discipline) {
+      filter.discipline = { $regex: disciplineSearch || discipline, $options: "i" };
+    }
+    if (area_of_study) filter.area_of_study = { $regex: area_of_study, $options: "i" };
+    if (country) filter.country = country;
+
+    if (university_name) {
+      const uniId = await getUniversityIdByName(university_name);
+      if (uniId) {
+        filter.university_name = uniId;
+      } else {
+        filter.university_name = null;
+      }
+    }
+
+    if (course_duration) filter.course_duration = course_duration;
+
+    if (min_tuition_fee || max_tuition_fee) {
+      filter.tution_fee = {};
+      if (min_tuition_fee) filter.tution_fee.$gte = Number(min_tuition_fee);
+      if (max_tuition_fee) filter.tution_fee.$lte = Number(max_tuition_fee);
+    }
+
+    if (application_deadline) {
+      filter.application_deadline = { $lte: new Date(application_deadline) };
+    }
+
+    if (intakeYear) {
+      if (intakeYear.includes("-")) {
+        const [monthPart, yearPart] = intakeYear.split("-").map(item => item.trim());
+        filter.intakes = {
+          $elemMatch: {
+            month: { $regex: `^${monthPart}`, $options: "i" },
+            year: Number(yearPart)
+          }
+        };
+      } else {
+        filter["intakes.year"] = Number(intakeYear);
+      }
+    }
+
+    if (program_level) filter.program_level = { $regex: program_level, $options: "i" };
+    if (program_name) filter.program_name = { $regex: program_name, $options: "i" };
+
+    if (scholarship_applicable) {
+      filter.scholarship_applicable = { $regex: scholarship_applicable, $options: "i" };
+    }
+
+    if (backlog) {
+      filter.eligibilityRequirements = {
+        $elemMatch: {
+          backlogRange: { $regex: backlog, $options: "i" }
+        }
       };
     }
 
-    const skip = (page - 1) * limit;
-
-    const total = await Course.countDocuments(filter);
-
-    // Apply sorting here by chaining .sort(sortOptions) to your query
-    const courses = await Course.find(filter)
-      // .select('-university_logo')
-      .sort(sortOptions)
-      .skip(skip)
-      .limit(limit);
-
-    // Modify courses (e.g., add university_logo_url)
-    const modifiedCourses = courses.map((course) => {
-      course = course.toObject();
-      if (course.university_logo_path) {
-        course.university_logo_url = `http://localhost:5000/uploads/${course.university_logo_path}`;
+    if (testRequirementName || testOverallScore) {
+      filter.testRequirements = { $elemMatch: {} };
+      if (testRequirementName) {
+        filter.testRequirements.$elemMatch.testRequirementName = { $regex: testRequirementName, $options: "i" };
       }
-      return course;
-    });
+      if (testOverallScore) {
+        filter.testRequirements.$elemMatch.overallScore = testOverallScore;
+      }
+    }
+
+    // Define sorting options mapping
+    const sortOptionsMap = {
+      newest: { createdAt: -1 },
+      oldest: { createdAt: 1 },
+      deadline_asc: { application_deadline: 1 },
+      deadline_desc: { application_deadline: -1 },
+      tuition_asc: { tution_fee: 1 },
+      tuition_desc: { tution_fee: -1 }
+    };
+    const sortOptions = sortOptionsMap[sortBy] || { createdAt: -1 };
+
+    // Fetch filtered courses with pagination, sorting, and populate university details
+    const courses = await Course.find(filter)
+      .populate({
+        path: "university_name",
+        select: "university_name university_logo university_rank country"
+      })
+      .sort(sortOptions)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec();
+
+    // Convert the university logo Buffer to base64 string for each course
+
+
+    // Get total count for pagination
+    const total = await Course.countDocuments(filter);
 
     res.status(200).json({
       success: true,
-      data: courses,
-      results: modifiedCourses,
-      pagination: { 
+      message: "Filtered courses retrieved successfully",
+      results: courses,
+      pagination: {
         total,
         page,
         limit,
         totalPages: Math.ceil(total / limit)
-      },
+      }
     });
   } catch (error) {
-    console.error("Error filtering courses:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while filtering courses",
+      error: error.message
+    });
   }
 };
 
 
 
-
-
-// Get values for dropdowns
-
-exports.getValues = async (req, res) => {
-  try {
-    const courseLevels = await Course.distinct("course_level");
-    const disciplines = await Course.distinct("discipline");
-    const areasOfStudy = await Course.distinct("area_of_study");
-    const countries = await Course.distinct("country");
-    const courseTitle=await Course.distinct("course_title");
-    const courseDurations = await Course.distinct("course_duration");
-    const testRequirements = await Course.distinct("testRequirements.testRequirementName");
-    const eligibilityRequirements = await Course.distinct("eligibilityRequirements.backlogRange");
-    const scholarships = await Course.distinct("scholarship_applicable");
-    const universityNames = await Course.distinct("university_name");
-    const universityRankings = await Course.distinct("university_ranking");
-    const intakeYears = await Course.distinct("intakes.year");
-    const tuitionFees = await Course.distinct("tution_fee" )
-    
-    
-    return res.status(200).json({
-      success: true,
-      data: {
-        courseLevels,
-        disciplines,
-        areasOfStudy,
-        courseTitle,
-        countries,
-        courseDurations,
-        testRequirements,
-        eligibilityRequirements,
-        scholarships,
-        universityNames,
-        universityRankings,
-        intakeYears,
-        tuitionFees
-      },
-    });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
-  }
+// Helper function to get University ID by name
+const getUniversityIdByName = async (name) => {
+  const university = await University.findOne({
+    university_name: { $regex: name, $options: "i" },
+  });
+  return university ? university._id : null;
 };
-
 
 // Delete a course by ID
 exports.deleteCourse = async (req, res) => {
@@ -757,3 +690,203 @@ exports.deleteCourse = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// exports.profileMatcher = async (req, res) => {
+//     try {
+//         let {
+//             search = "",
+//             country,
+//             course_level,
+//             area_of_study,
+//             minRanking,
+//             maxRanking,
+//             intakeYear
+//         } = req.query;
+
+//         let filter = {};
+
+//         // Search filter (match university or course name)
+//         if (search) {
+//             filter.$or = [
+//                 { university_name: { $regex: search, $options: "i" } },
+//                 { area_of_study: { $regex: search, $options: "i" } }
+//             ];
+//         }
+
+//         // Apply filters dynamically
+//         if (country) filter.country = country;
+//         if (course_level) filter.course_level = course_level;
+//         if (area_of_study) filter.area_of_study = area_of_study;
+
+//         // Ranking filter
+//         if (!isNaN(minRanking) || !isNaN(maxRanking)) {
+//             filter.university_ranking = {};
+//             if (!isNaN(minRanking)) filter.university_ranking.$gte = Number(minRanking);
+//             if (!isNaN(maxRanking)) filter.university_ranking.$lte = Number(maxRanking);
+//         }
+
+//         // Intake Year Filter (Only return courses that have an intake in the specified year)
+//         if (intakeYear) {
+//             filter["intakes.year"] = parseInt(intakeYear);
+//         }
+
+//         // Fetch courses matching filters and return only necessary fields
+//         const courses = await Course.find(filter)
+//             .select("university_name university_logo university_ranking intakes.year")
+//             .limit(50);
+
+//         // Categorize universities
+//         let ascenderUniversities = [];
+//         let contenderUniversities = [];
+//         let pathfinderUniversities = [];
+
+//         courses.forEach(course => {
+//             const formattedCourse = {
+//                 university_name: course.university_name,
+//                 university_logo: course.university_logo,
+//                 university_ranking: course.university_ranking,
+//                 intake_years: course.intakes.map(i => i.year)
+//             };
+
+//             if (course.university_ranking <= 50) {
+//                 ascenderUniversities.push(formattedCourse);
+//             } else if (course.university_ranking <= 100) {
+//                 contenderUniversities.push(formattedCourse);
+//             } else {
+//                 pathfinderUniversities.push(formattedCourse);
+//             }
+//         });
+
+//         res.status(200).json({
+//             success: true,
+//             categories: {
+//                 ascenderUniversities,
+//                 contenderUniversities,
+//                 pathfinderUniversities
+//             }
+//         });
+
+//     } catch (error) {
+//         console.error("Error in profile matcher:", error);
+//         res.status(500).json({ success: false, message: "Server Error", error });
+//     }
+// };
+
+// controllers/courseController.js
+
+// exports.profileMatcher = async (req, res) => {
+//   try {
+//     const { country, course_level, discipline, university_name } = req.query;
+
+//     // Build match stage for filtering
+//     let matchStage = {};
+//     if (country) matchStage.country = country;
+//     if (course_level) matchStage.course_level = course_level;
+//     if (discipline)
+//       matchStage.discipline = { $regex: discipline, $options: "i" };
+//     if (university_name)
+//       matchStage.university_name = { $regex: university_name, $options: "i" }; // Name search
+
+//     const pipeline = [
+//       { $match: matchStage }, // Apply filters
+//       {
+//         $project: {
+//           university_name: 1,
+//           university_logo: 1,
+//           university_ranking: 1,
+//           country: 1,
+//           // city: 1,
+//           // state: 1,
+//           intakes: 1, // Added intake year
+//           category: {
+//             $switch: {
+//               branches: [
+//                 { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
+//                 {
+//                   case: {
+//                     $and: [
+//                       { $gt: ["$university_ranking", 50] },
+//                       { $lte: ["$university_ranking", 100] },
+//                     ],
+//                   },
+//                   then: "Contender",
+//                 },
+//                 {
+//                   case: {
+//                     $and: [
+//                       { $gt: ["$university_ranking", 100] },
+//                       { $lte: ["$university_ranking", 200] },
+//                     ],
+//                   },
+//                   then: "Frontrunner",
+//                 },
+//               ],
+//               default: null, // No "Others" category
+//             },
+//           },
+//         },
+//       },
+//       {
+//         $match: { category: { $ne: null } }, // Remove "Others" category
+//       },
+//       {
+//         $project: {
+//           university_name: 1,
+//           university_logo: 1,
+//           university_ranking: 1,
+//           country: 1,
+//           intakes: {
+//             $map: {
+//               input: "$intakes",
+//               as: "intake",
+//               in: {
+//                 month: "$$intake.month",
+//                 year: "$$intake.year",
+//               },
+//             },
+//           },
+//           category: 1,
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$category",
+//           universities: {
+//             $push: {
+//               university_name: "$university_name",
+//               university_logo: "$university_logo",
+//               qs_rank: "$university_ranking",
+//               intakes: "$intakes",
+//               location: "$country",
+//             },
+//           },
+//           count: { $sum: 1 },
+//         },
+//       },
+//     ];
+
+//     const results = await Course.aggregate(pipeline);
+
+//     // Prepare structured response
+//     const data = {
+//       Ascend: { count: 0, universities: [] },
+//       Contender: { count: 0, universities: [] },
+//       Frontrunner: { count: 0, universities: [] },
+//     };
+
+//     results.forEach((group) => {
+//       data[group._id] = {
+//         count: group.count,
+//         universities: group.universities,
+//       };
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       data,
+//     });
+//   } catch (error) {
+//     console.error("Error in profileMatcher:", error);
+//     res.status(500).json({ success: false, message: "Server Error", error });
+//   }
+// };

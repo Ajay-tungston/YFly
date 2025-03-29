@@ -378,7 +378,7 @@ const CourseList = () => {
                 />
               </div>
               <div className="w-[30%]">{list.course_level}</div>
-              <div className="w-[30%]">{list.university_name}</div>
+              <div className="w-[30%]">{list?.university_name?.university_name}</div>
               <div className="w-[30%]">{list.country}</div>
               <div className="w-[10%] flex">
                 <button className="mr-4" onClick={() => handleDelete(list._id)}>
