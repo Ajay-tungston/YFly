@@ -29,7 +29,8 @@ module.exports = {
       // pop: ['poppins', 'sans-serif'],
       urban: ['Urbanist', 'sans-serif'],
       dela: ['Dela Gothic One', 'sans-serif'],
-      pop: [ "Poppins", 'sans-serif']
+      pop: [ "Poppins", 'sans-serif'],
+      lato: ['Lato', 'sans-serif'], 
     },
     
   },

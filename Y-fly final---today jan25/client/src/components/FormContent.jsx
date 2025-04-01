@@ -42,6 +42,7 @@ export const FormProvider = ({ children }) => {
       verbal_score: "",
       quant_score: "",
     },
+    selectedCourses: []
   });
 
 ///

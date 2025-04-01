@@ -229,6 +229,7 @@ exports.createCourse = async (req, res) => {
 };
 
 // Get all courses
+// Example in your controller
 exports.getAllCourses = async (req, res) => {
   try {
     const courses = await Course.find().populate(
@@ -246,7 +247,7 @@ exports.getSingleCourse = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id).populate(
       "university_name",
-      "university_name"
+      "university_name university_ranking"
     );
     if (!course) {
       return res.status(404).json({ error: "Course not found." });
@@ -473,6 +474,206 @@ exports.updateCourse = async (req, res) => {
     console.error("Error updating course:", error.stack || error.message);
     res.status(500).json({ error: error.message || "Internal server error." });
   }
+};
+
+exports.getFilteredCourses = async (req, res) => {
+  try {
+    // Fetch all courses and populate the referenced fields from the University collection
+    const courses = await Course.find()
+      .populate({
+        path: "university_name",
+        select: "university_name university_logo university_rank", // Specify fields to fetch from University collection
+      })
+      .exec();
+
+    // Send the fetched courses as a response
+    res.status(200).json({
+      success: true,
+      message: "Courses retrieved successfully",
+      data: courses,
+    });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching courses",
+      error: error.message,
+    });
+  }
+};
+
+exports.filterCourses = async (req, res) => {
+  try {
+    // (Extract query parameters and build your filter object here...)
+    let {
+      page = 1,
+      limit = 10,
+      search = "",
+      course_level,
+      discipline,            // if provided directly
+      disciplineSearch,      // alternate query parameter name from frontend
+      area_of_study,
+      country,
+      university_name,
+      course_duration,
+      min_tuition_fee,
+      max_tuition_fee,
+      application_deadline,
+      intakeYear,            // can be either "2025" or "September-2025"
+      program_level,
+      program_name,
+     
+      backlog,               // filter for eligibilityRequirements backlogRange
+      testRequirementName,   // filter for testRequirements name
+      testOverallScore,      // filter for testRequirements overall score
+      course_title,          // filter directly on course_title field
+      sort: sortBy = "",     // using "sort" from query string (frontend sends sort)
+      scholarship_applicable // optional: filter on scholarship_applicable field
+    } = req.query;
+
+    page = isNaN(page) || page < 1 ? 1 : parseInt(page);
+    limit = isNaN(limit) || limit < 1 || limit > 100 ? 10 : parseInt(limit);
+
+    // Build filter object dynamically
+    const filter = {};
+
+    // Keyword search: search in computed course_title and overview fields
+    if (search) {
+      filter.$or = [
+        { course_title: { $regex: search, $options: "i" } },
+        { overview: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    if (course_title) {
+      filter.course_title = { $regex: course_title, $options: "i" };
+    }
+    if (course_level) {
+      filter.course_level = { $regex: course_level, $options: "i" };
+    }
+
+    if (disciplineSearch || discipline) {
+      filter.discipline = { $regex: disciplineSearch || discipline, $options: "i" };
+    }
+    if (area_of_study) filter.area_of_study = { $regex: area_of_study, $options: "i" };
+    if (country) filter.country = country;
+
+    if (university_name) {
+      const uniId = await getUniversityIdByName(university_name);
+      if (uniId) {
+        filter.university_name = uniId;
+      } else {
+        filter.university_name = null;
+      }
+    }
+
+    if (course_duration) filter.course_duration = course_duration;
+
+    if (min_tuition_fee || max_tuition_fee) {
+      filter.tution_fee = {};
+      if (min_tuition_fee) filter.tution_fee.$gte = Number(min_tuition_fee);
+      if (max_tuition_fee) filter.tution_fee.$lte = Number(max_tuition_fee);
+    }
+
+    if (application_deadline) {
+      filter.application_deadline = { $lte: new Date(application_deadline) };
+    }
+
+    if (intakeYear) {
+      if (intakeYear.includes("-")) {
+        const [monthPart, yearPart] = intakeYear.split("-").map(item => item.trim());
+        filter.intakes = {
+          $elemMatch: {
+            month: { $regex: `^${monthPart}`, $options: "i" },
+            year: Number(yearPart)
+          }
+        };
+      } else {
+        filter["intakes.year"] = Number(intakeYear);
+      }
+    }
+
+    if (program_level) filter.program_level = { $regex: program_level, $options: "i" };
+    if (program_name) filter.program_name = { $regex: program_name, $options: "i" };
+
+    if (scholarship_applicable) {
+      filter.scholarship_applicable = { $regex: scholarship_applicable, $options: "i" };
+    }
+
+    if (backlog) {
+      filter.eligibilityRequirements = {
+        $elemMatch: {
+          backlogRange: { $regex: backlog, $options: "i" }
+        }
+      };
+    }
+
+    if (testRequirementName || testOverallScore) {
+      filter.testRequirements = { $elemMatch: {} };
+      if (testRequirementName) {
+        filter.testRequirements.$elemMatch.testRequirementName = { $regex: testRequirementName, $options: "i" };
+      }
+      if (testOverallScore) {
+        filter.testRequirements.$elemMatch.overallScore = testOverallScore;
+      }
+    }
+
+    // Define sorting options mapping
+    const sortOptionsMap = {
+      newest: { createdAt: -1 },
+      oldest: { createdAt: 1 },
+      deadline_asc: { application_deadline: 1 },
+      deadline_desc: { application_deadline: -1 },
+      tuition_asc: { tution_fee: 1 },
+      tuition_desc: { tution_fee: -1 }
+    };
+    const sortOptions = sortOptionsMap[sortBy] || { createdAt: -1 };
+
+    // Fetch filtered courses with pagination, sorting, and populate university details
+    const courses = await Course.find(filter)
+      .populate({
+        path: "university_name",
+        select: "university_name university_logo university_rank country"
+      })
+      .sort(sortOptions)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec();
+
+    // Convert the university logo Buffer to base64 string for each course
+
+
+    // Get total count for pagination
+    const total = await Course.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      message: "Filtered courses retrieved successfully",
+      results: courses,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while filtering courses",
+      error: error.message
+    });
+  }
+};
+
+
+
+// Helper function to get University ID by name
+const getUniversityIdByName = async (name) => {
+  const university = await University.findOne({
+    university_name: { $regex: name, $options: "i" },
+  });
+  return university ? university._id : null;
 };
 
 // Delete a course by ID

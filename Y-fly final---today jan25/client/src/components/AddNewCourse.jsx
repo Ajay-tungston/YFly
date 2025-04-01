@@ -178,7 +178,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
         ],
         application_requirements: [{ requirement: "", isRequired: false }],
         job_roles: [{ jobrole: "" }],
-        top_recruiters: [{ recruiters_name: "", logo: null }],
+        top_recruiters: [{ recruiters_name: "",recruiters_logo:"" }],
         scholarship_applicable: [{ scholarship: "" }],
         tution_fee: "",
         funding_options: [{ fundingOption: "" }],

@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "dev",
+			"path": "Y-fly final---today jan25/server",
+			"problemMatcher": [],
+			"label": "npm: dev - Y-fly final---today jan25/server",
+			"detail": "nodemon server.js"
+		}
+	]
+}

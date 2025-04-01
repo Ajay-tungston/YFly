@@ -30,6 +30,9 @@ import ProficiencyExam from './components/ProficiencyExam';
 import Mattermost from './components/MattersTheMost';
 import MyProfile from './components/MyProfile';
 import EnquiryList from './components/EnquiryList';
+import CourseOverview from './pages/CourseOverview';
+
+
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return isAuthenticated ? children : <Navigate to="/admin-login" />;
@@ -67,6 +70,9 @@ const App = () => {
         <Route path ='/matters' element={<Mattermost/>}/>
         <Route path='/myprofile' element={<MyProfile/>}/>
         <Route path='/enquiry' element={<EnquiryList/>}/>
+        <Route path='/courseoverview/:id' element={<CourseOverview/>}/>
+        
+        
       </Routes>
       
     </>
