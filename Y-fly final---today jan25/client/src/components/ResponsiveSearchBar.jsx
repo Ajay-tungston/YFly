@@ -18,7 +18,7 @@ const ResponsiveSearchBar = ({
   setDuration,
   setMinScore,
   setMaxScore,
-  setTestRequirement
+  setTestRequirement,setMinGpa,setMaxGpa
 }) => {
   const [tempValues, setTempValues] = useState({
     courseLevel: "",
@@ -33,7 +33,8 @@ const ResponsiveSearchBar = ({
     minScore: null,
     maxScore: null,
   });
-
+ const [tempMinGpa, setTempMinGpa] = useState(null);
+ const [tempMaxGpa, setTempMaxGpa] = useState(null);
   const [search, setSearch] = useState({
     country: "",
     areaSearch: "",
@@ -62,6 +63,8 @@ const ResponsiveSearchBar = ({
     setMinScore(tempValues.minScore);
     setMaxScore(tempValues.maxScore);
     setTestRequirement(tempValues.requirements);
+    setMinGpa(tempMinGpa);
+    setMaxGpa(tempMaxGpa);
   };
 
   const handleFeeChange = (min, max) => {
@@ -202,7 +205,7 @@ const ResponsiveSearchBar = ({
               <div className="font-urban text-[18px] max-xl:text-[0.9rem] font-bold pl-8 py-4">
                 Percentage scored
               </div>
-              <PercentageSlider />
+              <PercentageSlider setMinGPA={setTempMinGpa} setMaxGPA={setTempMaxGpa}/>
             </div>
           )}
         </div>

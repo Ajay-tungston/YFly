@@ -12,6 +12,7 @@ const validateArrayField = (field, errorMessage) => {
 
 // Create a new course with updated validation
 exports.createCourse = async (req, res) => {
+  console.log(req.fields)
   try {
     // console.log('Raw request fields:', req.fields);
     // console.log('Raw request files:', req.files);
@@ -33,7 +34,7 @@ exports.createCourse = async (req, res) => {
     // Validate required fields
     if (
       !course_level ||
-      !discipline ||
+      // !discipline ||
       !area_of_study ||
       !country ||
       // !university_ranking ||

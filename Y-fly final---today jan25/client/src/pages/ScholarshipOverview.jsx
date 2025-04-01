@@ -294,7 +294,7 @@ const ScholarshipOverview = () => {
         </div>
       </section>
 
-      <Contactus />
+      {/* <Contactus /> */}
       <Footer />
     </div>
   );

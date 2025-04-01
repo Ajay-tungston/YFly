@@ -33,7 +33,7 @@ const CourseSearchbar = ({
   maxScore,
   setMaxScore,
   scholarship,
-  setScholarship,
+  setScholarship,minGpa, setMinGpa, maxGpa, setMaxGpa
 }) => {
   useEffect(() => {
     setMinScore(null);
@@ -192,7 +192,7 @@ const CourseSearchbar = ({
               <div className="font-urban text-[18px] max-xl:text-[0.9rem] font-bold pl-8 py-4">
                 Percentage scored
               </div>
-              <PercentageSlider />
+              <PercentageSlider setMinGPA={setMinGpa} setMaxGPA={setMaxGpa}/>
             </div>
           )}
 

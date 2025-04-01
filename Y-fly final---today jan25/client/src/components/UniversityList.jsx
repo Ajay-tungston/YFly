@@ -59,7 +59,7 @@ const UniversityList = () => {
   };
 
   if (addingNewUniversity) {
-    return <AddNewUniversity />;
+    return <AddNewUniversity setAddingNewUniversity={setAddingNewUniversity} setEditOpen={setEditOpen} />;
   }
   if(editOpen){
     return <EditUniversity id={editOpen} setEditOpen={setEditOpen} />

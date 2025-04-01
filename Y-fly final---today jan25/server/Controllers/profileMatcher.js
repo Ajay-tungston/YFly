@@ -234,6 +234,8 @@ const profileMatcher = async (req, res) => {
       min_score, 
       max_score,
       scholarship, 
+      minGPA,   // minGPA range start
+      maxGPA,   // maxGPA range end
     } = req.query;
 
     console.log(intake_month, intake_year);
@@ -323,6 +325,26 @@ const profileMatcher = async (req, res) => {
                         ],
                       }
                     : { $const: true },
+
+                  // ✅ GPA Filtering Logic with the user range (minGPA, maxGPA)
+                  minGPA && maxGPA
+                    ? {
+                        $and: [
+                          { 
+                            $gte: [
+                              { $arrayElemAt: ["$$course.eligibilityRequirements.minGPA", 0] }, // Access minGPA in eligibilityRequirements array
+                              parseFloat(minGPA)
+                            ] 
+                          },
+                          { 
+                            $lte: [
+                              { $arrayElemAt: ["$$course.eligibilityRequirements.minGPA", 0] }, 
+                              parseFloat(maxGPA)
+                            ]
+                          },
+                        ],
+                      }
+                    : { $const: true },
                 ],
               },
             },
@@ -392,6 +414,7 @@ const profileMatcher = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error", error });
   }
 };
+
 
 const getProfileMatcherFilters = async (req, res) => {
   try {
