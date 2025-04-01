@@ -21,8 +21,11 @@ const Profile = () => {
 
   // When formData changes (after fetching), update localFormData
   useEffect(() => {
+    console.log("Updated formData:", formData);
     setLocalFormData(formData);
-  }, [formData]);
+  }
+  , [formData]
+);
 
   // Fetch user details on mount using the email stored in localStorage
   useEffect(() => {
@@ -87,12 +90,23 @@ const Profile = () => {
     const updateData = {
       education_details: {
         ...formData.education_details,
-        education_level: localFormData.education_details.education_level,
+        education_level: localFormData.education_details.education_level || "",  // Allow empty string
       },
     };
+    
+    setLocalFormData({
+      ...localFormData,
+      education_details: {
+        ...localFormData.education_details,
+        education_level: "",  // Clear the field locally
+      },
+    });
+  
     await persistUpdate(updateData);
     setEditMode((prev) => ({ ...prev, educationLevel: false }));
   };
+  
+  
 
   const saveWorkExperience = async () => {
     const updateData = {
@@ -141,11 +155,7 @@ const Profile = () => {
               {/* Profile Header */}
               <div className="flex items-center justify-between space-x-4">
                 <div className="flex items-center space-x-4">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Profile"
-                    className="w-18 h-12 rounded-full"
-                  />
+              
                   {editMode.name ? (
                     <>
                       <input

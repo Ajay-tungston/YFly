@@ -40,10 +40,10 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     tution_fee: "",
     funding_options: [{ fundingOption: "" }],
   });
-
+console.log(addCourseData)
   const [universities, setUniversities] = useState([]);
   useEffect(() => {
-    console.log("first");
+    
     const fetchUniversities = async () => {
       try {
         const response = await axios.get(
@@ -107,94 +107,91 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     if (!validateFields()) return;
 
     const formData = new FormData();
-
     Object.keys(addCourseData).forEach((key) => {
-    //   if (key === "university_logo" && addCourseData.university_logo) {
-    //     formData.append(key, addCourseData.university_logo);
-    //   } else
-       if (
-        key === "job_roles" ||
-        key === "scholarship_applicable" ||
-        key === "funding_options"
-      ) {
-        // Convert objects to strings
-        const stringArray = addCourseData[key].map((item) =>
-          key === "job_roles"
-            ? item.jobrole
-            : key === "scholarship_applicable"
-            ? item.scholarship
-            : item.fundingOption
-        );
-        formData.append(key, JSON.stringify(stringArray));
+      if (key === "job_roles" || key === "scholarship_applicable" || key === "funding_options") {
+          // Convert objects to strings
+          const stringArray = addCourseData[key].map((item) =>
+              key === "job_roles" ? item.jobrole :
+              key === "scholarship_applicable" ? item.scholarship :
+              item.fundingOption
+          );
+          formData.append(key, JSON.stringify(stringArray));
       } else if (Array.isArray(addCourseData[key])) {
-        formData.append(key, JSON.stringify(addCourseData[key]));
+          formData.append(key, JSON.stringify(addCourseData[key]));
       } else {
-        formData.append(key, addCourseData[key]);
+          formData.append(key, addCourseData[key]);
       }
-    });
+  });
 
-    console.log(addCourseData);
+  // 🔹 Append Recruiter Logos Separately
+  addCourseData.top_recruiters.forEach((recruiter, index) => {
+      if (recruiter.logo instanceof File) {
+          formData.append(`recruiters_logo_${index}`, recruiter.logo);
+      }
+  });
+    console.log(addCourseData.top_recruiters)
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/courses/create",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+          "http://localhost:5000/courses/create",
+          formData,
+          {
+              headers: { "Content-Type": "multipart/form-data" },
+          }
       );
 
       toast.success("Course added successfully!", {
-        position: "top-center",
-        autoClose: 2000,
-        style: { backgroundColor: "#30589F", color: "white" },
+          position: "top-center",
+          autoClose: 2000,
+          style: { backgroundColor: "#30589F", color: "white" },
       });
-      window.location.reload();
-      console.log(response.data);
+      // window.location.reload();
+      // console.log(response.data);
       // Reset form after successful submission
-      setAddCourseData({
-        course_level: "",
-        discipline: "",
-        area_of_study: "",
-        country: "",
-        // university_ranking: "",
-        university_name: "",
-        // university_logo: "",
-        course_duration: "",
-        application_deadline: "",
-        overview: "",
-        intakes: [{ month: "", year: "" }],
-        testRequirements: [
-          { testRequirementName: "Requirement 1", overallScore: "" },
-        ],
-        eligibilityRequirements: [
-          {
-            requirementType: "",
-            gpaRange: "",
-            backlogRange: "",
-            workExperience: "",
-            entranceExam: "",
-          },
-        ],
-        application_requirements: [{ requirement: "", isRequired: false }],
-        job_roles: [{ jobrole: "" }],
-        top_recruiters: [{ recruiters_name: "",recruiters_logo:"" }],
-        scholarship_applicable: [{ scholarship: "" }],
-        tution_fee: "",
-        funding_options: [{ fundingOption: "" }],
-      });
-    } catch (error) {
+      // setAddCourseData({
+      //   course_level: "",
+      //   discipline: "",
+      //   area_of_study: "",
+      //   country: "",
+      //   // university_ranking: "",
+      //   university_name: "",
+      //   // university_logo: "",
+      //   course_duration: "",
+      //   application_deadline: "",
+      //   overview: "",
+      //   intakes: [{ month: "", year: "" }],
+      //   testRequirements: [
+      //     { testRequirementName: "Requirement 1", overallScore: "" },
+      //   ],
+      //   eligibilityRequirements: [
+      //     {
+      //       requirementType: "",
+      //       gpaRange: "",
+      //       backlogRange: "",
+      //       workExperience: "",
+      //       entranceExam: "",
+      //     },
+      //   ],
+      //   application_requirements: [{ requirement: "", isRequired: false }],
+      //   job_roles: [{ jobrole: "" }],
+      //   top_recruiters: [{ recruiters_name: "",logo:"" }],
+      //   scholarship_applicable: [{ scholarship: "" }],
+      //   tution_fee: "",
+      //   funding_options: [{ fundingOption: "" }],
+        
+      // });
+      
+    }  catch (error) {
       console.log(error);
-      const errorMessage =
-        error.response?.data?.error ||
-        "Failed to add course. Please try again.";
+      const errorMessage = error.response?.data?.error || "Failed to add course. Please try again.";
       toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 2000,
-        style: { backgroundColor: "#D22B2B", color: "white" },
+          position: "top-center",
+          autoClose: 2000,
+          style: { backgroundColor: "#D22B2B", color: "white" },
       });
-    }
-  };
+  }
+};
+  
 
   const [isOpenCourseLevel, setIsOpenCourseLevel] = useState(false);
   const handleCourseLevel = (option) => {
@@ -464,7 +461,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
       ...prevData,
       top_recruiters: [
         ...prevData.top_recruiters,
-        { recruiters_name: "", logo: null },
+        { recruiters_name: "", logo: "" },
       ],
     }));
   };

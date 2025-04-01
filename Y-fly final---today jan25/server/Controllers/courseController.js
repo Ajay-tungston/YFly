@@ -27,7 +27,7 @@ exports.createCourse = async (req, res) => {
       overview,
       tution_fee,
     } = req.fields;
-
+console.log(req.fields,req.files)
     // const university_logo = req.files ? req.files.university_logo : null;
 
     // Validate required fields
@@ -153,6 +153,43 @@ exports.createCourse = async (req, res) => {
         req.fields.top_recruiters,
         "top_recruiters"
       );
+      top_recruiters = top_recruiters.map((recruiter, index) => {
+        // Assume the file is named recruiters_logo_0, recruiters_logo_1, etc.
+        const fileKey = `recruiters_logo_${index}`;
+        const file = req.files[fileKey];
+      
+        if (file) {
+          // Validate file type and size if necessary
+          if (!["image/jpeg", "image/png"].includes(file.type)) {
+            throw new Error("Recruiters logo must be a JPEG or PNG image.");
+          }
+          if (file.size > 5000000) { // example 5MB limit
+            throw new Error("Recruiters logo size must be less than 5MB.");
+          }
+          if (!fs.existsSync(file.path)) {
+            throw new Error("Uploaded recruiters logo file does not exist.");
+          }
+      
+          // Read file data
+          const fileData = fs.readFileSync(file.path);
+          // Optionally remove file after reading
+          fs.unlinkSync(file.path);
+      
+        
+          return {
+            recruiters_name: recruiter.recruiters_name, 
+            recruiters_logo: {
+              data: fileData,
+              contentType: file.type,
+            },
+          };
+        } else {
+         
+          return recruiter;
+        }
+      });
+
+
       scholarship_applicable = safeParseJson(
         req.fields.scholarship_applicable,
         "scholarship_applicable"
