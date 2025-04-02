@@ -13,7 +13,6 @@ const RangeSlider = ({ amount, minAmount, maxAmount, handleAmountRange }) => {
   const handleChange = (newValues) => {
     handleAmountRange(newValues[0], newValues[1]); // Send raw numbers
   };
-  console.log(safeMin, safeMax);
 
   return (
     <div className="px-8">

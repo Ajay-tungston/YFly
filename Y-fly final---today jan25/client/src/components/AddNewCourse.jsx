@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import profile from "../assets/images/profile.svg";
 import down from "../assets/images/down.svg";
@@ -27,7 +26,9 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     eligibilityRequirements: [
       {
         requirementType: "",
-        gpaRange: "",
+        // gpaRange: "",
+        minGPA: "",
+        // maxGPA: "",
         backlogRange: "",
         workExperience: "",
         entranceExam: "",
@@ -69,7 +70,7 @@ console.log(addCourseData)
     const validateFields = () => {
       const requiredFields = [
         "course_level",
-        "discipline",
+        // "discipline",
         "area_of_study",
         "country",
         // "university_ranking",
@@ -148,40 +149,40 @@ console.log(addCourseData)
       // window.location.reload();
       // console.log(response.data);
       // Reset form after successful submission
-      // setAddCourseData({
-      //   course_level: "",
-      //   discipline: "",
-      //   area_of_study: "",
-      //   country: "",
-      //   // university_ranking: "",
-      //   university_name: "",
-      //   // university_logo: "",
-      //   course_duration: "",
-      //   application_deadline: "",
-      //   overview: "",
-      //   intakes: [{ month: "", year: "" }],
-      //   testRequirements: [
-      //     { testRequirementName: "Requirement 1", overallScore: "" },
-      //   ],
-      //   eligibilityRequirements: [
-      //     {
-      //       requirementType: "",
-      //       gpaRange: "",
-      //       backlogRange: "",
-      //       workExperience: "",
-      //       entranceExam: "",
-      //     },
-      //   ],
-      //   application_requirements: [{ requirement: "", isRequired: false }],
-      //   job_roles: [{ jobrole: "" }],
-      //   top_recruiters: [{ recruiters_name: "",logo:"" }],
-      //   scholarship_applicable: [{ scholarship: "" }],
-      //   tution_fee: "",
-      //   funding_options: [{ fundingOption: "" }],
-        
-      // });
-      
-    }  catch (error) {
+      setAddCourseData({
+        course_level: "",
+        discipline: "",
+        area_of_study: "",
+        country: "",
+        // university_ranking: "",
+        university_name: "",
+        // university_logo: "",
+        course_duration: "",
+        application_deadline: "",
+        overview: "",
+        intakes: [{ month: "", year: "" }],
+        testRequirements: [
+          { testRequirementName: "Requirement 1", overallScore: "" },
+        ],
+        eligibilityRequirements: [
+          {
+            requirementType: "",
+            // gpaRange: "",
+            minGPA: "",
+            // maxGPA: "",
+            backlogRange: "",
+            workExperience: "",
+            entranceExam: "",
+          },
+        ],
+        application_requirements: [{ requirement: "", isRequired: false }],
+        job_roles: [{ jobrole: "" }],
+        top_recruiters: [{ recruiters_name: "", recruiters_logo: "" }],
+        scholarship_applicable: [{ scholarship: "" }],
+        tution_fee: "",
+        funding_options: [{ fundingOption: "" }],
+      });
+    } catch (error) {
       console.log(error);
       const errorMessage = error.response?.data?.error || "Failed to add course. Please try again.";
       toast.error(errorMessage, {
@@ -220,12 +221,12 @@ console.log(addCourseData)
   };
 
   // University Ranking Input Handler
-//   const handleUniversityRankingChange = (e) => {
-//     setAddCourseData((prevData) => ({
-//       ...prevData,
-//       university_ranking: e.target.value,
-//     }));
-//   };
+  //   const handleUniversityRankingChange = (e) => {
+  //     setAddCourseData((prevData) => ({
+  //       ...prevData,
+  //       university_ranking: e.target.value,
+  //     }));
+  //   };
 
   // University Name Input Handler
   const handleUniversityNameChange = (e) => {
@@ -236,14 +237,14 @@ console.log(addCourseData)
   };
 
   // University Logo File Handler
-//   const handleUniversityFileChange = (e) => {
-//     if (e.target.files[0]) {
-//       setAddCourseData((prevData) => ({
-//         ...prevData,
-//         university_logo: e.target.files[0], // Store file directly
-//       }));
-//     }
-//   };
+  //   const handleUniversityFileChange = (e) => {
+  //     if (e.target.files[0]) {
+  //       setAddCourseData((prevData) => ({
+  //         ...prevData,
+  //         university_logo: e.target.files[0], // Store file directly
+  //       }));
+  //     }
+  //   };
 
   // State for toggling course duration dropdown
   const [isOpenCourseDuration, setIsOpenCourseDuration] = useState(false);
@@ -340,15 +341,23 @@ console.log(addCourseData)
   };
 
   // Eligibility Requirements
-  const handleEligibilityInputChange = (index, field, value) => {
-    const updatedEligibilityRequirements = [
-      ...addCourseData.eligibilityRequirements,
-    ];
-    updatedEligibilityRequirements[index][field] = value;
+  // const handleEligibilityInputChange = (index, field, value) => {
+  //   const updatedEligibilityRequirements = [
+  //     ...addCourseData.eligibilityRequirements,
+  //   ];
+  //   updatedEligibilityRequirements[index][field] = value;
 
+  //   setAddCourseData((prevData) => ({
+  //     ...prevData,
+  //     eligibilityRequirements: updatedEligibilityRequirements,
+  //   }));
+  // };
+  const handleEligibilityInputChange = (index, field, value) => {
     setAddCourseData((prevData) => ({
       ...prevData,
-      eligibilityRequirements: updatedEligibilityRequirements,
+      eligibilityRequirements: prevData.eligibilityRequirements.map((req, i) =>
+        i === index ? { ...req, [field]: value } : req
+      ),
     }));
   };
 
@@ -359,7 +368,9 @@ console.log(addCourseData)
         ...prevData.eligibilityRequirements,
         {
           requirementType: "",
-          gpaRange: "",
+          // gpaRange: "",
+          minGPA: "",
+          // maxGPA: "",
           backlogRange: "",
           workExperience: "",
           entranceExam: "",
@@ -616,55 +627,58 @@ console.log(addCourseData)
             </div>
           )}
 
-          <div className="w-[10%] max-xl:w-[5%] flex items-center justify-center">
-            of
-          </div>
+          {addCourseData?.course_level !== "MBA" && (
+            <>
+              <div className="w-[10%] max-xl:w-[5%] flex items-center justify-center">
+                of
+              </div>
 
-          {/* Discipline Dropdown */}
-          <button
-            type="button"
-            onClick={() => setIsOpenDiscipline(!isOpenDiscipline)}
-            className="flex w-[20%] max-xl:w-[25%] items-center text-[0.8rem] px-5 py-1 justify-between text-[#898C9A] border-[#898C9A] border text-gray-800 bg-[#F9F9F9] rounded-md"
-          >
-            {addCourseData?.discipline || "Discipline"}
-            <img src={down} alt="down" width={12} className="ml-8" />
-          </button>
-          {isOpenDiscipline && (
-            <div className="absolute mt-10 ml-[34.2rem] max-xl:ml-[20.6rem] w-[15%] max-xl:w-[18%] bg-[#F9F9F9] border border-[#898C9A] rounded-md shadow-lg z-10">
-              <ul className="text-[0.8rem] h-[29vh] overflow-y-auto">
-                <li
-                  onClick={() =>
-                    handleDiscipline("Agriculture, Forestry & Fishery")
-                  }
-                  className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
-                >
-                  Agriculture, Forestry & Fishery
-                </li>
-                <li
-                  onClick={() => handleDiscipline("Agriculture & Building")}
-                  className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
-                >
-                  Agriculture & Building
-                </li>
-                <li
-                  onClick={() => handleDiscipline("Arts")}
-                  className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
-                >
-                  Arts
-                </li>
-                <li
-                  onClick={() =>
-                    handleDiscipline("Commerce, Business & Administration")
-                  }
-                  className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
-                >
-                  Commerce, Business & Administration
-                </li>
-                {/* Add all other disciplines as listed */}
-              </ul>
-            </div>
+              {/* Discipline Dropdown */}
+              <button
+                type="button"
+                onClick={() => setIsOpenDiscipline(!isOpenDiscipline)}
+                className="flex w-[20%] max-xl:w-[25%] items-center text-[0.8rem] px-5 py-1 justify-between text-[#898C9A] border-[#898C9A] border text-gray-800 bg-[#F9F9F9] rounded-md"
+              >
+                {addCourseData?.discipline || "Discipline"}
+                <img src={down} alt="down" width={12} className="ml-8" />
+              </button>
+              {isOpenDiscipline && (
+                <div className="absolute mt-10 ml-[34.2rem] max-xl:ml-[20.6rem] w-[15%] max-xl:w-[18%] bg-[#F9F9F9] border border-[#898C9A] rounded-md shadow-lg z-10">
+                  <ul className="text-[0.8rem] h-[29vh] overflow-y-auto">
+                    <li
+                      onClick={() =>
+                        handleDiscipline("Agriculture, Forestry & Fishery")
+                      }
+                      className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
+                    >
+                      Agriculture, Forestry & Fishery
+                    </li>
+                    <li
+                      onClick={() => handleDiscipline("Agriculture & Building")}
+                      className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
+                    >
+                      Agriculture & Building
+                    </li>
+                    <li
+                      onClick={() => handleDiscipline("Arts")}
+                      className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
+                    >
+                      Arts
+                    </li>
+                    <li
+                      onClick={() =>
+                        handleDiscipline("Commerce, Business & Administration")
+                      }
+                      className="px-4 py-2 cursor-pointer hover:bg-[#7f848dda] hover:text-white"
+                    >
+                      Commerce, Business & Administration
+                    </li>
+                    {/* Add all other disciplines as listed */}
+                  </ul>
+                </div>
+              )}
+            </>
           )}
-
           <div className="w-[10%] max-xl:w-[5%] flex items-center justify-center">
             in
           </div>
@@ -721,7 +735,7 @@ console.log(addCourseData)
 
           {/* University Ranking */}
           <div className="w-[25%] max-xl:w-[25%] flex items-center justify-center">
-            University 
+            University
           </div>
           <select
             className="w-[25%] bg-[#F9F9F9] border border-[#898C9A] rounded-md p-2 text-[0.8rem]"
@@ -1001,7 +1015,7 @@ console.log(addCourseData)
 
               <option value="Work Experience">Work Experience</option>
             </select>
-            {req.requirementType === "Min GPA" && (
+            {/* {req.requirementType === "Min GPA" && (
               <input
                 className="w-[25%] ml-2 bg-[#F9F9F9] border-[#898C9A] rounded-md"
                 placeholder="Enter GPA Range"
@@ -1014,7 +1028,64 @@ console.log(addCourseData)
                   )
                 }
               />
+            )} */}
+
+            {req.requirementType === "Min GPA" && (
+              <div className="flex space-x-2 w-32 ">
+                <input
+                  type="number" 
+                  min="1"
+                  max="10"
+                  className="w-full ml-2 bg-[#F9F9F9] border-[#898C9A] rounded-md"
+                  placeholder="Min GPA"
+                  value={req.minGPA || ""}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    if (value === "") {
+                      handleEligibilityInputChange(index, "minGPA", "");
+                      return;
+                    }
+                    let numValue = parseFloat(value);
+                    if (numValue < 1) numValue = 1;
+                    if (numValue > 10) numValue = 10;
+                    handleEligibilityInputChange(index, "minGPA", numValue);
+                  }}
+                  onBlur={(e) => {
+                    let numValue = parseFloat(e.target.value);
+                    if (isNaN(numValue) || numValue < 1) numValue = 1;
+                    if (numValue > 10) numValue = 10;
+                    handleEligibilityInputChange(index, "minGPA", numValue);
+                  }}
+                />
+                {/* <span className="pt-3">-</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  className="w-[35%] ml-2 bg-[#F9F9F9] border-[#898C9A] rounded-md"
+                  placeholder="Max GPA"
+                  value={req.maxGPA || ""}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    if (value === "") {
+                      handleEligibilityInputChange(index, "maxGPA", "");
+                      return;
+                    }
+                    let numValue = parseFloat(value);
+                    if (numValue < 1) numValue = 1;
+                    if (numValue > 10) numValue = 10;
+                    handleEligibilityInputChange(index, "maxGPA", numValue);
+                  }}
+                  onBlur={(e) => {
+                    let numValue = parseFloat(e.target.value);
+                    if (isNaN(numValue) || numValue < 1) numValue = 1;
+                    if (numValue > 10) numValue = 10;
+                    handleEligibilityInputChange(index, "maxGPA", numValue);
+                  }}
+                /> */}
+              </div>
             )}
+
             {req.requirementType === "Backlogs Applicable" && (
               <input
                 className="w-[25%] ml-2 bg-[#F9F9F9] border-[#898C9A] rounded-md"

@@ -132,125 +132,155 @@ const EditUniversity = ({ id, setEditOpen }) => {
   };
 
   return (
-    <div className="h-screen">
-      <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">Edit University</h2>
-        {message && <p className="text-[#d7420c] mb-4">{message}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div>
+      <form className='px-10 py-10  w-[94%] max-w-[90%] bg-white z-50 max-h-screen overflow-y-auto' onSubmit={handleSubmit} >
+        <div className='border-[#BFBFBF] border-b-[1px] my-5'></div>
+
+        <div className='flex justify-between items-center font-urban'>
           <div>
-            <label className="block font-medium">University Name</label>
+            <div className='text-[#0E1B2C] font-bold'>Edit University</div>
+            <div className='text-[#898C9A] text-[0.8rem]'>Upload University details here.</div>
+          </div>
+          <div className='flex text-[0.8rem] font-bold'>
+            <button type="button" className='border-[#BFBFBF] border-[1px] mr-3 px-3 py-1 rounded-[9px] text-[#BFBFBF]'>Cancel</button>
+            <button className='bg-[#30589F] px-3 py-1 rounded-[9px] text-white ' >Save</button>
+          </div>
+        </div>
+        {message && <p className="text-[#d7420c] mb-4">{message}</p>}
+        <div className='border-[#BFBFBF] border-b-[1px] my-5'></div>
+
+        <div className='font-urban mr-10 max-xl:mr-0'>
+          <div className='flex items-center text-[0.9rem]'>
+            <div className='w-[20%] max-xl:w-[15%]'>University Name</div>
             <input
-              type="text"
-              name="university_name"
+              type='text'
+              name='university_name'
               value={formData.university_name}
               onChange={handleChange}
-              className="w-full border rounded-lg p-2"
+              className='w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]'
+              placeholder='Enter here'
             />
             {errors.university_name && (
               <p className="text-[#d7420c] text-sm">{errors.university_name}</p>
             )}
-          </div>
 
-          <div>
-            <label className="block font-medium">University Ranking</label>
+<div className='w-[25%] max-xl:w-[25%] flex items-center justify-center'>University Ranking</div>
             <input
-              type="number"
-              name="university_ranking"
+              type='number'
+              name='university_ranking'
               value={formData.university_ranking}
               onChange={handleChange}
-              className="w-full border rounded-lg p-2"
+              className='w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]'
+              placeholder='Enter here'
             />
-            {errors.university_ranking && (
+ {errors.university_ranking && (
               <p className="text-[#d7420c] text-sm">
                 {errors.university_ranking}
               </p>
             )}
           </div>
+</div>
+          
+<div className='border-[#BFBFBF] border-b-[1px] my-5'></div>
 
-          <div>
-            <label className="block font-medium">State</label>
+        <div className='font-urban mr-10 max-xl:mr-0'>
+          <div className='flex items-center text-[0.9rem]'>
+
+            <div className='w-[20%] max-xl:w-[15%]'>State</div>
             <input
-              type="text"
-              name="state"
+              type='text'
+              name='state'
               value={formData.state}
               onChange={handleChange}
-              className="w-full border rounded-lg p-2"
+              className='w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]'
+              placeholder='Enter here'
             />
             {errors.state && (
               <p className="text-[#d7420c] text-sm">{errors.state}</p>
             )}
-          </div>
 
-          <div>
-            <label className="block font-medium">Country</label>
+<div className='w-[25%] max-xl:w-[25%] flex items-center justify-center'>Country</div>
             <input
-              type="text"
-              name="country"
+              type='text'
+              name='country'
               value={formData.country}
               onChange={handleChange}
-              className="w-full border rounded-lg p-2"
+              className='w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]'
+              placeholder='Enter here'
             />
             {errors.country && (
               <p className="text-[#d7420c] text-sm">{errors.country}</p>
             )}
           </div>
+           </div>
 
-          <div>
-            <label className="block font-medium">University Type</label>
+        
+          <div className='border-[#BFBFBF] border-b-[1px] my-5'></div>
+
+<div className='font-urban mr-10 max-xl:mr-0'>
+  <div className='flex items-center text-[0.9rem]'>
+
+  <div className='w-[20%] max-xl:w-[15%] -ml-3'>University Type</div>
             <select
-              name="university_type"
+              name='university_type'
               value={formData.university_type}
               onChange={handleChange}
-              className="w-full border rounded-lg p-2"
+              className='w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md text-[0.9rem]'
             >
               <option value="Public">Public</option>
               <option value="Private">Private</option>
             </select>
+            
+
             {errors.university_type && (
               <p className="text-[#d7420c] text-sm">{errors.university_type}</p>
             )}
-          </div>
 
-          <div>
-            <label className="block font-medium">University Logo</label>
-            {existingLogo ? (
-              <div className="mb-2 ">
-                <img
-                  src={`data:${existingLogo.contentType};base64,${btoa(
-                    String.fromCharCode(...existingLogo.data.data)
-                  )}`}
-                  alt="University Logo"
-                  className="w-24 h-24 object-cover rounded-md border"
-                />
-                <button
-                  className="px-3 h-14 rounded-xl bg-[#4b7bd5] text-white mt-2"
-                  onClick={() => setExistingLogo(null)}
-                >
-                  Add New Logo
-                </button>
-              </div>
-            ) : (
-              <input
-                type="file"
-                accept="image/png, image/jpeg"
-                onChange={handleFileChange}
-                className="w-full border rounded-lg p-2"
-              />
-            )}
-            {errors.university_logo && (
-              <p className="text-[#d7420c] text-sm">{errors.university_logo}</p>
-            )}
-          </div>
+    <div className="w-[25%] max-xl:w-[25%] flex items-center justify-center">University Logo</div>
+    
+    {/* Check if an existing logo is available */}
+    {existingLogo ? (
+      <div className="flex items-center space-x-3">
+        <img
+          src={`data:${existingLogo.contentType};base64,${btoa(
+            String.fromCharCode(...existingLogo.data.data)
+          )}`}
+          alt="University Logo"
+          className="w-[50%] h-[54px] object-cover rounded-md border" 
+        />
+        <button
+          className="px-3 h-10 rounded-xl bg-[#4b7bd5] text-white"
+          onClick={() => setExistingLogo(null)}
+        >
+          Add New Logo
+        </button>
+      </div>
+    ) : (
+      <input
+        type="file"
+        accept="image/png, image/jpeg"
+        onChange={handleFileChange}
+        className="w-[30%] bg-[#F9F9F9] border border-[#898C9A] rounded-md placeholder:text-[0.9rem]"
+      />
+    )}
+  
 
-          <button
+  {/* Display error message if there is one */}
+  {errors.university_logo && (
+    <p className="text-[#d7420c] text-sm mt-2">{errors.university_logo}</p>
+  )}
+</div>
+
+</div>
+          {/* <button
             type="submit"
             className="w-full bg-[#4b7bd5]  text-white rounded-lg p-2"
           >
             Submit
-          </button>
-        </form>
-      </div>
+          </button> */}
+      </form>
     </div>
+
   );
 };
 

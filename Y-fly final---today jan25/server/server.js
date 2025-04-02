@@ -27,6 +27,7 @@ app.use('/scholarships', scholarshipRoutes);
 app.use('/courses', courseRoutes);
 app.use('/university', require("./Routes/universityRoutes"));
 app.use('/profile-matcher', require("./Routes/profileMatcherRoutes"));
+app.use('/application', require("./Routes/apllicationRoutes"));
 
 // Connect to the database
 mongoose

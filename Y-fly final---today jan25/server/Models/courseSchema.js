@@ -8,7 +8,9 @@ const courseSchema = new mongoose.Schema(
       enum: ["Masters", "MBA", "Bachelors"],
       required: true,
     },
-    discipline: { type: String, required: true, trim: true },
+    discipline: { type: String,
+      //  required: true,
+        trim: true },
     area_of_study: { type: String, required: true, trim: true },
     country: {
       type: String,
@@ -25,7 +27,10 @@ const courseSchema = new mongoose.Schema(
     },
     // university_ranking: { type: Number, required: true },
     // university_name: { type: String, required: true, trim: true },
-    university_name: { type: mongoose.Schema.Types.ObjectId, ref: "University" },
+    university_name: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "University",
+    },
     // university_logo: { data: Buffer, contentType: String },
     course_duration: {
       type: String,
@@ -57,7 +62,9 @@ const courseSchema = new mongoose.Schema(
     eligibilityRequirements: [
       {
         requirementType: { type: String, required: true },
-        gpaRange: { type: String, required: false },
+        // gpaRange: { type: String, required: false },
+        minGPA: { type: Number, min: 1, max: 10, required: false },
+        // maxGPA: { type: Number, min: 1, max: 10, required: false },
         backlogRange: { type: String, required: false },
         workExperience: { type: String, required: false },
         entranceExam: { type: String, required: false },
@@ -116,6 +123,5 @@ courseSchema.pre("save", function (next) {
   this.course_title = `${this.course_level} of ${this.discipline} in ${this.area_of_study}`;
   next();
 });
-
 
 module.exports = mongoose.model("Course", courseSchema);
