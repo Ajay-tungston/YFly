@@ -43,6 +43,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
   });
 
   const [universities, setUniversities] = useState([]);
+  const [scholarshipOptions, setScholarshipOptions] = useState([]);
   useEffect(() => {
     console.log("first");
     const fetchUniversities = async () => {
@@ -58,7 +59,23 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     };
     fetchUniversities();
   }, []);
-
+  useEffect(() => {
+    const fetchScholarships = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/scholarships/get-all");
+        console.log("Scholarship response:", response.data);
+        // If your response is an object with a 'scholarships' key, adjust accordingly:
+        const scholarshipsArray = Array.isArray(response.data)
+          ? response.data
+          : response.data.scholarships;
+        setScholarshipOptions(scholarshipsArray || []);
+      } catch (error) {
+        console.error("Error fetching scholarships:", error);
+      }
+    };
+  
+    fetchScholarships();
+  }, []);
   const handleCancel = () => {
     setAddingNewCourse(false); // Close the form and return to the scholarship list
   };
@@ -513,15 +530,13 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
   };
 
   const handleRemoveScholarship = (index) => {
-    const updatedScholarships = addCourseData.scholarship_applicable.filter(
-      (_, i) => i !== index
-    );
+    const updatedScholarships = [...addCourseData.scholarship_applicable];
+    updatedScholarships.splice(index, 1);
     setAddCourseData((prevData) => ({
       ...prevData,
       scholarship_applicable: updatedScholarships,
     }));
   };
-
   const handleTuitionFeeChange = (value) => {
     setAddCourseData((prevData) => ({
       ...prevData,
@@ -952,12 +967,17 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
                 )
               }
             >
-              <option value="Select" disabled>
+              <option value="Select" >
                 Select Requirement
               </option>
-              <option value="Requirement 1">Requirement 1</option>
-              <option value="Requirement 2">Requirement 2</option>
-              <option value="Requirement 3">Requirement 3</option>
+              <option value="gre">GRE</option>
+              <option value="gmat">GMAT</option>
+              <option value="ielts">IELTS</option>
+              <option value="ielts">IELTS</option>
+              <option value="tofel">TOFEL</option>
+              <option value="pte">PTE</option>
+              <option value="sat">SAT</option>
+              <option value="act">ACT</option>
             </select>
             <div className="w-[25%] flex items-center justify-center">
               Overall Required Score
@@ -1275,42 +1295,58 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
       </div>
       <div className="border-[#BFBFBF] border-b-[1px] my-5"></div>
       {/* Scholarship Applicable section */}
-      <div className="font-urban mr-10 max-xl:mr-0">
-        {addCourseData?.scholarship_applicable?.map((item, index) => (
-          <div key={index} className="flex text-[0.9rem] mt-4 items-center">
-            <div className="w-[20%] max-xl:w-[15%]">Scholarship Applicable</div>
-            <select
-              className="w-[30%] px-5 py-2 text-[#898C9A] border-[#898C9A] bg-[#F9F9F9] rounded-md"
-              value={item.scholarship}
-              onChange={(e) => handleScholarshipChange(index, e.target.value)}
-            >
-              <option value="Select" disabled>
-                Select
-              </option>
-              <option value="Scholarship 1">Scholarship 1</option>
-              <option value="Scholarship 2">Scholarship 2</option>
-              <option value="Scholarship 3">Scholarship 3</option>
-            </select>
-            {index > 0 && (
-              <button
-                type="button"
-                className="ml-4 text-red-500 hover:text-red-700"
-                onClick={() => handleRemoveScholarship(index)}
-              >
-                <img src={trashclose} alt="remove" />
-              </button>
-            )}
-          </div>
+      
+<div className="font-urban mr-10 max-xl:mr-0 mt-4">
+  {addCourseData.scholarship_applicable.map((item, index) => (
+    <div key={index} className="flex text-[0.9rem] mt-4 items-center">
+      <div className="w-[20%] max-xl:w-[15%]">Scholarship Applicable</div>
+      <select
+        className="w-[30%] px-5 py-2 text-[#898C9A] border-[#898C9A] bg-[#F9F9F9] rounded-md"
+        value={item.scholarship}
+        onChange={(e) => handleScholarshipChange(index, e.target.value)}
+      >
+        <option value="Select Scholarship">
+          Select
+        </option>
+        {scholarshipOptions.map((scholarship) => (
+          <option key={scholarship._id} value={scholarship.scholarship_name}>
+            {scholarship.scholarship_name}
+          </option>
         ))}
+      </select>
+      {index > 0 && (
         <button
           type="button"
-          className="flex items-center font-bold ml-[20%] mt-3 text-[0.9rem] border border-[#898C9A] text-[#30589F] py-2 px-5 rounded-md"
-          onClick={handleAddScholarship}
+          className="ml-4 text-red-500 hover:text-red-700"
+          onClick={() => handleRemoveScholarship(index)}
         >
-          <img src={add} alt="add" width={17} className="mr-1" />
-          Add Scholarship
+          <img src={trashclose} alt="remove" />
         </button>
-      </div>
+      )}
+    </div>
+  ))}
+  <button
+    type="button"
+    className="flex items-center font-bold ml-[20%] mt-3 text-[0.9rem] border border-[#898C9A] text-[#30589F] py-2 px-5 rounded-md"
+    onClick={handleAddScholarship}
+  >
+    <img src={add} alt="add" width={17} className="mr-1" />
+    Add Scholarship
+  </button>
+</div>
+
+
+        {/* Submit and Cancel buttons */}
+        <div className="mt-6">
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md mr-4">
+            Submit
+          </button>
+          <button type="button" className="px-4 py-2 bg-gray-600 text-white rounded-md" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+
+       
       <div className="border-[#BFBFBF] border-b-[1px] my-5"></div>
       {/*Tuition fees section */}
       <div className="font-urban mr-10 max-xl:mr-0">
