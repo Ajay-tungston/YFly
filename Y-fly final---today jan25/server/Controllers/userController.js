@@ -385,6 +385,50 @@ console.log(req.body)
 };
 
 
+
+//Update user details
+
+exports.updateUserDetails = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const updateData = req.body;
+
+    // Validate user_id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    // Remove fields that shouldn't be updated
+    const restrictedFields = ['_id', 'user_id', 'email', 'password', 'firstLogin'];
+    restrictedFields.forEach(field => delete updateData[field]);
+
+    // Find the user by ID and update
+    const updatedUser = await User.findOneAndUpdate(
+      { user_id: new mongoose.Types.ObjectId(user_id) },
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'User details updated successfully',
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error('Error updating user details:', error);
+    
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ message: 'Validation error', errors });
+    }
+    
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
  //Fetches user details
 exports.getUserDetails = async (req, res) => {
   try {
