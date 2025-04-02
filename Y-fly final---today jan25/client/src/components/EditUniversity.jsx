@@ -46,7 +46,9 @@ const EditUniversity = ({ id, setEditOpen }) => {
   const handleFileChange = (e) => {
     setFormData({ ...formData, university_logo: e.target.files[0] });
   };
-
+const handleCancel=()=>{
+  setEditOpen(false);
+}
   const validateForm = () => {
     let errors = {};
     if (!formData.university_name.trim())
@@ -142,7 +144,7 @@ const EditUniversity = ({ id, setEditOpen }) => {
             <div className='text-[#898C9A] text-[0.8rem]'>Upload University details here.</div>
           </div>
           <div className='flex text-[0.8rem] font-bold'>
-            <button type="button" className='border-[#BFBFBF] border-[1px] mr-3 px-3 py-1 rounded-[9px] text-[#BFBFBF]'>Cancel</button>
+            <button type="button" className='border-[#BFBFBF] border-[1px] mr-3 px-3 py-1 rounded-[9px] text-[#BFBFBF]' onClick={handleCancel}>Cancel</button>
             <button className='bg-[#30589F] px-3 py-1 rounded-[9px] text-white ' >Save</button>
           </div>
         </div>

@@ -338,7 +338,7 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
                 <div className='text-[#898C9A] text-[0.8rem]'>Upload scholarship details here.</div>
             </div>
             <div className='flex text-[0.8rem] font-bold'>
-                <button type="button" onClick={handleCancel} className='border-[#BFBFBF] border-[1px] mr-3 px-3 py-1 rounded-[9px] text-[#BFBFBF]'>Cancel</button>
+                <button type="button" onClick={handleCancel} className='border-[#ad3131] border-[1px] mr-3 px-3 py-1 rounded-[9px] text-[#BFBFBF]'>Cancel</button>
                 <button className='bg-[#30589F] px-3 py-1 rounded-[9px] text-white'  onClick={handleSave}>Save</button>
             </div>
         </div>
