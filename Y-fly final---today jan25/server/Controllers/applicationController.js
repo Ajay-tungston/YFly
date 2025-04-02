@@ -1,129 +1,91 @@
-const fs = require("fs");
-const path = require("path");
-const Application = require("../Models/Application");
-const User = require("../Models/userSchema");
-const Course = require("../Models/courseSchema");
+const Application = require('../Models/Application');
+const User = require('../Models/userSchema');
+const Course = require('../Models/courseSchema');
+const fs = require('fs');
+const path = require('path');
+
+const deleteUploadedFiles = (files) => {
+  if (!files) return;
+  
+  Object.values(files).forEach(field => {
+    field.forEach(file => {
+      fs.unlink(file.path, err => {
+        if (err) console.error(`Error deleting file: ${file.path}`, err);
+      });
+    });
+  });
+};
 
 const addApplication = async (req, res) => {
-  const { userId, courseId, intakeYear, intakeMonth } = req.fields;
-  const { files } = req;
-console.log("fjajf:",files)
-  // Function to delete uploaded files
-  const deleteFiles = (fileArray) => {
-    console.log(fileArray)
-    if (Array.isArray(fileArray)) {
-      fileArray.forEach((file) => fs.unlink(file.path, () => {}));
-    } else if (fileArray && fileArray.path) {
-      fs.unlink(fileArray.path, () => {});
-    }
-  };
+  const { userId, courseId, intakeYear, intakeMonth } = req.body;
+  const files = req.files;
 
   try {
-    // Validate user existence
-    const userExists = await User.findById(userId);
-    if (!userExists) {
-      deleteFiles(Object.values(files)); // Delete all uploaded files
-      return res.status(400).json({ success: false, message: "Invalid userId. User not found." });
-    }
+    // Validations
+    const [userExists, courseExists] = await Promise.all([
+      User.findById(userId),
+      Course.findById(courseId)
+    ]);
 
-    // Validate course existence
-    const courseExists = await Course.findById(courseId);
-    if (!courseExists) {
-      deleteFiles(Object.values(files)); // Delete all uploaded files
-      return res.status(400).json({ success: false, message: "Invalid courseId. Course not found." });
-    }
-
-    // Validate intake year and month against the course's available intakes
-    const intakeExists = courseExists.intakes.some(
-      (intake) => intake.year === parseInt(intakeYear) && intake.month === intakeMonth
-    );
-
-    if (!intakeExists) {
-      deleteFiles(Object.values(files)); // Delete all uploaded files
+    if (!userExists || !courseExists) {
+      deleteUploadedFiles(files);
       return res.status(400).json({
         success: false,
-        message: `The selected intake year (${intakeYear}) and month (${intakeMonth}) are not available for this course.`,
+        message: !userExists ? 'User not found' : 'Course not found'
       });
     }
 
-    // Function to check if a file is a PDF using file extension
-    const isPDF = (file) => file && path.extname(file.path).toLowerCase() === ".pdf";
+    // Validate Intake - Check if the combination exists in course intakes
+    const intakeValid = courseExists.intakes.some(intake => 
+      intake.year.toString() === intakeYear.toString() && 
+      intake.month.toLowerCase() === intakeMonth.toLowerCase()
+    );
 
-    // Function to validate and process files (handles both single & multiple files)
-    const processFiles = (fileInput, isSingle = false) => {
-      if (!fileInput) return isSingle ? null : [];
-
-      // Convert to array if it's a single file
-      const fileArray = Array.isArray(fileInput) ? fileInput : [fileInput];
-
-      // Validate all files are PDFs
-      const invalidFiles = fileArray.filter((file) => !isPDF(file));
-
-      if (invalidFiles.length > 0) {
-        deleteFiles(fileArray); // Delete invalid files before returning the error
-        return { error: "All uploaded files must be in PDF format." };
-      }
-
-      // Store file paths
-      const filePaths = fileArray.map((file) => file.path);
-
-      // Ensure single files return a string, not an array
-      return isSingle ? filePaths[0] || null : filePaths;
-    };
-
-    // Process and validate all document fields
-    const documents = {
-      identityDocuments: {
-        passportFront: processFiles(files.passportFront, true), // Single file
-        passportBack: processFiles(files.passportBack, true), // Single file
-        cvResume: processFiles(files.cvResume, true), // Single file
-      },
-      educationalDocuments: processFiles(files.educationalDocuments),
-      workExperienceDocuments: processFiles(files.workExperienceDocuments),
-      englishProficiencyDocuments: processFiles(files.englishProficiencyDocuments),
-      extracurricularDocuments: processFiles(files.extracurricularDocuments),
-      recommendationDocuments: processFiles(files.recommendationDocuments),
-      otherDocuments: processFiles(files.otherDocuments),
-    };
-
-    // Check for any validation errors in document processing
-    for (const key in documents) {
-      if (typeof documents[key] === "object" && documents[key] !== null) {
-        for (const subKey in documents[key]) {
-          if (documents[key][subKey]?.error) {
-            deleteFiles(Object.values(files)); // Delete all uploaded files
-            return res.status(400).json({ success: false, message: documents[key][subKey].error });
-          }
-        }
-      } else if (documents[key]?.error) {
-        deleteFiles(Object.values(files)); // Delete all uploaded files
-        return res.status(400).json({ success: false, message: documents[key].error });
-      }
+    if (!intakeValid) {
+      deleteUploadedFiles(files);
+      return res.status(400).json({
+        success: false,
+        message: `The selected intake (${intakeMonth} ${intakeYear}) is not available for this course.`
+      });
     }
 
-    // Save application with relative file paths
+    // Process files
+    const processFiles = (fieldName) => files[fieldName]?.map(file => file.path) || [];
+    const processSingleFile = (fieldName) => files[fieldName]?.[0]?.path || null;
+
     const application = new Application({
       user: userId,
       course: courseId,
-      intake: {
+      intake: { 
         year: parseInt(intakeYear),
-        month: intakeMonth,
+        month: intakeMonth 
       },
-      documents,
+      documents: {
+        identityDocuments: {
+          passportFront: processSingleFile('passportFront'),
+          passportBack: processSingleFile('passportBack'),
+          cvResume: processSingleFile('cvResume')
+        },
+        educationalDocuments: processFiles('educationalDocuments'),
+        workExperienceDocuments: processFiles('workExperienceDocuments'),
+        englishProficiencyDocuments: processFiles('englishProficiencyDocuments'),
+        extracurricularDocuments: processFiles('extracurricularDocuments'),
+        recommendationDocuments: processFiles('recommendationDocuments'),
+        otherDocuments: processFiles('otherDocuments')
+      }
     });
 
     await application.save();
-
-    return res.json({
-      success: true,
-      message: "Application submitted successfully",
-      data: application,
-    });
+    res.status(201).json({ success: true, data: application });
 
   } catch (error) {
-    console.error(error);
-    deleteFiles(Object.values(files)); // Delete all uploaded files on error
-    return res.status(400).json({ success: false, message: error.message });
+    deleteUploadedFiles(files);
+    res.status(400).json({ 
+      success: false, 
+      message: error.message.includes('PDF') 
+        ? error.message 
+        : 'Application submission failed: ' + error.message
+    });
   }
 };
 

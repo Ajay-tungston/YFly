@@ -117,7 +117,7 @@ const CourseSearchbar = ({
   );
   return (
     <>
-      <div className="w-[24%] font-urban  bg-[#ffffff] rounded-[50px] border-[1px] border-black flex flex-col max-lg:hidden">
+      <div className="w-[24%] font-urban h-fit bg-[#ffffff] rounded-[50px] border-[1px] border-black flex flex-col max-lg:hidden">
         {/* -------------------filter ------------------------*/}
         <div className="font-urban text-[1.2rem] text-black flex gap-3 items-center px-8 pt-7 pb-5 tracking-wide">
           <img src={filter} alt="filter" />

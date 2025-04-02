@@ -8,24 +8,22 @@ import info from "../assets/images/image/info.svg";
 import contender from "../assets/images/image/contender.svg";
 import shieldtick from "../assets/images/image/shieldtick.svg";
 import ascendorange from "../assets/images/image/ascendorange.svg";
-import harvard from "../assets/images/image/harvard.svg";
-import princeton from "../assets/images/image/princeton.svg";
+
 import contenderblue from "../assets/images/image/contenderblue.svg";
 import contendergreen from "../assets/images/image/contendergreen.svg";
 import close from "../assets/images/image/close.svg";
 import wallet from "../assets/images/image/wallet.svg";
-import Contactus from "../components/ContactUs";
 import down from "../assets/images/image/down.svg";
 
 import Footer from "../components/Footer";
-import Ascend from "../components/Ascend";
 import ResponsiveSearchBar from "../components/ResponsiveSearchBar";
 import axios from "axios";
 import { debounce } from "lodash";
 import { Oval } from "react-loader-spinner";
+import SuccessPopup from "../components/alertPopUp/SuccessPopup";
 
 const Profilematcher = () => {
-  // const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState([]);
   const [universityData, setUniversityData] = useState([]);
   const [filters, setFilters] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
@@ -41,27 +39,29 @@ const Profilematcher = () => {
   const [maxScore, setMaxScore] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [scholarship, setScholarship] = useState([]);
-
+console.log(testRequirement)
   const [isLoading, setIsLoading] = useState(false);
   const [minGpa, setMinGpa] = useState(null);
   const [maxGpa, setMaxGpa] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const email = localStorage.getItem("email");
-  //       if (email) {
-  //         const response = await axios.get(
-  //           `http://localhost:5000/user/profile/${email}`
-  //         );
-  //         setUserData(response?.data?.user);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchUserData();
-  // }, []);
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const email = localStorage.getItem("email");
+        if (email) {
+          const response = await axios.get(
+            `http://localhost:5000/user/profile/${email}`
+          );
+          setUserData(response?.data?.user);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const fetchFilters = async () => {
@@ -120,8 +120,8 @@ const Profilematcher = () => {
             min_score: minScore,
             max_score: maxScore,
             scholarship,
-            minGPA:minGpa,
-            maxGPA:maxGpa,
+            minGPA: minGpa,
+            maxGPA: maxGpa,
           },
         }
       );
@@ -144,7 +144,9 @@ const Profilematcher = () => {
     testRequirement,
     minScore,
     maxScore,
-    scholarship,minGpa,maxGpa
+    scholarship,
+    minGpa,
+    maxGpa,
   ]);
 
   useEffect(() => {
@@ -160,6 +162,19 @@ const Profilematcher = () => {
 
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+
+  // Get unique available years from course intakes
+  let availableYears = selectedCourse?.intakes
+    ? [...new Set(selectedCourse?.intakes?.map((intake) => intake.year))]
+    : [];
+
+  // Get months available for the selected year
+  let availableMonths =
+    selectedCourse?.intakes
+      ?.filter((intake) => intake.year === selectedYear)
+      ?.map((intake) => intake.month) || [];
 
   const toggleShowMore = (value) => {
     if (value === "ascend") setIsAscendExpanded(!isAscendExpanded);
@@ -202,8 +217,9 @@ const Profilematcher = () => {
     if (documentsdrop) {
       setDocumentsdrop(false);
     }
+    setSelectedMonth(null);
+    setSelectedYear(null);
   };
-
   const [yeardrop, setYeardrop] = useState(false);
   const handleYearDrop = () => {
     setYeardrop(!yeardrop);
@@ -214,49 +230,263 @@ const Profilematcher = () => {
     setMonthdrop(!monthdrop);
   };
 
+  //file upload section
   const [documentsdrop, setDocumentsdrop] = useState(false);
-  const handleDocuments = () => {
-    setDocumentsdrop(!documentsdrop);
-    if (apply) {
+  const [identitydoc, setIdentitydoc] = useState(false);
+  const [educationdoc, setEducationdoc] = useState(false);
+  const [workexpdoc, setWorkexpdoc] = useState(false);
+  const [englishdoc, setEnglishdoc] = useState(false);
+  const [extracurricularDoc, setExtracurricularDoc] = useState(false);
+  const [recommendationDoc, setRecommendationDoc] = useState(false);
+  const [otherDoc, setOtherDoc] = useState(false);
+
+  // Refs for file inputs
+  const passportFrontRef = useRef();
+  const passportBackRef = useRef();
+  const cvResumeRef = useRef();
+  const educationDocsRef = useRef();
+  const workExpDocsRef = useRef();
+  const englishProfDocsRef = useRef();
+  const extracurricularDocsRef = useRef();
+  const recommendationDocsRef = useRef();
+  const otherDocsRef = useRef();
+
+  // State for uploaded files
+  const [passportFront, setPassportFront] = useState(null);
+  const [passportBack, setPassportBack] = useState(null);
+  const [cvResume, setCvResume] = useState(null);
+  const [educationalDocs, setEducationalDocs] = useState([]);
+  const [workExpDocs, setWorkExpDocs] = useState([]);
+  const [englishProfDocs, setEnglishProfDocs] = useState([]);
+  const [extracurricularDocs, setExtracurricularDocs] = useState([]);
+  const [recommendationDocs, setRecommendationDocs] = useState([]);
+  const [otherDocs, setOtherDocs] = useState([]);
+  const [errMsg, setErrMsg] = useState(null);
+
+  // Handlers for dropdown toggles
+  const handleDocuments = () => setDocumentsdrop(!documentsdrop);
+  const handleIdentitynDoc = () => setIdentitydoc(!identitydoc);
+  const handleEducationDoc = () => setEducationdoc(!educationdoc);
+  const handleWorkExpDoc = () => setWorkexpdoc(!workexpdoc);
+  const handleEnglishDoc = () => setEnglishdoc(!englishdoc);
+  const handleExtracurricularDoc = () =>
+    setExtracurricularDoc(!extracurricularDoc);
+  const handleRecommendationDoc = () =>
+    setRecommendationDoc(!recommendationDoc);
+  const handleOtherDoc = () => setOtherDoc(!otherDoc);
+
+  // Handlers for file uploads
+  const handlePassportFrontChange = (e) => {
+    if (e.target.files[0]) {
+      setPassportFront(e.target.files[0]);
+    }
+  };
+
+  const handlePassportBackChange = (e) => {
+    if (e.target.files[0]) {
+      setPassportBack(e.target.files[0]);
+    }
+  };
+
+  const handleCvResumeChange = (e) => {
+    if (e.target.files[0]) {
+      setCvResume(e.target.files[0]);
+    }
+  };
+
+  const handleEducationDocsChange = (e) => {
+    setEducationalDocs([...educationalDocs, ...Array.from(e.target.files)]);
+  };
+
+  const handleWorkExpDocsChange = (e) => {
+    setWorkExpDocs([...workExpDocs, ...Array.from(e.target.files)]);
+  };
+
+  const handleEnglishProfDocsChange = (e) => {
+    setEnglishProfDocs([...englishProfDocs, ...Array.from(e.target.files)]);
+  };
+
+  const handleExtracurricularDocsChange = (e) => {
+    setExtracurricularDocs([
+      ...extracurricularDocs,
+      ...Array.from(e.target.files),
+    ]);
+  };
+
+  const handleRecommendationDocsChange = (e) => {
+    setRecommendationDocs([
+      ...recommendationDocs,
+      ...Array.from(e.target.files),
+    ]);
+  };
+
+  const handleOtherDocsChange = (e) => {
+    setOtherDocs([...otherDocs, ...Array.from(e.target.files)]);
+  };
+
+  // Handlers for triggering file input clicks
+  const handlePassportFront = () => passportFrontRef.current.click();
+  const handlePassportBack = () => passportBackRef.current.click();
+  const handleCvResume = () => cvResumeRef.current.click();
+  const handleEducationClick = () => educationDocsRef.current.click();
+  const handleWorkExpClick = () => workExpDocsRef.current.click();
+  const handleEnglishProfClick = () => englishProfDocsRef.current.click();
+  const handleExtracurricularClick = () =>
+    extracurricularDocsRef.current.click();
+  const handleRecommendationClick = () => recommendationDocsRef.current.click();
+  const handleOtherClick = () => otherDocsRef.current.click();
+
+  // Handler for removing files from multiple uploads
+  const removeFile = (fileList, setFileList, index) => {
+    const newFiles = [...fileList];
+    newFiles.splice(index, 1);
+    setFileList(newFiles);
+  };
+
+  // Submit handler
+  const handleSubmit = async () => {
+    // Validate required fields
+    // if (
+    //   !userData?._id ||
+    //   !selectedCourse?._id ||
+    //   !selectedYear ||
+    //   !selectedMonth
+    // ) {
+    //   alert("Please fill in all required fields");
+    //   return;
+    // }
+    setErrMsg("");
+
+    // Single default limit for all multiple file categories
+    const DEFAULT_FILE_LIMIT = 3; // Maximum 3 files per category
+
+    // Track validation states
+    let hasMissingFiles = false;
+    let hasInvalidFiles = false;
+    let hasExceededLimits = false;
+
+    // Check single file fields (unchanged)
+    if (!passportFront || !passportBack || !cvResume) {
+      hasMissingFiles = true;
+    } else if (
+      passportFront.type !== "application/pdf" ||
+      passportBack.type !== "application/pdf" ||
+      cvResume.type !== "application/pdf"
+    ) {
+      hasInvalidFiles = true;
+    }
+
+    // Check multiple file fields with default limit
+    const documentGroups = [
+      { files: educationalDocs },
+      { files: workExpDocs },
+      { files: englishProfDocs },
+      { files: extracurricularDocs },
+      { files: recommendationDocs },
+      { files: otherDocs },
+    ];
+
+    documentGroups.forEach(({ files }) => {
+      if (files.length === 0) {
+        hasMissingFiles = true;
+      } else if (files.some((file) => file.type !== "application/pdf")) {
+        hasInvalidFiles = true;
+      } else if (files.length > DEFAULT_FILE_LIMIT) {
+        hasExceededLimits = true;
+      }
+    });
+
+    // Set appropriate error message
+    if (hasExceededLimits) {
+      setErrMsg(
+        `Maximum ${DEFAULT_FILE_LIMIT} files allowed per document category.`
+      );
+      return;
+    } else if (hasMissingFiles && hasInvalidFiles) {
+      setErrMsg("All documents are required and must be in PDF format.");
+    } else if (hasMissingFiles) {
+      setErrMsg("All required documents must be uploaded.");
+    } else if (hasInvalidFiles) {
+      setErrMsg("Only PDF format is accepted for all documents.");
+    }
+
+    if (hasMissingFiles || hasInvalidFiles) {
+      return;
+    }
+
+    const formData = new FormData();
+
+    // Append user and course information
+    formData.append("userId", userData._id);
+    formData.append("courseId", selectedCourse._id);
+    formData.append("intakeYear", selectedYear);
+    formData.append("intakeMonth", selectedMonth);
+
+    // Append identity documents (single files)
+    if (passportFront) formData.append("passportFront", passportFront);
+    if (passportBack) formData.append("passportBack", passportBack);
+    if (cvResume) formData.append("cvResume", cvResume);
+
+    // Append other documents (multiple files)
+    educationalDocs.forEach((file) =>
+      formData.append("educationalDocuments", file)
+    );
+    workExpDocs.forEach((file) =>
+      formData.append("workExperienceDocuments", file)
+    );
+    englishProfDocs.forEach((file) =>
+      formData.append("englishProficiencyDocuments", file)
+    );
+    extracurricularDocs.forEach((file) =>
+      formData.append("extracurricularDocuments", file)
+    );
+    recommendationDocs.forEach((file) =>
+      formData.append("recommendationDocuments", file)
+    );
+    otherDocs.forEach((file) => formData.append("otherDocuments", file));
+
+    try {
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(`${key}:`, value);
+      // }
+
+      const response = await axios.post(
+        "http://localhost:5000/application/apply",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // For Axios, response data is in response.data
+      setShowPopup(true);
+
+      setOpenModal(false);
+      setDetails(false);
       setApply(false);
+      setDocumentsdrop(false);
+
+      // Reset form state
+      setPassportFront(null);
+      setPassportBack(null);
+      setCvResume(null);
+      setEducationalDocs([]);
+      setWorkExpDocs([]);
+      setEnglishProfDocs([]);
+      setExtracurricularDocs([]);
+      setRecommendationDocs([]);
+      setOtherDocs([]);
+      setSelectedYear(null);
+      setSelectedMonth(null);
+      setDocumentsdrop(false);
+
+      setErrMsg("");
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      alert("Error submitting application");
     }
-  };
-
-  const [identitydoc, setIdentityDoc] = useState(false);
-  const handleIdentitynDoc = () => {
-    setIdentityDoc(!identitydoc);
-  };
-
-  const [educationdoc, setEducationDoc] = useState(false);
-  const handleEducationDoc = () => {
-    setEducationDoc(!educationdoc);
-  };
-
-  //Education Documents
-  const [fileName, setFileName] = useState("");
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
-    }
-  };
-  const fileInputRef = useRef(null);
-
-  const handleClick = () => {
-    fileInputRef.current.click();
-  };
-  //passport front
-  const [passportFront, setPassportFront] = useState("");
-  const handlePassportFrontChange = (event) => {
-    const pf = event.target.files[0];
-    if (pf) {
-      setPassportFront(pf.name);
-    }
-  };
-  const passportFrontRef = useRef(null);
-
-  const handlePassportFront = () => {
-    passportFrontRef.current.click();
   };
 
   return (
@@ -282,50 +512,71 @@ const Profilematcher = () => {
 
         {/*---------------------------------- second section--------------------- */}
         <div className="flex justify-center mt-10 max-lg:hidden">
-          <div className="bg-bluegradient w-[90%] rounded-full py-12 px-20 flex flex-wrap justify-between">
-            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-              {!courseLevel ? (
-                <div className="">Masters</div>
-              ) : (
-                <div>{courseLevel}</div>
-              )}
-            </button>
+  <div className="bg-bluegradient w-[90%] rounded-full py-6 px-6 flex flex-wrap justify-around gap-2">
+    {/* Course Level */}
+    <FilterPill >
+      {courseLevel || "Course Level"}
+    </FilterPill>
 
-            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-              {(country?.length > 0 ? country.join(", ") : country) ||
-                "country"}
-              {/* {country.length > 0 ? (
-                <div>
-                  {country.map((c, index) => (
-                    <div key={index}>{c}</div> // Each country appears on a new line
-                  ))}
-                </div>
-              ) : (
-                <div>USA</div>
-              )} */}
-            </button>
+    {/* Country */}
+    <FilterPill>
+      {country?.length > 0 ? (
+        country.length > 1 ? `${country[0]} +${country.length - 1}` : country[0]
+      ) : (
+        "Country"
+      )}
+    </FilterPill>
 
-            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-              <div className="">Computer Science & IT</div>
-            </button>
+    {/* Area of Study */}
+    <FilterPill >
+      {areasOfStudy?.length > 0 ? (
+        areasOfStudy.length > 1 ? `${areasOfStudy[0]} +${areasOfStudy.length - 1}` : areasOfStudy[0]
+      ) : (
+        "Area of Study"
+      )}
+    </FilterPill>
 
-            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-              <div className="">Aug - Nov 2024</div>
-            </button>
+    {/* Intake */}
+    <FilterPill >
+      {intake?.length > 0 ? (
+        intake.length > 1 ? (
+          `${intake[0].month} ${intake[0].year} +${intake.length - 1}`
+        ) : (
+          `${intake[0].month} ${intake[0].year}`
+        )
+      ) : (
+        "Intake"
+      )}
+    </FilterPill>
 
-            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-              <div className="">₹30L</div>
-            </button>
+    {/* Scholarships */}
+    <FilterPill>
+      {scholarship?.length > 0 ? (
+        scholarship.length > 1 ? `${scholarship[0]} +${scholarship.length - 1}` : scholarship[0]
+      ) : (
+        "Scholarships"
+      )}
+    </FilterPill>
 
-            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-              <div className="">48 months</div>
-            </button>
+    {/* Course Duration */}
+    <FilterPill >
+      {duration?.length > 0 ? (
+        duration.length > 1 ? `${duration[0]} +${duration.length - 1}` : duration[0]
+      ) : (
+        "Course Duration"
+      )}
+    </FilterPill>
 
-            <button className="flex items-center justify-center px-8 py-3 bg-white rounded-full mb-2">
-              <div className="">IELTS Exam Score 9</div>
-            </button>
-          </div>
-        </div>
+    {/* testRequirement */}
+    <FilterPill >
+      {testRequirement?.length > 0 ? (
+        testRequirement.length > 1 ? `${testRequirement[0]} +${testRequirement.length - 1}` : testRequirement[0]
+      ) : (
+        "Test Requirement"
+      )}
+    </FilterPill>
+  </div>
+</div>
 
         <ResponsiveSearchBar
           filters={filters}
@@ -340,7 +591,8 @@ const Profilematcher = () => {
           setMinScore={setMinScore}
           setMaxScore={setMaxScore}
           setTestRequirement={setTestRequirement}
-          setMinGpa={setMinGpa} setMaxGpa={setMaxGpa}
+          setMinGpa={setMinGpa}
+          setMaxGpa={setMaxGpa}
         />
 
         {/*--------------------------------- white grid section------------------------------------------ */}
@@ -1151,50 +1403,56 @@ const Profilematcher = () => {
 
                       {yeardrop && (
                         <div>
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center">
-                            2024
-                          </div>
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center">
-                            2025
-                          </div>
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center">
-                            2026
-                          </div>
+                          {availableYears.map((year) => (
+                            <div
+                              key={year}
+                              className={`py-3 px-5 mt-2 font-dela border-black border-[1px] rounded-[15px] text-center cursor-pointer 
+          ${
+            selectedYear === year ? "bg-[#2B7CD6] text-white" : "text-[#2B7CD6]"
+          }`}
+                              onClick={() => {
+                                setSelectedYear(year);
+                                setSelectedMonth(null);
+                              }}
+                            >
+                              {year}
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
 
-                    {/* intake month */}
-                    <div className="py-4 px-5 border-black border-[1px] rounded-[30px] mt-3 ">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          Select intake month
+                    {selectedYear && (
+                      <div className="py-4 px-5 border-black border-[1px] rounded-[30px] mt-3">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            Select intake month
+                          </div>
+                          <button onClick={handleMonthDrop}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
                         </div>
-                        <button onClick={handleMonthDrop}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
+
+                        {monthdrop && (
+                          <div className="overflow-y-scroll max-h-[21vh]">
+                            {availableMonths.map((month) => (
+                              <div
+                                key={month}
+                                className={`py-3 px-5 mt-2 font-dela border-black border-[1px] rounded-[15px] text-center mr-4 cursor-pointer
+              ${
+                selectedMonth === month
+                  ? "bg-[#2B7CD6] text-white"
+                  : "text-[#2B7CD6]"
+              }`}
+                                onClick={() => setSelectedMonth(month)}
+                              >
+                                {month}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-
-                      {monthdrop && (
-                        <div className="overflow-y-auto h-[21vh]">
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center mr-4">
-                            January
-                          </div>
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center mr-4">
-                            February
-                          </div>
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center mr-4">
-                            March
-                          </div>
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center mr-4">
-                            April
-                          </div>
-                          <div className="py-3 px-5 mt-2 text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] text-center mr-4">
-                            May
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
 
                   <div className="flex justify-between ">
@@ -1206,7 +1464,13 @@ const Profilematcher = () => {
                     </button>
                     <button
                       onClick={handleDocuments}
-                      className=" bg-[#2B7CD6] text-[14px] font-urban text-white flex items-center px-5 py-1 rounded-full shadow-right-bottom border-[1px] shadow-black border-black"
+                      // onClick={() => setShowPopup(true)}
+                      disabled={!selectedYear || !selectedMonth}
+                      className={`bg-[#2B7CD6] text-[14px] font-urban text-white flex items-center px-5 py-1 rounded-full shadow-right-bottom border-[1px] shadow-black border-black ${
+                        !selectedYear || !selectedMonth
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
                     >
                       Next
                     </button>
@@ -1216,176 +1480,429 @@ const Profilematcher = () => {
             </div>
           )}
 
-          {documentsdrop && (
-            <div className="bg-black bg-opacity-50 h-[100vh] fixed inset-0 ">
-              <div className=" flex justify-around">
-                <div className="bg-white w-[40%] max-md:w-[95%] absolute top-[5%] rounded-[30px] p-8">
-                  <div className="font-dela">Apply Now</div>
-
-                  <div className="my-5">
-                    {/* Identity Documents */}
-                    <div className="py-3 px-5 border-black border-[1px] rounded-[30px] ">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          Identity Documents
+          <>
+            {documentsdrop && (
+              <div className="bg-black bg-opacity-50 msx-h-[80vh] overflow-y-scroll fixed inset-0">
+                <div className="flex justify-around">
+                  <div className="bg-white w-[40%] max-md:w-[95%] absolute top-[5%] rounded-[30px] p-8">
+                    <div className="font-dela">Apply Now</div>
+                    {errMsg && <p className="text-[#c81f1f] text-center">{errMsg}</p>}
+                    <div className="my-5">
+                      {/* Identity Documents */}
+                      <div className="py-3 px-5 border-black border-[1px] rounded-[30px]">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            Identity Documents
+                          </div>
+                          <button onClick={handleIdentitynDoc}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
                         </div>
-                        <button onClick={handleIdentitynDoc}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
+
+                        {identitydoc && (
+                          <div>
+                            {/* Passport Front */}
+                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px]">
+                              Passport Front
+                              <input
+                                type="file"
+                                className="hidden"
+                                ref={passportFrontRef}
+                                onChange={handlePassportFrontChange}
+                                accept=".pdf"
+                              />
+                              <div>
+                                <button
+                                  onClick={handlePassportFront}
+                                  className="border-none font-urban font-semibold text-[#2B7CD6]"
+                                >
+                                  Upload file
+                                </button>
+                                {passportFront && (
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {passportFront.name}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Passport Back */}
+                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px]">
+                              Passport Back
+                              <input
+                                type="file"
+                                className="hidden"
+                                ref={passportBackRef}
+                                onChange={handlePassportBackChange}
+                                accept=".pdf"
+                              />
+                              <div>
+                                <button
+                                  onClick={handlePassportBack}
+                                  className="border-none font-urban font-semibold text-[#2B7CD6]"
+                                >
+                                  Upload file
+                                </button>
+                                {passportBack && (
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {passportBack.name}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* CV/Resume */}
+                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px]">
+                              CV/Resume
+                              <input
+                                type="file"
+                                className="hidden"
+                                ref={cvResumeRef}
+                                onChange={handleCvResumeChange}
+                                accept=".pdf"
+                              />
+                              <div>
+                                <button
+                                  onClick={handleCvResume}
+                                  className="border-none font-urban font-semibold text-[#2B7CD6]"
+                                >
+                                  Upload file
+                                </button>
+                                {cvResume && (
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {cvResume.name}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
-                      {identitydoc && (
-                        <div>
-                          {/* passport front */}
-                          <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] ">
-                            Passport Front
+                      {/* Education Documents */}
+                      <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            Education Documents
+                          </div>
+                          <button onClick={handleEducationDoc}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
+                        </div>
+                        {educationdoc && (
+                          <div>
                             <input
                               type="file"
                               className="hidden"
-                              ref={passportFrontRef}
-                              onChange={handlePassportFrontChange}
+                              ref={educationDocsRef}
+                              onChange={handleEducationDocsChange}
+                              accept=".pdf"
+                              multiple
                             />
-                            <div className="">
+                            <div className="flex flex-col">
                               <button
-                                onClick={handlePassportFront}
-                                className=" border-none font-urban font-semibold text-[#2B7CD6] border"
+                                onClick={handleEducationClick}
+                                className="py-2 border-none font-urban font-semibold text-[#2B7CD6]"
                               >
-                                Upload file
+                                Upload files
                               </button>
-                              {passportFront && (
-                                <p className=" font-urban text-[13px] pt-1 text-[#2B7CD6]">
-                                  {passportFront}
-                                </p>
-                              )}
+                              {educationalDocs.map((file, index) => (
+                                <div key={index} className="flex items-center">
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {file.name}
+                                  </p>
+                                  <button
+                                    onClick={() =>
+                                      removeFile(
+                                        educationalDocs,
+                                        setEducationalDocs,
+                                        index
+                                      )
+                                    }
+                                    className="ml-2 text-red-500"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                          <div className="py-3 px-5 mt-2 flex justify-between text-[14px] text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] ">
-                            Passport Back
-                            <button className=" border-none font-urban font-semibold text-[#2B7CD6] border">
-                              Upload file
-                            </button>
+                        )}
+                      </div>
+
+                      {/* Work Experience Documents */}
+                      <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            Work Experience Documents
                           </div>
-                          <div className="py-3 px-5 mt-2 flex justify-between text-[14px] text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px] ">
-                            CV/Resume
-                            <button className=" border-none font-urban font-semibold text-[#2B7CD6] border">
-                              Upload file
-                            </button>
+                          <button onClick={handleWorkExpDoc}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
+                        </div>
+                        {workexpdoc && (
+                          <div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              ref={workExpDocsRef}
+                              onChange={handleWorkExpDocsChange}
+                              accept=".pdf"
+                              multiple
+                            />
+                            <div className="flex flex-col">
+                              <button
+                                onClick={handleWorkExpClick}
+                                className="py-2 border-none font-urban font-semibold text-[#2B7CD6]"
+                              >
+                                Upload files
+                              </button>
+                              {workExpDocs.map((file, index) => (
+                                <div key={index} className="flex items-center">
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {file.name}
+                                  </p>
+                                  <button
+                                    onClick={() =>
+                                      removeFile(
+                                        workExpDocs,
+                                        setWorkExpDocs,
+                                        index
+                                      )
+                                    }
+                                    className="ml-2 text-red-500"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Education Documents */}
-                    <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          Education Documents
-                        </div>
-                        <button onClick={handleEducationDoc}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
+                        )}
                       </div>
-                      {educationdoc && (
-                        <div>
-                          <input
-                            type="file"
-                            className="hidden"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                          />
-                          <div className="flex ">
-                            <button
-                              onClick={handleClick}
-                              className="py-2 border-none font-urban font-semibold text-[#2B7CD6] border"
-                            >
-                              Upload file
-                            </button>
-                            {fileName && (
-                              <p className="mt-2 ml-5 font-urban text-[13px] pt-1 text-[#2B7CD6]">
-                                {fileName}
-                              </p>
-                            )}
+
+                      {/* English Proficiency Documents */}
+                      <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            English Proficiency Documents
                           </div>
+                          <button onClick={handleEnglishDoc}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
                         </div>
-                      )}
+                        {englishdoc && (
+                          <div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              ref={englishProfDocsRef}
+                              onChange={handleEnglishProfDocsChange}
+                              accept=".pdf"
+                              multiple
+                            />
+                            <div className="flex flex-col">
+                              <button
+                                onClick={handleEnglishProfClick}
+                                className="py-2 border-none font-urban font-semibold text-[#2B7CD6]"
+                              >
+                                Upload files
+                              </button>
+                              {englishProfDocs.map((file, index) => (
+                                <div key={index} className="flex items-center">
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {file.name}
+                                  </p>
+                                  <button
+                                    onClick={() =>
+                                      removeFile(
+                                        englishProfDocs,
+                                        setEnglishProfDocs,
+                                        index
+                                      )
+                                    }
+                                    className="ml-2 text-red-500"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Extracurricular Documents */}
+                      <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            Extracurricular Documents
+                          </div>
+                          <button onClick={handleExtracurricularDoc}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
+                        </div>
+                        {extracurricularDoc && (
+                          <div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              ref={extracurricularDocsRef}
+                              onChange={handleExtracurricularDocsChange}
+                              accept=".pdf"
+                              multiple
+                            />
+                            <div className="flex flex-col">
+                              <button
+                                onClick={handleExtracurricularClick}
+                                className="py-2 border-none font-urban font-semibold text-[#2B7CD6]"
+                              >
+                                Upload files
+                              </button>
+                              {extracurricularDocs.map((file, index) => (
+                                <div key={index} className="flex items-center">
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {file.name}
+                                  </p>
+                                  <button
+                                    onClick={() =>
+                                      removeFile(
+                                        extracurricularDocs,
+                                        setExtracurricularDocs,
+                                        index
+                                      )
+                                    }
+                                    className="ml-2 text-red-500"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Recommendation Documents */}
+                      <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            Recommendation Documents
+                          </div>
+                          <button onClick={handleRecommendationDoc}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
+                        </div>
+                        {recommendationDoc && (
+                          <div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              ref={recommendationDocsRef}
+                              onChange={handleRecommendationDocsChange}
+                              accept=".pdf"
+                              multiple
+                            />
+                            <div className="flex flex-col">
+                              <button
+                                onClick={handleRecommendationClick}
+                                className="py-2 border-none font-urban font-semibold text-[#2B7CD6]"
+                              >
+                                Upload files
+                              </button>
+                              {recommendationDocs.map((file, index) => (
+                                <div key={index} className="flex items-center">
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {file.name}
+                                  </p>
+                                  <button
+                                    onClick={() =>
+                                      removeFile(
+                                        recommendationDocs,
+                                        setRecommendationDocs,
+                                        index
+                                      )
+                                    }
+                                    className="ml-2 text-red-500"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Other Documents */}
+                      <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
+                        <div className="flex justify-between">
+                          <div className="text-[#BFBFBF] font-urban">
+                            Other Documents
+                          </div>
+                          <button onClick={handleOtherDoc}>
+                            <img src={down} width={15} alt="down" />
+                          </button>
+                        </div>
+                        {otherDoc && (
+                          <div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              ref={otherDocsRef}
+                              onChange={handleOtherDocsChange}
+                              accept=".pdf"
+                              multiple
+                            />
+                            <div className="flex flex-col">
+                              <button
+                                onClick={handleOtherClick}
+                                className="py-2 border-none font-urban font-semibold text-[#2B7CD6]"
+                              >
+                                Upload files
+                              </button>
+                              {otherDocs.map((file, index) => (
+                                <div key={index} className="flex items-center">
+                                  <p className="font-urban text-[13px] pt-1 text-[#2B7CD6]">
+                                    {file.name}
+                                  </p>
+                                  <button
+                                    onClick={() =>
+                                      removeFile(otherDocs, setOtherDocs, index)
+                                    }
+                                    className="ml-2 text-red-500"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Work Experience Documents */}
-                    <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          Work Experience Documents
-                        </div>
-                        <button onClick={handleYearDrop}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
-                      </div>
+                    <div className="flex justify-between">
+                      <button
+                        onClick={handleDocuments}
+                        className="bg-white px-4 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] font-urban border-[2px] rounded-[20px]"
+                      >
+                        Back
+                      </button>
+                      <button
+                        onClick={handleSubmit}
+                        className="bg-[#2B7CD6] text-[14px] font-urban text-white flex items-center px-5 py-1 rounded-full shadow-right-bottom border-[1px] shadow-black border-black"
+                        // onClick={() => setShowPopup(true)}
+                      >
+                        Submit
+                      </button>
                     </div>
-
-                    {/* English Proficiency Documents */}
-                    <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          English Proficiency Documents
-                        </div>
-                        <button onClick={handleYearDrop}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
-                      </div>
-                    </div>
-                    {/* Extra Curricular Document */}
-                    <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          Extra Curricular Document
-                        </div>
-                        <button onClick={handleYearDrop}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
-                      </div>
-                    </div>
-                    {/*Recommendation Documents */}
-                    <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          Recommendation Documents
-                        </div>
-                        <button onClick={handleYearDrop}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
-                      </div>
-                    </div>
-                    {/*Other Documents */}
-                    <div className="py-3 px-5 border-black border-[1px] rounded-[30px] mt-3">
-                      <div className="flex justify-between">
-                        <div className="text-[#BFBFBF] font-urban">
-                          Other Documents
-                        </div>
-                        <button onClick={handleYearDrop}>
-                          <img src={down} width={15} alt="down" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between ">
-                    <button
-                      onClick={handleApply}
-                      className="bg-white px-4 py-2 border-[#0F62AF] text-[#0F62AF] text-[13px] font-urban border-[2px] rounded-[20px]"
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={handleDocuments}
-                      className=" bg-[#2B7CD6] text-[14px] font-urban text-white flex items-center px-5 py-1 rounded-full shadow-right-bottom border-[1px] shadow-black border-black"
-                    >
-                      Submit
-                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </>
+          {showPopup && <SuccessPopup onClose={() => setShowPopup(false)} />}
         </div>
 
         {/* <Contactus /> */}
@@ -1396,3 +1913,15 @@ const Profilematcher = () => {
 };
 
 export default Profilematcher;
+
+const FilterPill = ({ children }) => (
+  <div className={`
+    flex items-center justify-center 
+    px-4 py-2 rounded-full mb-2
+    bg-white text-black
+    whitespace-nowrap
+    max-w-[200px] overflow-hidden text-ellipsis
+  `}>
+    {children}
+  </div>
+);

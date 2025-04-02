@@ -1,21 +1,8 @@
-const express = require("express");
-const formidable = require("express-formidable");
-const { addApplication } = require("../Controllers/applicationController"); 
-const fs = require("fs");
-
+const express = require('express');
 const router = express.Router();
-const uploadDir = "./uploads/applications";
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true }); 
-}
+const uploadMiddleware = require("../Middlewares/multer");
+const { addApplication } = require('../Controllers/applicationController');
 
-router.use(
-    formidable({
-        uploadDir, 
-        keepExtensions: true, 
-    })
-);
-
-router.post("/apply", addApplication); 
+router.post('/apply', uploadMiddleware, addApplication);
 
 module.exports = router;

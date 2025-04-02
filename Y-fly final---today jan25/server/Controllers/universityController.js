@@ -202,7 +202,6 @@ const getUniversityById = async (req, res) => {
   const updateUniversity = async (req, res) => {
     try {
       const { id } = req.params; // Get university ID from params
-      console.log(req.fields);
   
       // Fetch existing university
       let university = await University.findById(id);
