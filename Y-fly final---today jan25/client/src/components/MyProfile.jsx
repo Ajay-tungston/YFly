@@ -219,9 +219,32 @@ const Profile = () => {
               <hr />
               {/* Test Score & Qualifications */}
               <div className="flex justify-between text-sm text-gray-700 p-4 border border-[#E7E7E7]">
-                <span>📖 Test Score</span>
-                <span>📜 Qualifications</span>
-              </div>
+  <div>
+    <span>📖 Test Score</span>
+    <p className="text-gray-600">
+      {formData.proficiency_exam?.exam_name
+        ? `${formData.proficiency_exam.exam_name} - ${formData.proficiency_exam.score}`
+        : "No test score available"}
+    </p>
+  </div>
+  <div>
+    <span>📜 Qualifications</span>
+    <p className="text-gray-600">
+      {formData.education_details?.degree
+        ? `${formData.education_details.degree}`
+        : "No degree available"}
+    </p>
+    {formData.education_details?.certifications &&
+      formData.education_details.certifications.length > 0 && (
+        <ul className="list-disc ml-4 text-gray-600">
+          {formData.education_details.certifications.map((cert, index) => (
+            <li key={index}>{cert}</li>
+          ))}
+        </ul>
+      )}
+  </div>
+</div>
+
             </div>
 
             {/* Education & Work Experience */}
