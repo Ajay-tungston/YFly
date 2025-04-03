@@ -120,15 +120,28 @@ const Profile = () => {
     await persistUpdate(updateData);
     setEditMode((prev) => ({ ...prev, educationLevel: false }));
   };
-
   const saveWorkExperience = async () => {
     const updateData = {
       work_experience: {
+        ...formData.work_experience,
         months_of_experience: inputValues.months_of_experience,
       },
     };
-    await persistUpdate(updateData);
-    setEditMode((prev) => ({ ...prev, workExperience: false }));
+
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/user/update/${formData.user_id}`,
+        updateData
+      );
+
+      if (res.data && res.data.user) {
+        setUpdateFormData(res.data.user);
+      }
+
+      setEditMode((prev) => ({ ...prev, workExperience: false }));
+    } catch (err) {
+      console.error("Error updating work experience:", err);
+    }
   };
 
   const saveProficiencyExam = async () => {
@@ -152,6 +165,7 @@ const Profile = () => {
     await persistUpdate(updateData);
     setEditMode((prev) => ({ ...prev, academicTest: false }));
   };
+  console.log();
   // Convert array fields to comma-separated strings for display
   const displayCountries =
     formData.countries && formData.countries.length
@@ -247,7 +261,6 @@ const Profile = () => {
                   </p>
 
                   {/* Academic Test Scores */}
-              
                 </div>
 
                 {/* 📜 Qualifications Section */}
@@ -311,10 +324,8 @@ const Profile = () => {
                       onChange={handleInputChange}
                       className="border border-gray-300 rounded px-2 py-1"
                     />
-                  ) : formData.work_experience?.has_experience ? (
-                    `${
-                      formData.work_experience.months_of_experience || "N/A"
-                    } months`
+                  ) : formData.work_experience?.months_of_experience ? (
+                    `${formData.work_experience.months_of_experience} months` 
                   ) : (
                     "No"
                   )}

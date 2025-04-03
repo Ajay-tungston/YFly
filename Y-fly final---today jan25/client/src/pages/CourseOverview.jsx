@@ -443,8 +443,8 @@ const CourseOverview = () => {
         </div>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center w-full">
           {similarCourses.map((similarCourse) => (
-            <div key={similarCourse._id} className="border border-black rounded-[38px] w-full max-w-[500px] h-auto shadow-md p-4 bg-[#fff] cursor-pointer" onClick={() => handleCourseClick(similarCourse._id)}>
-              <div className="border py-6 border-black rounded-[30px] bg-white flex flex-col sm:flex-row sm:justify-center items-center">
+            <div key={similarCourse._id} className="border border-black rounded-[38px] w-full max-w-[500px] md:h-[350px] h-auto shadow-md p-4 bg-[#fff] cursor-pointer" onClick={() => handleCourseClick(similarCourse._id)}>
+              <div className="border py-6 border-black rounded-[30px] bg-[#fff] md:h-32 flex flex-col sm:flex-row sm:justify-center items-center">
                 <div className="flex flex-col sm:flex-row w-full justify-evenly items-center gap-4">
                   {similarCourse.university_name?.university_logo?.data ? (
                     <img
