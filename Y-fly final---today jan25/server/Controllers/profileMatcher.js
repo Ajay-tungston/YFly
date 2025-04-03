@@ -85,7 +85,7 @@ const profileMatcher = async (req, res) => {
                     : { $const: true },
                   scholarshipFilter.length ? { $gt: [{ $size: { $setIntersection: ["$$course.scholarship_applicable", scholarshipFilter] } }, 0] } : { $const: true },
                   
-                  // ✅ Fixed Intake Filtering
+                  //  Fixed Intake Filtering
                   intakeMonthFilter.length && intakeYearFilter.length
                     ? {
                         $gt: [
@@ -110,7 +110,7 @@ const profileMatcher = async (req, res) => {
                       }
                     : { $const: true },
 
-                  // ✅ GPA Filtering Logic with the user range (minGPA, maxGPA)
+                  // GPA Filtering Logic with the user range (minGPA, maxGPA)
                   minGPA && maxGPA
                     ? {
                         $and: [

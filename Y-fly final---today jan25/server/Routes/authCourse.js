@@ -38,9 +38,5 @@ router.get('/getall', courseController.getFilteredCourses);
 // router.get('/filtersearch', courseController.filterSearch);
 router.get('/filters', courseController.filterCourses)
 
-// Get dropdown values
-
-// router.get('/getvalues', courseController.getValues);
-// router.get("/get-profileMatcher",courseController.profileMatcher)
 
 module.exports = router;

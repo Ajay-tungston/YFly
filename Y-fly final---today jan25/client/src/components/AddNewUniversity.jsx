@@ -92,7 +92,6 @@ const AddNewUniversity = ({ setAddingNewUniversity, setEditOpen }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
       alert("University created successfully!");
 
         // Set the university ID or details to be edited

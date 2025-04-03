@@ -34,13 +34,6 @@ router.put("/update/:id",updateUniversity)
 
 router.delete("/delete/:id",deleteUniversityById)
 
-// // GET route to retrieve a single university by ID
-// router.get("/get/:id", universityController.getSingleUniversity);
 
-// // PUT route to update a university by ID
-// router.put("/edit/:id", universityController.updateUniversity);
-
-// // DELETE route to delete a university by ID
-// router.delete("/delete/:id", universityController.deleteUniversity);
 
 module.exports = router;

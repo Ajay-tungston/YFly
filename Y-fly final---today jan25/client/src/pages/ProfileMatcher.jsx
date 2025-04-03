@@ -39,7 +39,6 @@ const Profilematcher = () => {
   const [maxScore, setMaxScore] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [scholarship, setScholarship] = useState([]);
-console.log(testRequirement)
   const [isLoading, setIsLoading] = useState(false);
   const [minGpa, setMinGpa] = useState(null);
   const [maxGpa, setMaxGpa] = useState(null);

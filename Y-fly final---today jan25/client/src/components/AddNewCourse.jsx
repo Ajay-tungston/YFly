@@ -41,7 +41,6 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     tution_fee: "",
     funding_options: [{ fundingOption: "" }],
   });
-console.log(addCourseData)
   const [universities, setUniversities] = useState([]);
   useEffect(() => {
     
@@ -50,7 +49,6 @@ console.log(addCourseData)
         const response = await axios.get(
           "http://localhost:5000/university/get-all"
         );
-        console.log(response);
         setUniversities(response?.data?.university);
       } catch (error) {
         console.log(error);
@@ -130,7 +128,6 @@ console.log(addCourseData)
           formData.append(`recruiters_logo_${index}`, recruiter.logo);
       }
   });
-    console.log(addCourseData.top_recruiters)
 
     try {
       const response = await axios.post(
@@ -198,6 +195,9 @@ console.log(addCourseData)
   const handleCourseLevel = (option) => {
     setAddCourseData((prevData) => ({ ...prevData, course_level: option }));
     setIsOpenCourseLevel(false);
+    if(option==="MBA"){
+      handleDiscipline("")
+    }
   };
 
   // Discipline

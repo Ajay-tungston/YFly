@@ -112,7 +112,6 @@ const EditUniversity = ({ id, setEditOpen }) => {
           },
         }
       );
-      console.log(response);
       alert("University Updated successfully!");
       setFormData({
         university_name: "",
