@@ -24,7 +24,7 @@ const ScholarshipList = () => {
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/scholarships/get-all');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/scholarships/get-all`);
         setScholarships(response.data.scholarships);
       } catch (error) {
         console.error('Error fetching scholarships:', error);
@@ -57,7 +57,7 @@ const ScholarshipList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this scholarship?')) {
       try {
-        await axios.delete(`http://localhost:5000/scholarships/delete/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/scholarships/delete/${id}`);
         setScholarships(scholarships.filter((scholarship) => scholarship._id !== id));
       } catch (error) {
         console.error('Error deleting scholarship:', error);
@@ -77,7 +77,7 @@ const ScholarshipList = () => {
     try {
       await Promise.all(
         selectedScholarships.map((id) =>
-          axios.delete(`http://localhost:5000/scholarships/delete/${id}`)
+          axios.delete(`${process.env.REACT_APP_API_URL}/scholarships/delete/${id}`)
         )
       );
 

@@ -246,7 +246,7 @@ const CourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/courses/get-all');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/courses/get-all`);
         console.log('Fetched courses:', response.data.courses);
         setCourses(response.data.courses || []); // Use fallback to avoid errors
       } catch (error) {
@@ -280,7 +280,7 @@ const CourseList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this course?')) {
       try {
-        await axios.delete(`http://localhost:5000/courses/delete/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/courses/delete/${id}`);
         setCourses(courses.filter((course) => course._id !== id));
       } catch (error) {
         console.error('Error deleting course:', error);

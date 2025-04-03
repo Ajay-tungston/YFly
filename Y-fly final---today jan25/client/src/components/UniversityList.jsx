@@ -24,7 +24,7 @@ const UniversityList = () => {
   const fetchUniversities = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/university/get?page=${currentPage}&limit=${limit}&search=${searchQuery}`
+        `${process.env.REACT_APP_API_URL}/university/get?page=${currentPage}&limit=${limit}&search=${searchQuery}`
       );
       setUniversity(response.data || []);
       setTotalPages(response?.data?.pagination?.pages);
@@ -43,7 +43,7 @@ const UniversityList = () => {
     if (window.confirm("Are you sure you want to delete this course?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:5000/university/delete/${id}`
+          `${process.env.REACT_APP_API_URL}/university/delete/${id}`
         );
         fetchUniversities();
       } catch (error) {

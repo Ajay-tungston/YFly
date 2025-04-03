@@ -116,7 +116,7 @@ const Coursefinder = () => {
           `&university_name=${universityName}` +
           `&sort=${sort}`;
         const response = await axios.get(
-          `http://localhost:5000/courses/filters${query}`
+          `${process.env.REACT_APP_API_URL}/courses/filters${query}`
         );
         setCourses(response.data.results);
         setTotalPages(response?.data?.pagination?.totalPages);
@@ -146,7 +146,7 @@ const Coursefinder = () => {
 
   // useEffect to fetch all courses (or any other db values if needed) and transform for dropdowns
   useEffect(() => {
-    fetch("http://localhost:5000/courses/getall")
+    fetch(`${process.env.REACT_APP_API_URL}/courses/getall`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {

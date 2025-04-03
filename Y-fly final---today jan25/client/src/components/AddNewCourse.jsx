@@ -48,7 +48,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     const fetchUniversities = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/university/get-all"
+          `${process.env.REACT_APP_API_URL}/university/get-all`
         );
         setUniversities(response?.data?.university);
       } catch (error) {
@@ -60,7 +60,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/scholarships/get-all");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/scholarships/get-all`);
         console.log("Scholarship response:", response.data);
         // If your API returns an object, extract the array accordingly. For example:
         const scholarshipsArray = Array.isArray(response.data)
@@ -149,7 +149,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
 
     try {
       const response = await axios.post(
-          "http://localhost:5000/courses/create",
+          `${process.env.REACT_APP_API_URL}/courses/create`,
           formData,
           {
               headers: { "Content-Type": "multipart/form-data" },

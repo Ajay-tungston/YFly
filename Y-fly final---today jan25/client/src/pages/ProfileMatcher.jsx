@@ -51,7 +51,7 @@ const Profilematcher = () => {
         const email = localStorage.getItem("email");
         if (email) {
           const response = await axios.get(
-            `http://localhost:5000/user/profile/${email}`
+            `${process.env.REACT_APP_API_URL}/user/profile/${email}`
           );
           setUserData(response?.data?.user);
         }
@@ -66,7 +66,7 @@ const Profilematcher = () => {
     const fetchFilters = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/profile-matcher/filters`
+          `${process.env.REACT_APP_API_URL}/profile-matcher/filters`
         );
         setFilters(response?.data?.filters);
       } catch (error) {
@@ -101,7 +101,7 @@ const Profilematcher = () => {
       setIsLoading(true);
 
       const response = await axios.get(
-        "http://localhost:5000/profile-matcher/result",
+        `${process.env.REACT_APP_API_URL}/profile-matcher/result`,
         {
           params: {
             university_name: searchQuery,
@@ -450,7 +450,7 @@ const Profilematcher = () => {
       // }
 
       const response = await axios.post(
-        "http://localhost:5000/application/apply",
+        `${process.env.REACT_APP_API_URL}/application/apply`,
         formData,
         {
           headers: {

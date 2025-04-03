@@ -15,7 +15,7 @@ const EditUniversity = ({ id, setEditOpen }) => {
     const fetchUniversity = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/university/get/${id}`
+          `${process.env.REACT_APP_API_URL}/university/get/${id}`
         );
         setUniversity(response.data.university);
         setFormData({
@@ -109,7 +109,7 @@ const EditUniversity = ({ id, setEditOpen }) => {
     }
     try {
       const response = await axios.put(
-        `http://localhost:5000/university/update/${id}`,
+        `${process.env.REACT_APP_API_URL}/university/update/${id}`,
         updatedData,
         {
           headers: {

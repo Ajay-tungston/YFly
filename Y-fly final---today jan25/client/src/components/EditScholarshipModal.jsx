@@ -46,7 +46,7 @@ const EditScholarshipModal = (props,setEditingScholarship) => {
       useEffect(() => {
         const getScholarshipData = async () => {
           try {
-            const response = await axios.get(`http://localhost:5000/scholarships/get/${props.id}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/scholarships/get/${props.id}`);
             const data = response.data.scholarship;
 
             setEditScholarship({
@@ -106,7 +106,7 @@ const EditScholarshipModal = (props,setEditingScholarship) => {
     
         try {
             const response = await axios.put(
-                `http://localhost:5000/scholarships/edit/${props.id}`,
+                `${process.env.REACT_APP_API_URL}/scholarships/edit/${props.id}`,
                 formData
             );
             toast.success('Scholarship updated successfully', {

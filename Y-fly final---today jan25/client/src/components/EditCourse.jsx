@@ -56,7 +56,7 @@ const EditCourse = (props, setEditingCourse) => {
     const fetchUniversities = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/university/get-all"
+          `${process.env.REACT_APP_API_URL}/university/get-all`
         );
         setUniversities(response?.data?.university);
       } catch (error) {
@@ -76,7 +76,7 @@ const EditCourse = (props, setEditingCourse) => {
     const getCourseData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/courses/get/${props.id}`
+          `${process.env.REACT_APP_API_URL}/courses/get/${props.id}`
         );
         const data = response.data.course;
         setEditCourse({
@@ -169,7 +169,7 @@ const EditCourse = (props, setEditingCourse) => {
       console.log("Payload:", editCourse);
       console.log("FormData:", formData);
       const response = await axios.put(
-        `http://localhost:5000/courses/edit/${props.id}`,
+        `${process.env.REACT_APP_API_URL}/courses/edit/${props.id}`,
         formData
       );
       toast.success("course updated successfully", {

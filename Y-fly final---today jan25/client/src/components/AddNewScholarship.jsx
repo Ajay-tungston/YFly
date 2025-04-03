@@ -68,7 +68,7 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
         formData.append('specialRestrictions', JSON.stringify(specialRestrictions));
 
         try {
-            const response = await axios.post('http://localhost:5000/scholarships/create', formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/scholarships/create`, formData);
             toast.success('Scholarship added successfully', {
                 position: 'top-center',
                 autoClose: 4000,

@@ -22,10 +22,10 @@ const CourseOverview = () => {
     const fetchCourses = async () => {
       try {
         const courseRes = await axios.get(
-          `http://localhost:5000/courses/get/${id}`
+          `${process.env.REACT_APP_API_URL}/courses/get/${id}`
         );
         const allCoursesRes = await axios.get(
-          `http://localhost:5000/courses/getall`
+          `${process.env.REACT_APP_API_URL}/courses/getall`
         );
 
         if (courseRes.data.success) {

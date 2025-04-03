@@ -204,7 +204,7 @@ const AdminLogin = () => {
       }
 
       // Send login request to backend
-      const response = await axios.post('http://localhost:5000/admin/login', { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/admin/login`, { email, password });
 
       // Decode token and save to Redux
       const { token } = response.data;

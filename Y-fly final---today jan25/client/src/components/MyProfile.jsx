@@ -53,7 +53,7 @@ const Profile = () => {
         const email = localStorage.getItem("email");
         if (!email) throw new Error("Email not found in localStorage");
         // Assuming the GET request returns the full user object including user_id.
-        const res = await axios.get(`http://localhost:5000/user/profile/${email}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile/${email}`);
         if (res.data && res.data.user) {
           setUpdateFormData(res.data.user);
         } else {
@@ -79,7 +79,7 @@ const Profile = () => {
         throw new Error("User ID not found in the profile data.");
       }
       const res = await axios.put(
-        `http://localhost:5000/user/update/${formData.user_id}`,
+        `${process.env.REACT_APP_API_URL}/user/update/${formData.user_id}`,
         updateData
       );
       if (res.data && res.data.user) {
