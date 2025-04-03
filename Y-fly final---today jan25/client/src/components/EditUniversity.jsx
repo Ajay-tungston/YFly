@@ -80,10 +80,15 @@ const EditUniversity = ({ id, setEditOpen }) => {
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
+  const handleCancel = () => {
+    setEditOpen(false);
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+   
 
     if (!validateForm()) return;
 
@@ -142,7 +147,7 @@ const EditUniversity = ({ id, setEditOpen }) => {
             <div className='text-[#898C9A] text-[0.8rem]'>Upload University details here.</div>
           </div>
           <div className='flex text-[0.8rem] font-bold'>
-            <button type="button" className='border-[#BFBFBF] border-[1px] mr-3 px-3 py-1 rounded-[9px] text-[#BFBFBF]'>Cancel</button>
+            <button type="button" className='border-[#BFBFBF] border-[1px] mr-3 px-3 py-1 rounded-[9px] text-[#BFBFBF]' onClick={handleCancel}>Cancel</button>
             <button className='bg-[#30589F] px-3 py-1 rounded-[9px] text-white ' >Save</button>
           </div>
         </div>
