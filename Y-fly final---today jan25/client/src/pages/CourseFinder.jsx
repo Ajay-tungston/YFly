@@ -10,7 +10,7 @@ import CourseFinderBar from "../components/CourseFinderBar";
 import CourseSideBar from "../components/CourseSideBar";
 import { useNavigate } from "react-router-dom";
 import PaginationBar from "../components/pagination/PaginationBar";
-import coin from "../assets/images/coin.svg";
+
 
 // Function to transform courses array into an object of distinct values for filters
 const transformCoursesToDropdownOptions = (courses) => {
@@ -307,8 +307,8 @@ const Coursefinder = () => {
                     onClick={() => navigate(`/courseoverview/${course._id}`)}
                   >
                     {/* University Logo and Name */}
-                    <div className="border-[1px] py-10 border-black rounded-[30px] bg-white flex flex-col sm:flex-row sm:justify-center items-center">
-                      <div className="flex flex-col sm:flex-row w-full justify-evenly items-center gap-4">
+                    <div className="border-[1px] py-10 border-black rounded-[30px] bg-[#fff] h-[150px] flex flex-col sm:flex-row sm:justify-center items-center">
+                      <div className="flex flex-col sm:flex-row w-full justify-between align-items-center ">
                         {course.university_name?.university_logo?.data?.data ? (
                           (() => {
                             const { contentType, data } =

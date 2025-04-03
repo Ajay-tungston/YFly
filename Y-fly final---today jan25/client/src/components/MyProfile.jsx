@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { FaPen, FaSave } from "react-icons/fa";
 import Footer from "../components/Footer";
-import { FormContent } from "../components/FormContent"; // Adjust the import path as needed
 import axios from "axios";
 
 const Profile = () => {
-  const { formData, updateFormData } = useContext(FormContent);
+  // Initialize formData as an empty object to avoid undefined errors.
+  const [formData, setUpdateFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Local state for inline editing (copy of formData)
-  const [localFormData, setLocalFormData] = useState(formData);
+  // Edit mode state for each editable field
   const [editMode, setEditMode] = useState({
     name: false,
     educationLevel: false,
@@ -19,10 +18,33 @@ const Profile = () => {
     proficiencyExam: false,
   });
 
-  // When formData changes (after fetching), update localFormData
+  // Local input state for inline editing
+  const [inputValues, setInputValues] = useState({
+    first_name: "",
+    last_name: "",
+    education_level: "",
+    months_of_experience: "",
+    exam_name: "",
+    exam_score: "",
+  });
+
+  // Update inputValues when formData is fetched or updated
   useEffect(() => {
-    setLocalFormData(formData);
+    setInputValues({
+      first_name: formData.first_name || "",
+      last_name: formData.last_name || "",
+      education_level: formData.education_details?.education_level || "",
+      months_of_experience: formData.work_experience?.months_of_experience || "",
+      exam_name: formData.proficiency_exam?.exam_name || "",
+      exam_score: formData.proficiency_exam?.score || "",
+    });
   }, [formData]);
+
+  // Handle changes in input fields
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputValues((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Fetch user details on mount using the email stored in localStorage
   useEffect(() => {
@@ -30,9 +52,10 @@ const Profile = () => {
       try {
         const email = localStorage.getItem("email");
         if (!email) throw new Error("Email not found in localStorage");
+        // Assuming the GET request returns the full user object including user_id.
         const res = await axios.get(`http://localhost:5000/user/profile/${email}`);
         if (res.data && res.data.user) {
-          updateFormData(res.data.user);
+          setUpdateFormData(res.data.user);
         } else {
           setError("User not found");
         }
@@ -43,29 +66,24 @@ const Profile = () => {
         setLoading(false);
       }
     };
-    fetchUserDetails();
-  }, [updateFormData]);
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  if (error)
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        {error}
-      </div>
-    );
+    fetchUserDetails();
+  }, []);
 
   // API call to update the user details on the backend.
+  // We now use axios.put and pass the user_id in the URL.
   const persistUpdate = async (updateData) => {
     try {
-      const email = localStorage.getItem("email");
-      const res = await axios.post(`http://localhost:5000/user/profile/${email}`, updateData);
+      // Ensure formData.user_id exists; it should be returned from your backend.
+      if (!formData.user_id) {
+        throw new Error("User ID not found in the profile data.");
+      }
+      const res = await axios.put(
+        `http://localhost:5000/user/update/${formData.user_id}`,
+        updateData
+      );
       if (res.data && res.data.user) {
-        updateFormData(res.data.user);
+        setUpdateFormData(res.data.user);
       }
     } catch (err) {
       console.error("Error updating user details:", err);
@@ -73,11 +91,11 @@ const Profile = () => {
     }
   };
 
-  // Handlers for saving individual fields
+  // Handlers for saving each editable field using the inputValues state.
   const saveName = async () => {
     const updateData = {
-      first_name: localFormData.first_name,
-      last_name: localFormData.last_name,
+      first_name: inputValues.first_name,
+      last_name: inputValues.last_name,
     };
     await persistUpdate(updateData);
     setEditMode((prev) => ({ ...prev, name: false }));
@@ -86,8 +104,7 @@ const Profile = () => {
   const saveEducationLevel = async () => {
     const updateData = {
       education_details: {
-        ...formData.education_details,
-        education_level: localFormData.education_details.education_level,
+        education_level: inputValues.education_level,
       },
     };
     await persistUpdate(updateData);
@@ -97,8 +114,7 @@ const Profile = () => {
   const saveWorkExperience = async () => {
     const updateData = {
       work_experience: {
-        ...formData.work_experience,
-        months_of_experience: localFormData.work_experience.months_of_experience,
+        months_of_experience: inputValues.months_of_experience,
       },
     };
     await persistUpdate(updateData);
@@ -108,8 +124,8 @@ const Profile = () => {
   const saveProficiencyExam = async () => {
     const updateData = {
       proficiency_exam: {
-        exam_name: localFormData.proficiency_exam.exam_name,
-        score: localFormData.proficiency_exam.score,
+        exam_name: inputValues.exam_name,
+        score: inputValues.exam_score,
       },
     };
     await persistUpdate(updateData);
@@ -118,11 +134,31 @@ const Profile = () => {
 
   // Convert array fields to comma-separated strings for display
   const displayCountries =
-    formData.countries && formData.countries.length ? formData.countries.join(", ") : "N/A";
+    formData.countries && formData.countries.length
+      ? formData.countries.join(", ")
+      : "N/A";
   const displayMajors =
-    formData.majors && formData.majors.length ? formData.majors.join(", ") : "N/A";
+    formData.majors && formData.majors.length
+      ? formData.majors.join(", ")
+      : "N/A";
   const displayMainCriteria =
-    formData.mainCriteria && formData.mainCriteria.length ? formData.mainCriteria.join(", ") : "N/A";
+    formData.mainCriteria && formData.mainCriteria.length
+      ? formData.mainCriteria.join(", ")
+      : "N/A";
+
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
 
   return (
     <div className="bg-[#0D1224] min-h-screen text-black font-lato relative">
@@ -141,33 +177,20 @@ const Profile = () => {
               {/* Profile Header */}
               <div className="flex items-center justify-between space-x-4">
                 <div className="flex items-center space-x-4">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Profile"
-                    className="w-18 h-12 rounded-full"
-                  />
                   {editMode.name ? (
                     <>
                       <input
                         type="text"
-                        value={localFormData.first_name}
-                        onChange={(e) =>
-                          setLocalFormData({
-                            ...localFormData,
-                            first_name: e.target.value,
-                          })
-                        }
+                        name="first_name"
+                        value={inputValues.first_name}
+                        onChange={handleInputChange}
                         className="text-lg font-lato border border-gray-300 rounded px-2 py-1"
                       />
                       <input
                         type="text"
-                        value={localFormData.last_name}
-                        onChange={(e) =>
-                          setLocalFormData({
-                            ...localFormData,
-                            last_name: e.target.value,
-                          })
-                        }
+                        name="last_name"
+                        value={inputValues.last_name}
+                        onChange={handleInputChange}
                         className="text-lg font-lato border border-gray-300 rounded px-2 py-1"
                       />
                     </>
@@ -180,9 +203,17 @@ const Profile = () => {
                   )}
                 </div>
                 {editMode.name ? (
-                  <FaSave onClick={saveName} className="text-gray-500 cursor-pointer" />
+                  <FaSave
+                    onClick={saveName}
+                    className="text-gray-500 cursor-pointer"
+                  />
                 ) : (
-                  <FaPen onClick={() => setEditMode({ ...editMode, name: true })} className="text-gray-500 cursor-pointer" />
+                  <FaPen
+                    onClick={() =>
+                      setEditMode({ ...editMode, name: true })
+                    }
+                    className="text-gray-500 cursor-pointer"
+                  />
                 )}
               </div>
               <hr />
@@ -201,26 +232,27 @@ const Profile = () => {
                   {editMode.educationLevel ? (
                     <input
                       type="text"
-                      value={localFormData.education_details.education_level}
-                      onChange={(e) =>
-                        setLocalFormData({
-                          ...localFormData,
-                          education_details: {
-                            ...localFormData.education_details,
-                            education_level: e.target.value,
-                          },
-                        })
-                      }
+                      name="education_level"
+                      value={inputValues.education_level}
+                      onChange={handleInputChange}
                       className="border border-gray-300 rounded px-2 py-1"
                     />
                   ) : (
-                    formData.education_details.education_level || "N/A"
+                    formData.education_details?.education_level || "N/A"
                   )}
                 </span>
                 {editMode.educationLevel ? (
-                  <FaSave onClick={saveEducationLevel} className="text-gray-500 cursor-pointer" />
+                  <FaSave
+                    onClick={saveEducationLevel}
+                    className="text-gray-500 cursor-pointer"
+                  />
                 ) : (
-                  <FaPen onClick={() => setEditMode({ ...editMode, educationLevel: true })} className="text-gray-500 cursor-pointer" />
+                  <FaPen
+                    onClick={() =>
+                      setEditMode({ ...editMode, educationLevel: true })
+                    }
+                    className="text-gray-500 cursor-pointer"
+                  />
                 )}
               </div>
               <div className="bg-white p-6 rounded-lg shadow flex justify-between border border-[#E7E7E7]">
@@ -229,28 +261,29 @@ const Profile = () => {
                   {editMode.workExperience ? (
                     <input
                       type="text"
-                      value={localFormData.work_experience.months_of_experience}
-                      onChange={(e) =>
-                        setLocalFormData({
-                          ...localFormData,
-                          work_experience: {
-                            ...localFormData.work_experience,
-                            months_of_experience: e.target.value,
-                          },
-                        })
-                      }
+                      name="months_of_experience"
+                      value={inputValues.months_of_experience}
+                      onChange={handleInputChange}
                       className="border border-gray-300 rounded px-2 py-1"
                     />
-                  ) : formData.work_experience.has_experience ? (
+                  ) : formData.work_experience?.has_experience ? (
                     `${formData.work_experience.months_of_experience || "N/A"} months`
                   ) : (
                     "No"
                   )}
                 </span>
                 {editMode.workExperience ? (
-                  <FaSave onClick={saveWorkExperience} className="text-gray-500 cursor-pointer" />
+                  <FaSave
+                    onClick={saveWorkExperience}
+                    className="text-gray-500 cursor-pointer"
+                  />
                 ) : (
-                  <FaPen onClick={() => setEditMode({ ...editMode, workExperience: true })} className="text-gray-500 cursor-pointer" />
+                  <FaPen
+                    onClick={() =>
+                      setEditMode({ ...editMode, workExperience: true })
+                    }
+                    className="text-gray-500 cursor-pointer"
+                  />
                 )}
               </div>
             </div>
@@ -295,9 +328,17 @@ const Profile = () => {
               <div className="flex justify-between items-center">
                 <p className="text-gray-600">Have you taken an English test?</p>
                 {editMode.proficiencyExam ? (
-                  <FaSave onClick={saveProficiencyExam} className="text-gray-500 cursor-pointer" />
+                  <FaSave
+                    onClick={saveProficiencyExam}
+                    className="text-gray-500 cursor-pointer"
+                  />
                 ) : (
-                  <FaPen onClick={() => setEditMode({ ...editMode, proficiencyExam: true })} className="text-gray-500 cursor-pointer" />
+                  <FaPen
+                    onClick={() =>
+                      setEditMode({ ...editMode, proficiencyExam: true })
+                    }
+                    className="text-gray-500 cursor-pointer"
+                  />
                 )}
               </div>
               <div className="mt-4">
@@ -305,36 +346,22 @@ const Profile = () => {
                   <div className="flex flex-col md:flex-row gap-4">
                     <input
                       type="text"
-                      value={localFormData.proficiency_exam.exam_name}
-                      onChange={(e) =>
-                        setLocalFormData({
-                          ...localFormData,
-                          proficiency_exam: {
-                            ...localFormData.proficiency_exam,
-                            exam_name: e.target.value,
-                          },
-                        })
-                      }
+                      name="exam_name"
+                      value={inputValues.exam_name}
+                      onChange={handleInputChange}
                       placeholder="Exam Name (e.g., IELTS)"
                       className="w-full border border-gray-300 rounded px-2 py-1"
                     />
                     <input
                       type="text"
-                      value={localFormData.proficiency_exam.score}
-                      onChange={(e) =>
-                        setLocalFormData({
-                          ...localFormData,
-                          proficiency_exam: {
-                            ...localFormData.proficiency_exam,
-                            score: e.target.value,
-                          },
-                        })
-                      }
+                      name="exam_score"
+                      value={inputValues.exam_score}
+                      onChange={handleInputChange}
                       placeholder="Score"
                       className="w-full border border-gray-300 rounded px-2 py-1"
                     />
                   </div>
-                ) : formData.proficiency_exam.exam_name ? (
+                ) : formData.proficiency_exam?.exam_name ? (
                   <p className="mt-2 text-gray-700">
                     {formData.proficiency_exam.exam_name} (
                     {formData.proficiency_exam.score})
@@ -374,11 +401,7 @@ const Profile = () => {
                 marginBottom: "1.5rem",
               }}
             >
-              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
-              placerat gravida aliquet at. Nisi urna quam massa pellentesque
-              lectus odio sagittis. Tortor massa in rhoncus purus nunc
-              scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
-              eget urna varius eu nibh in sed est.
+              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis placerat gravida aliquet at. Nisi urna quam massa pellentesque lectus odio sagittis. Tortor massa in rhoncus purus nunc scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat eget urna varius eu nibh in sed est.
             </p>
             <button className="bg-white text-[#001f3f] border border-[#001f3f] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#001f3f] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0">
               Book a call →
