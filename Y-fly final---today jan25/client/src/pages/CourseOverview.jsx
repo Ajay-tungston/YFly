@@ -45,30 +45,22 @@ const CourseOverview = () => {
   }, [id]);
 
   const [openIndex, setOpenIndex] = useState(null);
+  const updateFaqsForCountry = (country) => {
+    if (!country) country = "this country"; // Prevent null values
+    const faqs = [
+      { question: "Can you work while studying in the USA?", answer: "Yes, international students can work up to 20 hours per week on campus during academic sessions." },
+      { question: "What are the English language proficiency tests in the USA?", answer: "Common tests include TOEFL, IELTS, and Duolingo English Test." },
+      { question: "What are other standardized tests in the USA?", answer: "Some common tests include SAT, ACT, GRE, GMAT, and LSAT depending on the program." },
+      { question: "What are the popular courses in the USA?", answer: "Popular fields include Engineering, Computer Science, Business, and Medicine." },
+      { question: "Are there any scholarships available in the USA?", answer: "Yes! Many universities and organizations offer merit-based and need-based scholarships." },
+    ];
 
-  const faqs = [
-    {
-      question: "Can you work while studying in the USA?",
-      answer: "Yes, international students can work up to 20 hours per week on campus during academic sessions.",
-    },
-    {
-      question: "What are the English language proficiency tests in the USA?",
-      answer: "Common tests include TOEFL, IELTS, and Duolingo English Test.",
-    },
-    {
-      question: "What are other standardized tests in the USA?",
-      answer: "Some common tests include SAT, ACT, GRE, GMAT, and LSAT depending on the program.",
-    },
-    {
-      question: "What are the popular courses in the USA?",
-      answer: "Popular fields include Engineering, Computer Science, Business, and Medicine.",
-    },
-    {
-      question: "Are there any scholarships available in the USA?",
-      answer: "Yes! Many universities and organizations offer merit-based and need-based scholarships.",
-    },
-  ];
-
+    return faqs.map(faq => ({
+      question: faq.question.replace(/USA/g, country),
+      answer: faq.answer.replace(/USA/g, country),
+    }));
+  };
+  const countrySpecificFaqs=updateFaqsForCountry(course?.country)
   // Get similar courses based on discipline, excluding the current course
   const getSimilarCourses = () => {
     if (!course || !allCourses || allCourses.length === 0) return [];
@@ -419,125 +411,74 @@ const CourseOverview = () => {
     </div>
 
     <div className="px-4 sm:px-6">
-      {/* FAQs Section Title */}
-      <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight mt-8">
-        FAQs
-      </div>
-
-      {/* FAQ List */}
-      <div className="w-full mt-8 grid gap-4">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className={`px-6 py-4 rounded-3xl border border-slate-900 cursor-pointer transition-all duration-300 ${
-              openIndex === index ? "bg-[#2a69df] text-white" : "bg-white text-slate-900"
-            }`}
-            onClick={() => setOpenIndex(openIndex === index ? null : index)}
-          >
-            {/* Question & Dropdown Icon */}
-            <div className="flex justify-between items-center">
-              <h3 className="flex-1 text-lg sm:text-2xl font-normal font-['Dela_Gothic_One'] leading-loose">
-                {faq.question}
-              </h3>
-              <FaChevronDown
-                className={`w-6 h-6 transition-transform ${
-                  openIndex === index ? "rotate-180" : ""
-                }`}
-              />
-            </div>
-
-            {/* Answer (Collapsible) */}
+        {/* FAQs Section */}
+        <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight mt-8">
+          FAQs
+        </div>
+        <div className="w-full mt-8 grid gap-4">
+          {countrySpecificFaqs.map((faq, index) => (
             <div
-              className={`mt-3 text-sm sm:text-base overflow-hidden transition-all duration-300 ${
-                openIndex === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+              key={index}
+              className={`px-6 py-4 rounded-3xl border border-slate-900 cursor-pointer transition-all duration-300 ${
+                openIndex === index ? "bg-[#2a69df] text-white" : "bg-white text-slate-900"
               }`}
+              onClick={() => setOpenIndex(openIndex === index ? null : index)}
             >
-              {faq.answer}
+              <div className="flex justify-between items-center">
+                <h3 className="flex-1 text-lg sm:text-2xl font-normal font-['Dela_Gothic_One'] leading-loose">
+                  {faq.question}
+                </h3>
+                <FaChevronDown className={`w-6 h-6 transition-transform ${openIndex === index ? "rotate-180" : ""}`} />
+              </div>
+              <div className={`mt-3 text-sm sm:text-base overflow-hidden transition-all duration-300 ${openIndex === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}>
+                {faq.answer}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      {/* Similar Courses Section */}
-      <div className="justify-start text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight mt-8">
-        Similar Courses
-      </div>
-    {/* Similar Courses Section */}
-<div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center w-full">
-  {similarCourses.map((similarCourse) => (
-    <div
-      key={similarCourse._id}
-      className="border border-black rounded-[38px] w-full max-w-[500px] md:h-full  h-auto shadow-md p-4 bg-[#fff] cursor-pointer"
-      onClick={() => handleCourseClick(similarCourse._id)}
-    >
-      {/* University Logo and Name */}
-      <div className="border py-6 border-black rounded-[30px] bg-white flex flex-col sm:flex-row sm:justify-center items-center">
-        <div className="flex flex-col sm:flex-row w-full justify-evenly items-center gap-4">
-          {similarCourse.university_name?.university_logo?.data ? (
-            (() => {
-              const { contentType, data } = similarCourse.university_name.university_logo;
-              const logoData = data.data || data;
-              const base64String = Buffer.from(logoData).toString("base64");
-              const logoSrc = `data:${contentType};base64,${base64String}`;
-              return (
-                <img
-                  src={logoSrc}
-                  alt={similarCourse.university_name?.university_name || "Unknown University"}
-                  className="w-16 sm:w-20 md:w-24 rounded"
-                />
-              );
-            })()
-          ) : (
-            <img src="https://placehold.co/80x80" alt="Placeholder" className="w-16 sm:w-20 md:w-24 rounded" />
-          )}
+          ))}
+        </div>
 
-          <div className="text-base sm:text-xl md:text-2xl text-center">
-            {similarCourse.university_name?.university_name || "Unknown University"}
-          </div>
+        {/* Similar Courses Section */}
+        <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight mt-8">
+          Similar Courses
+        </div>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center w-full">
+          {similarCourses.map((similarCourse) => (
+            <div key={similarCourse._id} className="border border-black rounded-[38px] w-full max-w-[500px] h-auto shadow-md p-4 bg-[#fff] cursor-pointer" onClick={() => handleCourseClick(similarCourse._id)}>
+              <div className="border py-6 border-black rounded-[30px] bg-white flex flex-col sm:flex-row sm:justify-center items-center">
+                <div className="flex flex-col sm:flex-row w-full justify-evenly items-center gap-4">
+                  {similarCourse.university_name?.university_logo?.data ? (
+                    <img
+                      src={`data:${similarCourse.university_name.university_logo.contentType};base64,${Buffer.from(similarCourse.university_name.university_logo.data.data || similarCourse.university_name.university_logo.data).toString("base64")}`}
+                      alt={similarCourse.university_name?.university_name || "Unknown University"}
+                      className="w-16 sm:w-20 md:w-24 rounded"
+                    />
+                  ) : (
+                    <img src="https://placehold.co/80x80" alt="Placeholder" className="w-16 sm:w-20 md:w-24 rounded" />
+                  )}
+                  <div className="text-base sm:text-xl md:text-2xl text-center">
+                    {similarCourse.university_name?.university_name || "Unknown University"}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 font-dela text-sm sm:text-base text-center">
+                {similarCourse.course_level} in {similarCourse.discipline} - {similarCourse.area_of_study}
+              </div>
+              <div className="border-t border-gray-300 my-4"></div>
+              <div className="flex justify-between items-center gap-4 flex-wrap">
+                <div>
+                  <div className="text-gray-500 font-urban font-bold text-center text-sm">Deadline</div>
+                  <div className="font-dela text-sm sm:text-base text-center">{new Date(similarCourse.application_deadline).toLocaleDateString()}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500 font-urban font-bold text-center text-sm">Total cost</div>
+                  <div className="font-dela text-sm sm:text-base text-center">${similarCourse.tution_fee || "N/A"}</div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* University Name Tag and QS Rank */}
-      <div className="flex justify-between mt-4 items-center gap-2 flex-wrap">
-        <div className="text-[#30589F] bg-[#E5F1FF] rounded-full font-urban text-sm px-3 py-1 text-center">
-          {similarCourse.university_name?.university_name || "Unknown University"}
-        </div>
-        <div className="font-urban font-bold text-center text-sm">
-          QS Rank:{" "}
-          {similarCourse.university_name?.university_ranking
-            ? `#${similarCourse.university_name.university_ranking}`
-            : "N/A"}
-        </div>
-      </div>
-
-      {/* Course Info */}
-      <div className="mt-4 font-dela text-sm sm:text-base text-center">
-        {similarCourse.course_level} in {similarCourse.discipline} - {similarCourse.area_of_study}
-      </div>
-      <div className="border-t border-gray-300 my-4"></div>
-
-      {/* Deadline and Total Cost */}
-      <div className="flex justify-between items-center gap-4 flex-wrap">
-        <div>
-          <div className="text-gray-500 font-urban font-bold text-center text-sm">
-            Deadline
-          </div>
-          <div className="font-dela text-sm sm:text-base text-center">
-            {new Date(similarCourse.application_deadline).toLocaleDateString()}
-          </div>
-        </div>
-        <div>
-          <div className="text-gray-500 font-urban font-bold text-center text-sm">
-            Total cost
-          </div>
-          <div className="font-dela text-sm sm:text-base text-center">
-            ${similarCourse.tution_fee || "N/A"}
-          </div>
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
-    </div>
+        
   </div>
 </div>
 

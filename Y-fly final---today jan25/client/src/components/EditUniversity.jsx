@@ -46,9 +46,7 @@ const EditUniversity = ({ id, setEditOpen }) => {
   const handleFileChange = (e) => {
     setFormData({ ...formData, university_logo: e.target.files[0] });
   };
-const handleCancel=()=>{
-  setEditOpen(false);
-}
+
   const validateForm = () => {
     let errors = {};
     if (!formData.university_name.trim())

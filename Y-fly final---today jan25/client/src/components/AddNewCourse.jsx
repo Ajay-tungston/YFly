@@ -59,6 +59,7 @@ console.log(addCourseData)
     };
     fetchUniversities();
   }, []);
+
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
@@ -76,23 +77,7 @@ console.log(addCourseData)
 
     fetchScholarships();
   }, []);
-  console.log(scholarshipOptions)  useEffect(() => {
-    const fetchScholarships = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/scholarships/get-all");
-        console.log("Scholarship response:", response.data);
-        // If your response is an object with a 'scholarships' key, adjust accordingly:
-        const scholarshipsArray = Array.isArray(response.data)
-          ? response.data
-          : response.data.scholarships;
-        setScholarshipOptions(scholarshipsArray || []);
-      } catch (error) {
-        console.error("Error fetching scholarships:", error);
-      }
-    };
-  
-    fetchScholarships();
-  }, []);
+
   const handleCancel = () => {
     setAddingNewCourse(false); // Close the form and return to the scholarship list
   };
