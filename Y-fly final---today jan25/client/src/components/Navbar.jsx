@@ -64,12 +64,35 @@ const Navbar = () => {
   const handleMajorProduct = () => setIsMajorProductOpen((prev) => !prev);
 
   // Click outside handler to close all dropdowns (desktop and mobile)
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (
+  //       destinationRef.current &&
+  //       !destinationRef.current.contains(event.target)
+  //     ) {
+  //       setIsDestinationOpen(false);
+  //     }
+  //     if (productRef.current && !productRef.current.contains(event.target)) {
+  //       setIsMajorProductOpen(false);
+  //     }
+  //     if (mobileRef.current && !mobileRef.current.contains(event.target)) {
+  //       setIsOpen(false);
+  //     }
+  //   };
+
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        destinationRef.current &&
-        !destinationRef.current.contains(event.target)
-      ) {
+      // Check if click was on an interactive element
+      if (event.target.closest('button, a, [role="button"]')) {
+        return; // Don't close menus if clicking interactive elements
+      }
+  
+      // Normal outside click handling
+      if (destinationRef.current && !destinationRef.current.contains(event.target)) {
         setIsDestinationOpen(false);
       }
       if (productRef.current && !productRef.current.contains(event.target)) {
@@ -79,11 +102,11 @@ const Navbar = () => {
         setIsOpen(false);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+  
+    // Use click instead of mousedown and proper event phase
+    document.addEventListener('click', handleClickOutside, true);
+    return () => document.removeEventListener('click', handleClickOutside, true);
   }, []);
-
   return (
     <nav className="w-11/12 top-0 absolute max-sm:h-[4vh] tracking-wider mt-4 font-urban px-7 py-4 bg-white rounded-full flex justify-between items-center">
       <div className="flex items-center">
@@ -297,7 +320,7 @@ const Navbar = () => {
           className="absolute z-50 bg-white top-[70px] left-0 w-full text-black flex flex-col items-center rounded-[80px] space-y-4 p-4 lg:hidden"
         >
           <div
-            className="flex flex-col items-center gap-2 cursor-pointer"
+            className="flex  items-center gap-2 cursor-pointer"
             onClick={handleDestination}
           >
             Study Destinations
@@ -396,7 +419,7 @@ const Navbar = () => {
           )}
 
           <div
-            className="flex flex-col items-center gap-2 cursor-pointer"
+            className="flex  items-center gap-2 cursor-pointer"
             onClick={handleMajorProduct}
           >
             Major Products
@@ -410,7 +433,7 @@ const Navbar = () => {
               }
             />
           </div>
-          {isMajorProductOpen && (
+          {isMajorProductOpen && ( 
             <div className="flex  flex-col items-center px-4 py-2 space-y-2 bg-white border rounded-[20px] shadow-lightshad focus:outline-none">
               <button
                onClick={() => navigate("/coursefinder")}
@@ -446,6 +469,10 @@ const Navbar = () => {
           </button>
         </div>
       )}
+
+
+
+
     </nav>
   );
 };

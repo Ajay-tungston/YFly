@@ -154,7 +154,7 @@ const Coursefinder = () => {
             data.data
           );
           setDbValues(transformedOptions);
-          console.log("Database Values (transformed):", transformedOptions);
+          // console.log("Database Values (transformed):", transformedOptions);
         }
       })
       .catch((error) =>
@@ -162,7 +162,6 @@ const Coursefinder = () => {
       );
   }, []);
 
-  console.log(courses);
   return (
     <div className="bg-[#0E1B2C] pb-10">
       {/* -------------------------Header Section-------------------------- */}
@@ -318,7 +317,7 @@ const Coursefinder = () => {
                               data.data
                             );
                             const logoSrc = `data:${contentType};base64,${base64String}`;
-                            console.log("Logo src:", logoSrc); // Debug log
+                            // console.log("Logo src:", logoSrc); // Debug log
                             return (
                               <img
                                 src={logoSrc}
