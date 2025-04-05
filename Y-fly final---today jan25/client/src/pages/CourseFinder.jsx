@@ -437,7 +437,7 @@ const Coursefinder = () => {
         </div>
       </div>
 
-      <Contactus />
+     
       <Footer />
     </div>
   );

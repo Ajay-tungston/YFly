@@ -17,17 +17,23 @@ import { useDispatch, useSelector } from "react-redux";
 import Countries from "./Countries";
 import { token } from "../Redux/store";
 
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu state
   const navigate = useNavigate();
   const location = useLocation();
 
-  
-  const hideLoginPaths = ['/experience', '/selectcourses', '/education', '/matters','/degree','/countries','/academics','/proficiency'];
-  
-  const shouldShowButton = !hideLoginPaths.includes(location.pathname);
+  const hideLoginPaths = [
+    "/experience",
+    "/selectcourses",
+    "/education",
+    "/matters",
+    "/degree",
+    "/countries",
+    "/academics",
+    "/proficiency",
+  ];
 
+  const shouldShowButton = !hideLoginPaths.includes(location.pathname);
 
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -83,10 +89,7 @@ const Navbar = () => {
       <div className="flex items-center">
         <img src={logo} alt="Logo" className="h-9 max-sm:h-5" />
       </div>
-      <div>
-    
-      
-      </div>
+      <div></div>
       <div className="hidden lg:flex space-x-8 text-black">
         {/* Study Destinations Dropdown */}
         <div ref={destinationRef}>
@@ -247,8 +250,9 @@ const Navbar = () => {
           )}
         </div>
 
-        <div>Services</div>
-        <div>Contact Us</div>
+        
+        <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/services')} >Services</div>
+          <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/contactus')}>Contact Us</div>
       </div>
 
       {/* My Profile Button */}
@@ -258,25 +262,24 @@ const Navbar = () => {
       >
         Login
       </button> */}
-    <>
-      {shouldShowButton && (
-        isAuthenticated ? (
-          <button
-            className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-            onClick={() => navigate("/myprofile")}
-          >
-            My Profile
-          </button>
-        ) : (
-          <button
-            className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </button>
-        )
-      )}
-    </>
+      <>
+        {shouldShowButton &&
+          (isAuthenticated ? (
+            <button
+              className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+              onClick={() => navigate("/myprofile")}
+            >
+              My Profile
+            </button>
+          ) : (
+            <button
+              className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          ))}
+      </>
 
       {/* Mobile Menu Toggle */}
       <div className="lg:hidden" ref={mobileRef}>
@@ -407,23 +410,37 @@ const Navbar = () => {
           </div>
           {isMajorProductOpen && (
             <div className="flex flex-col items-center px-4 py-2 space-y-2 bg-white border rounded-[20px] shadow-lightshad focus:outline-none">
-              <button className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent the click from bubbling up
+                  navigate("/coursefinder");
+                  setIsOpen(false);
+                }}
+                className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
+              >
                 <img src={course} alt="icons" />
                 Course Finder
               </button>
-              <button className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center">
+
+              <button
+                onClick={() => navigate("/scholarship")}
+                className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
+              >
                 <img src={scholarship} alt="icons" />
                 Scholarship Finder
               </button>
-              <button className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center">
+              <button
+                onClick={() => navigate("/coursefinder")}
+                className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
+              >
                 <img src={ai} alt="icons" />
                 AI Profile Matcher
               </button>
             </div>
           )}
 
-          <div>Services</div>
-          <div>Contact Us</div>
+          <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/services')} >Services</div>
+          <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/contactus')}>Contact Us</div>
           <button
             className="border-[#30589F] border-[2px] text-[#30589F] px-4 py-2 rounded-full"
             onClick={() => navigate("/login")}
