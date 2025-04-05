@@ -36,7 +36,8 @@ const EditCourse = (props, setEditingCourse) => {
     eligibilityRequirements: [
       {
         requirementType: "",
-        gpaRange: "",
+        // gpaRange: "",
+        minGPA: "",
         backlogRange: "",
         workExperience: "",
         entranceExam: "",
@@ -52,13 +53,11 @@ const EditCourse = (props, setEditingCourse) => {
 
   const [universities, setUniversities] = useState([]);
   useEffect(() => {
-    console.log("first");
     const fetchUniversities = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/university/get-all"
+          `${process.env.REACT_APP_API_URL}/university/get-all`
         );
-        console.log(response);
         setUniversities(response?.data?.university);
       } catch (error) {
         console.log(error);
@@ -77,7 +76,7 @@ const EditCourse = (props, setEditingCourse) => {
     const getCourseData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/courses/get/${props.id}`
+          `${process.env.REACT_APP_API_URL}/courses/get/${props.id}`
         );
         const data = response.data.course;
         setEditCourse({
@@ -98,7 +97,8 @@ const EditCourse = (props, setEditingCourse) => {
           eligibilityRequirements: data.eligibilityRequirements || [
             {
               requirementType: "",
-              gpaRange: "",
+              // gpaRange: "",
+              minGPA: "",
               backlogRange: "",
               workExperience: "",
               entranceExam: "",
@@ -165,12 +165,11 @@ const EditCourse = (props, setEditingCourse) => {
       }
     });
 
-    console.log(editCourse);
     try {
       console.log("Payload:", editCourse);
       console.log("FormData:", formData);
       const response = await axios.put(
-        `http://localhost:5000/courses/edit/${props.id}`,
+        `${process.env.REACT_APP_API_URL}/courses/edit/${props.id}`,
         formData
       );
       toast.success("course updated successfully", {
@@ -195,6 +194,9 @@ const EditCourse = (props, setEditingCourse) => {
   const handleCourseLevel = (option) => {
     setEditCourse((prevData) => ({ ...prevData, course_level: option }));
     setIsOpenCourseLevel(false);
+    if(option==="MBA"){
+      handleDiscipline("")
+    }
   };
 
   // Discipline
@@ -363,7 +365,8 @@ const EditCourse = (props, setEditingCourse) => {
         ...prevData.eligibilityRequirements,
         {
           requirementType: "",
-          gpaRange: "",
+          // gpaRange: "",
+          minGPA: "",
           backlogRange: "",
           workExperience: "",
           entranceExam: "",
@@ -617,7 +620,7 @@ const EditCourse = (props, setEditingCourse) => {
                     </ul>
                   </div>
                 )}
-
+{editCourse?.course_level!=="MBA"&&<>
                 <div className="w-[10%] max-xl:w-[5%] flex items-center justify-center">
                   of
                 </div>
@@ -669,6 +672,7 @@ const EditCourse = (props, setEditingCourse) => {
                     </ul>
                   </div>
                 )}
+                </>}
                 <div className="w-[10%] max-xl:w-[5%] flex items-center justify-center">
                   in
                 </div>
@@ -1019,7 +1023,7 @@ const EditCourse = (props, setEditingCourse) => {
 
                     <option value="Work Experience">Work Experience</option>
                   </select>
-                  {req.requirementType === "Min GPA" && (
+                  {/* {req.requirementType === "Min GPA" && (
                     <input
                       className="w-[25%] ml-2 bg-[#F9F9F9] border-[#898C9A] rounded-md"
                       placeholder="Enter GPA Range"
@@ -1032,7 +1036,34 @@ const EditCourse = (props, setEditingCourse) => {
                         )
                       }
                     />
-                  )}
+                  )} */}
+                  {req.requirementType === "Min GPA" && (
+              <div className="flex space-x-2 w-32 ">
+                <input
+                  type="number" 
+                  min="1"
+                  max="10"
+                  className="w-full ml-2 bg-[#F9F9F9] border-[#898C9A] rounded-md"
+                  placeholder="Min GPA"
+                  value={req.minGPA || ""}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    if (value === "") {
+                      handleEligibilityInputChange(index, "minGPA", "");
+                      return;
+                    }
+                    let numValue = parseFloat(value);
+                    if (numValue < 1) numValue = 1;
+                    if (numValue > 10) numValue = 10;
+                    handleEligibilityInputChange(index, "minGPA", numValue);
+                  }}
+                  onBlur={(e) => {
+                    let numValue = parseFloat(e.target.value);
+                    if (isNaN(numValue) || numValue < 1) numValue = 1;
+                    if (numValue > 10) numValue = 10;
+                    handleEligibilityInputChange(index, "minGPA", numValue);
+                  }}
+                /></div>)}
                   {req.requirementType === "Backlogs Applicable" && (
                     <input
                       className="w-[25%] ml-2 bg-[#F9F9F9] border-[#898C9A] rounded-md"

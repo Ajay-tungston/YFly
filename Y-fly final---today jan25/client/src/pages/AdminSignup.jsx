@@ -112,7 +112,7 @@ const AdminSignup = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:5000/admin/signup', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/admin/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,

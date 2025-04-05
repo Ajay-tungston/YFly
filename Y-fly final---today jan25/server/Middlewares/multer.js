@@ -1,21 +1,47 @@
-// const multer = require("multer");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-// const storage = multer.memoryStorage(); // Store file in memory as a buffer
+// Configure storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = './uploads/applications';
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
+  }
+});
 
-// const fileFilter = (req, file, cb) => {
-//   // Allow only image files
-//   if (file.mimetype === "image/jpeg" || file.mimetype === "image/jpg" || file.mimetype === "image/png") {
-//     cb(null, true); // Accept file
-//   } else {
-//     console.error(`File rejected: ${file.originalname} (${file.mimetype})`);
-//     cb(new Error("Only JPEG, JPG, or PNG image files are allowed!"), false); // Reject file
-//   }
-// };
+// File filter
+const fileFilter = (req, file, cb) => {
+  if (path.extname(file.originalname).toLowerCase() === '.pdf') {
+    cb(null, true);
+  } else {
+    cb(new Error('Only PDF files are allowed'), false);
+  }
+};
 
-// const upload = multer({
-//   storage: storage,
-//   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB file size limit
-//   fileFilter: fileFilter,
-// });
+// Define upload fields
+const uploadFields = [
+    { name: 'passportFront', maxCount: 1 },
+    { name: 'passportBack', maxCount: 1 },
+    { name: 'cvResume', maxCount: 1 },
+    { name: 'educationalDocuments', maxCount: 10 },
+    { name: 'workExperienceDocuments', maxCount: 10 },
+    { name: 'englishProficiencyDocuments', maxCount: 10 },
+    { name: 'extracurricularDocuments', maxCount: 10 },
+    { name: 'recommendationDocuments', maxCount: 10 },
+    { name: 'otherDocuments', maxCount: 10 }
+];
 
-// module.exports = upload;
+// Create and export middleware
+module.exports = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB
+}).fields(uploadFields);

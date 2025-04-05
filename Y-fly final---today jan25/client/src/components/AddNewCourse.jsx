@@ -41,7 +41,6 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     tution_fee: "",
     funding_options: [{ fundingOption: "" }],
   });
-console.log(addCourseData)
   const [universities, setUniversities] = useState([]);
   const [scholarshipOptions, setScholarshipOptions] = useState([]);
   useEffect(() => {
@@ -49,9 +48,8 @@ console.log(addCourseData)
     const fetchUniversities = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/university/get-all"
+          `${process.env.REACT_APP_API_URL}/university/get-all`
         );
-        console.log(response);
         setUniversities(response?.data?.university);
       } catch (error) {
         console.log(error);
@@ -63,7 +61,7 @@ console.log(addCourseData)
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/scholarships/get-all");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/scholarships/get-all`);
         console.log("Scholarship response:", response.data);
         // If your API returns an object, extract the array accordingly. For example:
         const scholarshipsArray = Array.isArray(response.data)
@@ -149,11 +147,10 @@ console.log(addCourseData)
           formData.append(`recruiters_logo_${index}`, recruiter.logo);
       }
   });
-    console.log(addCourseData.top_recruiters)
 
     try {
       const response = await axios.post(
-          "http://localhost:5000/courses/create",
+          `${process.env.REACT_APP_API_URL}/courses/create`,
           formData,
           {
               headers: { "Content-Type": "multipart/form-data" },
@@ -217,6 +214,9 @@ console.log(addCourseData)
   const handleCourseLevel = (option) => {
     setAddCourseData((prevData) => ({ ...prevData, course_level: option }));
     setIsOpenCourseLevel(false);
+    if(option==="MBA"){
+      handleDiscipline("")
+    }
   };
 
   // Discipline

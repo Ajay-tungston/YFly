@@ -87,12 +87,11 @@ const AddNewUniversity = ({ setAddingNewUniversity, setEditOpen }) => {
     });
 
     try {
-      const response = await axios.post("http://localhost:5000/university/add", formDataObj, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/university/add`, formDataObj, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
       alert("University created successfully!");
 
         // Set the university ID or details to be edited

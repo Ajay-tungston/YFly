@@ -19,15 +19,13 @@ const UniversityList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [editOpen, setEditOpen] = useState("");
-  const limit = 4;
-  console.log(selectedUniversity);
+  const limit = 10;
   // Fetch the courses from the backend
   const fetchUniversities = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/university/get?page=${currentPage}&limit=${limit}&search=${searchQuery}`
+        `${process.env.REACT_APP_API_URL}/university/get?page=${currentPage}&limit=${limit}&search=${searchQuery}`
       );
-      console.log(response.data);
       setUniversity(response.data || []);
       setTotalPages(response?.data?.pagination?.pages);
       // setSelectedUniversity([]);
@@ -45,9 +43,8 @@ const UniversityList = () => {
     if (window.confirm("Are you sure you want to delete this course?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:5000/university/delete/${id}`
+          `${process.env.REACT_APP_API_URL}/university/delete/${id}`
         );
-        console.log(response);
         fetchUniversities();
       } catch (error) {
         console.error("Error deleting course:", error);

@@ -7,8 +7,6 @@ const mongoose=require('mongoose')
 const nodemailer = require("nodemailer");
 
 
-
-
 exports.registerUser = async (req, res) => {
   try {
     console.log("Received Data:", req.body);

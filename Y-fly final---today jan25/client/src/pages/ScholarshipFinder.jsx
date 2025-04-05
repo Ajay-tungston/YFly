@@ -60,7 +60,7 @@ const ScholarshipFinder = () => {
     const fetchFilters = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/scholarships/get-filters"
+          `${process.env.REACT_APP_API_URL}/scholarships/get-filters`
         );
         setFilters(response?.data);
       } catch (error) {
@@ -78,7 +78,7 @@ const ScholarshipFinder = () => {
       const max = maxAmount !== null ? Number(maxAmount) : undefined;
 
       const response = await axios.get(
-        `http://localhost:5000/scholarships/search`,
+        `${process.env.REACT_APP_API_URL}/scholarships/search`,
         {
           params: {
             search: query,

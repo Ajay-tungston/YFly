@@ -1,107 +1,61 @@
-const fs = require("fs");
-const path = require("path");
 const Application = require("../Models/Application");
 const User = require("../Models/userSchema");
 const Course = require("../Models/courseSchema");
+const fs = require("fs");
+const path = require("path");
+
+const deleteUploadedFiles = (files) => {
+  if (!files) return;
+
+  Object.values(files).forEach((field) => {
+    field.forEach((file) => {
+      fs.unlink(file.path, (err) => {
+        if (err) console.error(`Error deleting file: ${file.path}`, err);
+      });
+    });
+  });
+};
 
 const addApplication = async (req, res) => {
-  const { userId, courseId, intakeYear, intakeMonth } = req.fields;
-  const { files } = req;
-console.log("fjajf:",files)
-  // Function to delete uploaded files
-  const deleteFiles = (fileArray) => {
-    console.log(fileArray)
-    if (Array.isArray(fileArray)) {
-      fileArray.forEach((file) => fs.unlink(file.path, () => {}));
-    } else if (fileArray && fileArray.path) {
-      fs.unlink(fileArray.path, () => {});
-    }
-  };
+  const { userId, courseId, intakeYear, intakeMonth } = req.body;
+  const files = req.files;
 
   try {
-    // Validate user existence
-    const userExists = await User.findById(userId);
-    if (!userExists) {
-      deleteFiles(Object.values(files)); // Delete all uploaded files
-      return res.status(400).json({ success: false, message: "Invalid userId. User not found." });
-    }
+    // Validations
+    const [userExists, courseExists] = await Promise.all([
+      User.findById(userId),
+      Course.findById(courseId),
+    ]);
 
-    // Validate course existence
-    const courseExists = await Course.findById(courseId);
-    if (!courseExists) {
-      deleteFiles(Object.values(files)); // Delete all uploaded files
-      return res.status(400).json({ success: false, message: "Invalid courseId. Course not found." });
-    }
-
-    // Validate intake year and month against the course's available intakes
-    const intakeExists = courseExists.intakes.some(
-      (intake) => intake.year === parseInt(intakeYear) && intake.month === intakeMonth
-    );
-
-    if (!intakeExists) {
-      deleteFiles(Object.values(files)); // Delete all uploaded files
+    if (!userExists || !courseExists) {
+      deleteUploadedFiles(files);
       return res.status(400).json({
         success: false,
-        message: `The selected intake year (${intakeYear}) and month (${intakeMonth}) are not available for this course.`,
+        message: !userExists ? "User not found" : "Course not found",
       });
     }
 
-    // Function to check if a file is a PDF using file extension
-    const isPDF = (file) => file && path.extname(file.path).toLowerCase() === ".pdf";
+    // Validate Intake - Check if the combination exists in course intakes
+    const intakeValid = courseExists.intakes.some(
+      (intake) =>
+        intake.year.toString() === intakeYear.toString() &&
+        intake.month.toLowerCase() === intakeMonth.toLowerCase()
+    );
 
-    // Function to validate and process files (handles both single & multiple files)
-    const processFiles = (fileInput, isSingle = false) => {
-      if (!fileInput) return isSingle ? null : [];
-
-      // Convert to array if it's a single file
-      const fileArray = Array.isArray(fileInput) ? fileInput : [fileInput];
-
-      // Validate all files are PDFs
-      const invalidFiles = fileArray.filter((file) => !isPDF(file));
-
-      if (invalidFiles.length > 0) {
-        deleteFiles(fileArray); // Delete invalid files before returning the error
-        return { error: "All uploaded files must be in PDF format." };
-      }
-
-      // Store file paths
-      const filePaths = fileArray.map((file) => file.path);
-
-      // Ensure single files return a string, not an array
-      return isSingle ? filePaths[0] || null : filePaths;
-    };
-
-    // Process and validate all document fields
-    const documents = {
-      identityDocuments: {
-        passportFront: processFiles(files.passportFront, true), // Single file
-        passportBack: processFiles(files.passportBack, true), // Single file
-        cvResume: processFiles(files.cvResume, true), // Single file
-      },
-      educationalDocuments: processFiles(files.educationalDocuments),
-      workExperienceDocuments: processFiles(files.workExperienceDocuments),
-      englishProficiencyDocuments: processFiles(files.englishProficiencyDocuments),
-      extracurricularDocuments: processFiles(files.extracurricularDocuments),
-      recommendationDocuments: processFiles(files.recommendationDocuments),
-      otherDocuments: processFiles(files.otherDocuments),
-    };
-
-    // Check for any validation errors in document processing
-    for (const key in documents) {
-      if (typeof documents[key] === "object" && documents[key] !== null) {
-        for (const subKey in documents[key]) {
-          if (documents[key][subKey]?.error) {
-            deleteFiles(Object.values(files)); // Delete all uploaded files
-            return res.status(400).json({ success: false, message: documents[key][subKey].error });
-          }
-        }
-      } else if (documents[key]?.error) {
-        deleteFiles(Object.values(files)); // Delete all uploaded files
-        return res.status(400).json({ success: false, message: documents[key].error });
-      }
+    if (!intakeValid) {
+      deleteUploadedFiles(files);
+      return res.status(400).json({
+        success: false,
+        message: `The selected intake (${intakeMonth} ${intakeYear}) is not available for this course.`,
+      });
     }
 
-    // Save application with relative file paths
+    // Process files
+    const processFiles = (fieldName) =>
+      files[fieldName]?.map((file) => file.path) || [];
+    const processSingleFile = (fieldName) =>
+      files[fieldName]?.[0]?.path || null;
+
     const application = new Application({
       user: userId,
       course: courseId,
@@ -109,22 +63,158 @@ console.log("fjajf:",files)
         year: parseInt(intakeYear),
         month: intakeMonth,
       },
-      documents,
+      documents: {
+        identityDocuments: {
+          passportFront: processSingleFile("passportFront"),
+          passportBack: processSingleFile("passportBack"),
+          cvResume: processSingleFile("cvResume"),
+        },
+        educationalDocuments: processFiles("educationalDocuments"),
+        workExperienceDocuments: processFiles("workExperienceDocuments"),
+        englishProficiencyDocuments: processFiles(
+          "englishProficiencyDocuments"
+        ),
+        extracurricularDocuments: processFiles("extracurricularDocuments"),
+        recommendationDocuments: processFiles("recommendationDocuments"),
+        otherDocuments: processFiles("otherDocuments"),
+      },
     });
 
     await application.save();
-
-    return res.json({
-      success: true,
-      message: "Application submitted successfully",
-      data: application,
-    });
-
+    res.status(201).json({ success: true, data: application });
   } catch (error) {
-    console.error(error);
-    deleteFiles(Object.values(files)); // Delete all uploaded files on error
-    return res.status(400).json({ success: false, message: error.message });
+    deleteUploadedFiles(files);
+    res.status(400).json({
+      success: false,
+      message: error.message.includes("PDF")
+        ? error.message
+        : "Application submission failed: " + error.message,
+    });
   }
 };
 
-module.exports = { addApplication };
+const getApplicationsWithPagination = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+
+    // Get applications with populated data, sorted by newest first
+    const applications = await Application.find({})
+      .sort({
+        isOpened: 1,
+        createdAt: -1,
+      })
+      .populate({
+        path: "user",
+        select: "first_name last_name email",
+      })
+      .populate({
+        path: "course",
+        select: "course_level discipline area_of_study university_name",
+        populate: {
+          path: "university_name",
+          select: "university_name",
+        },
+      })
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    // Construct full URLs for documents
+    const baseUrl = `${req.protocol}://${req.get("host")}/`;
+    const applicationsWithUrls = applications.map((app) => {
+      if (!app.documents) return app;
+
+      const docs = { ...app.documents };
+
+      // Process identity documents (object)
+      if (docs.identityDocuments) {
+        for (const [key, value] of Object.entries(docs.identityDocuments)) {
+          if (value) docs.identityDocuments[key] = baseUrl + value;
+        }
+      }
+
+      // Process array-type documents
+      const arrayDocTypes = [
+        "educationalDocuments",
+        "englishProficiencyDocuments",
+        "extracurricularDocuments",
+        "otherDocuments",
+        "recommendationDocuments",
+        "workExperienceDocuments",
+      ];
+
+      arrayDocTypes.forEach((type) => {
+        if (docs[type] && Array.isArray(docs[type])) {
+          docs[type] = docs[type].map((file) => (file ? baseUrl + file : file));
+        }
+      });
+
+      return { ...app, documents: docs };
+    });
+
+    // Get total count
+    const total = await Application.estimatedDocumentCount();
+
+    res.status(200).json({
+      success: true,
+      data: applicationsWithUrls,
+      pagination: {
+        total,
+        page: Number(page),
+        pages: Math.ceil(total / limit),
+        limit: Number(limit),
+      },
+    });
+  } catch (error) {
+    console.error("Error in getApplicationsWithPagination:", error);
+    res.status(500).json({ success: false, message: "Server Error", error });
+  }
+};
+
+const changeStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate the ID
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Application ID is required",
+      });
+    }
+
+    // Update the application's isOpenStatus to true
+    const updatedApplication = await Application.findByIdAndUpdate(
+      id,
+      { isOpened: true },
+      { new: true } // Return the updated document
+    );
+
+    // Check if application exists
+    if (!updatedApplication) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Application status updated successfully",
+      data: updatedApplication,
+    });
+  } catch (error) {
+    console.error("Error in changeStatus:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message,
+    });
+  }
+};
+module.exports = {
+  addApplication,
+  getApplicationsWithPagination,
+  changeStatus,
+};

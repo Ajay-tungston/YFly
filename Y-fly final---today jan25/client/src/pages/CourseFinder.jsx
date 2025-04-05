@@ -116,7 +116,7 @@ const Coursefinder = () => {
           `&university_name=${universityName}` +
           `&sort=${sort}`;
         const response = await axios.get(
-          `http://localhost:5000/courses/filters${query}`
+          `${process.env.REACT_APP_API_URL}/courses/filters${query}`
         );
         setCourses(response.data.results);
         setTotalPages(response?.data?.pagination?.totalPages);
@@ -146,7 +146,7 @@ const Coursefinder = () => {
 
   // useEffect to fetch all courses (or any other db values if needed) and transform for dropdowns
   useEffect(() => {
-    fetch("http://localhost:5000/courses/getall")
+    fetch(`${process.env.REACT_APP_API_URL}/courses/getall`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -154,7 +154,7 @@ const Coursefinder = () => {
             data.data
           );
           setDbValues(transformedOptions);
-          console.log("Database Values (transformed):", transformedOptions);
+          // console.log("Database Values (transformed):", transformedOptions);
         }
       })
       .catch((error) =>
@@ -162,7 +162,6 @@ const Coursefinder = () => {
       );
   }, []);
 
-  console.log(courses);
   return (
     <div className="bg-[#0E1B2C] pb-10">
       {/* -------------------------Header Section-------------------------- */}
@@ -318,7 +317,7 @@ const Coursefinder = () => {
                               data.data
                             );
                             const logoSrc = `data:${contentType};base64,${base64String}`;
-                            console.log("Logo src:", logoSrc); // Debug log
+                            // console.log("Logo src:", logoSrc); // Debug log
                             return (
                               <img
                                 src={logoSrc}

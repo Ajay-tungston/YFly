@@ -19,7 +19,7 @@ const ScholarshipOverview = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/scholarships/get/${params.id}`
+          `${process.env.REACT_APP_API_URL}/scholarships/get/${params.id}`
         );
         setScholarshipData(response?.data?.scholarship);
       } catch (error) {

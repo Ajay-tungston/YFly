@@ -12,7 +12,6 @@ const validateArrayField = (field, errorMessage) => {
 
 // Create a new course with updated validation
 exports.createCourse = async (req, res) => {
-  console.log(req.fields)
   try {
     // console.log('Raw request fields:', req.fields);
     // console.log('Raw request files:', req.files);
@@ -441,7 +440,8 @@ exports.updateCourse = async (req, res) => {
           }
           return {
             requirementType: req.requirementType.trim(),
-            gpaRange: req.gpaRange?.trim() || null,
+            // gpaRange: req.gpaRange?.trim() || null,
+            minGPA:req.minGPA||null,
             backlogRange: req.backlogRange?.trim() || null,
             workExperience: req.workExperience?.trim() || null,
             entranceExam: req.entranceExam?.trim() || null,

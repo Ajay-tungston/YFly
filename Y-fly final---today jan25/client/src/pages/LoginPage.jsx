@@ -43,7 +43,7 @@ const LoginPage = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5000/user/sendotp", { email });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/sendotp`, { email });
       setOtpSent(true);
       setMessage(response.data.message);
       setResendDisabled(true); // Disable resend button
@@ -61,7 +61,7 @@ const LoginPage = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5000/user/sendotp", { email });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/sendotp`, { email });
       setMessage(response.data.message);
       setResendDisabled(true); // Disable resend button
       setResendTimer(30); // Reset timer to 30 seconds
@@ -80,7 +80,7 @@ const verifyOTP = async (e) => {
   setMessage("");
 
   try {
-    const response = await axios.post("http://localhost:5000/user/verifyotp", { email, otp });
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/verifyotp`, { email, otp });
     console.log("Backend response:", response.data);
     setMessage(response.data.message);
 

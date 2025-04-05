@@ -52,7 +52,15 @@ const applicationSchema = new mongoose.Schema({
       type: String, // File paths for other documents
     }],
   },
-});
+  isOpened:{
+    type:Boolean,
+    default:false
+  }
+},
+{
+  timestamps: true,
+}
+);
 
 module.exports = mongoose.model("Application", applicationSchema);
 
