@@ -120,6 +120,13 @@ const Home = () => {
                       bibendum quam ultrices ultrices ac eu orci. Hac venenatis
                         mi purus venenatis et vulputate vel aliquet.</p>
                   </div>
+                  <div className='block min-w-[32%] max-md:min-w-[45%] pb-8 bg-[#0F62AF] hover:shadow-rad shadow-cards rounded-[55px]'>
+                    <img src={card3} alt='card3' className='w-96 px-8 mt-[2rem]'/>
+                    <p className='font-bold font-urban text-[1.5rem] px-8 max-lg:px-6 py-4 text-white'>Test Preparation</p>
+                    <p className='font-normal font-urban text-[1.1rem] max-xl:text-[1rem] text-white px-8 max-lg:px-6'>Lorem ipsum dolor sit amet consectetur. Cursus nibh aliquam
+                      bibendum quam ultrices ultrices ac eu orci. Hac venenatis
+                        mi purus venenatis et vulputate vel aliquet.</p>
+                  </div>
               </div>
             </div>
             </div>
@@ -193,7 +200,7 @@ const Home = () => {
 
        
         </div>
-        <Contactus />
+       
         {/* footer section */}
         <Footer/>
 
