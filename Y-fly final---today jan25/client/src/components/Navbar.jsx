@@ -139,7 +139,8 @@ const Navbar = () => {
             >
               <div>
                 <div className="flex items-center justify-around">
-                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  onClick={() => navigate("/study-usa")}>  
                     <img
                       src={usa}
                       alt="flag"
@@ -150,7 +151,8 @@ const Navbar = () => {
                       USA
                     </p>
                   </div>
-                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                   onClick={() => navigate("/study-uk")}>  
                     <img
                       src={uk}
                       alt="flag"
@@ -161,7 +163,8 @@ const Navbar = () => {
                       UK
                     </p>
                   </div>
-                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                   onClick={() => navigate("/study-canada")}>  
                     <img
                       src={canada}
                       alt="flag"
@@ -172,7 +175,8 @@ const Navbar = () => {
                       Canada
                     </p>
                   </div>
-                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                   onClick={() => navigate("/study-germany")}>  
                     <img
                       src={germany}
                       alt="flag"
@@ -185,7 +189,8 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className="flex items-center justify-evenly mt-[1rem]">
-                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                   onClick={() => navigate("/study-new-zealand")}>  
                     <img
                       src={newzealand}
                       alt="flag"
@@ -196,7 +201,8 @@ const Navbar = () => {
                       New Zealand
                     </p>
                   </div>
-                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                   onClick={() => navigate("/study-australia")}>  
                     <img
                       src={australia}
                       alt="flag"
@@ -207,7 +213,8 @@ const Navbar = () => {
                       Australia
                     </p>
                   </div>
-                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div className="px-5 py-4 border rounded-[15px] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                   onClick={() => navigate("/study-ireland")}>  
                     <img
                       src={ireland}
                       alt="flag"

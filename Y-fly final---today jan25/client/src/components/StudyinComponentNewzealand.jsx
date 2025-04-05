@@ -16,7 +16,7 @@ import Topcourse from "../components/Topcourse"
 import Domain from "../components/Domain"
 import Scholarships from '../components/Scholarship'
 import Intake from '../components/Intake'
-import Faqs from "../pages/Faqs"
+import FaqsNewzealand from "../pages/FaqsNewzealand"
 
 const StudyinComponent = () => {
     const [drop1, setDrop1] = useState(false)
@@ -113,23 +113,23 @@ const StudyinComponent = () => {
                         </div>
                         <div className='bg-[#30589F]  rounded-[38px] px-8 pt-16 max-md:px-3 max-md:pt-3 text-[15px] max-md:text-[10px] text-[#0E1B2C] p-10 w-full h-fit'>
                             <div className='flex  '>
-                                <div className='bg-white  py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4  text-center mr-6 mb-6 max-md:mr-3 max-md:mb-3 font-lato rounded-[30px] max-lg:px-[3.5rem]'>USA hosts more than a million international students</div>
-                                <div className='bg-white py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4 mb-6 max-md:mb-3 text-center  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Internships (CPT) up to 12 months while studying</div>
+                                <div className='bg-white  py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4  text-center mr-6 mb-6 max-md:mr-3 max-md:mb-3 font-lato rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
+                                <div className='bg-white py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4 mb-6 max-md:mb-3 text-center  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
                             </div>
 
                             <div className='flex '>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Opportunities for Research, Teaching and Graduate Assistantships</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[5.2rem] max-md:px-4 max-md:w-[50%] max-xl:px-[2.5rem] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Best of 12 Student Cities (QS 2023)</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[5.2rem] max-md:px-4 max-md:w-[50%] max-xl:px-[2.5rem] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
                             </div>
 
                             <div className='flex'>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.5rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Merit based and Need based scholarships</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Post-study stay back visas (OPT) up to 3 years for STEM programs</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.5rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
                             </div>
 
                             <div className='flex'>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mr-6 mb-6 max-md:mr-3 max-md:mb-3  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Over 4500 accredited universities & institutions to choose from</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>25% of world’s top 100 universities are in the USA</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mr-6 mb-6 max-md:mr-3 max-md:mb-3  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* */}</div>
                             </div>
                         </div>
                     </div>
@@ -224,7 +224,7 @@ const StudyinComponent = () => {
                             Pros and Cons  
                             </div>
                         </div>
-                    <Faqs />
+                    <FaqsNewzealand />
                     </div>
                 </div>
 

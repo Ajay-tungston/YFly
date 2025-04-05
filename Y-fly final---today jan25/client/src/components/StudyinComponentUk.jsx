@@ -11,14 +11,14 @@ import airfare from '../assets/images/image/airfare.svg'
 import visa from '../assets/images/image/visa.svg'
 import harvard from '../assets/images/image/harvard.svg'
 import down from '../assets/images/image/down.svg'
-import WhyStudySlider from './WhyStudySlider'
-import Topcourse from "../components/Topcourse"
-import Domain from "../components/Domain"
-import Scholarships from '../components/Scholarship'
-import Intake from '../components/Intake'
-import Faqs from "../pages/Faqs"
+import WhyStudySliderUk from './WhyStudySliderUk'
+import Topcourse from "./Topcourse"
+import DomainUk from "./DomainUk"
+import Scholarships from './Scholarship'
+import Intake from './Intake'
+import Faqsuk from "../pages/Faqsuk"
 
-const StudyinComponent = () => {
+const StudyinComponentUk = () => {
     const [drop1, setDrop1] = useState(false)
     const [drop2, setDrop2] = useState(false)
     const [drop3, setDrop3] = useState(false)
@@ -95,9 +95,9 @@ const StudyinComponent = () => {
 
 
                 {/*---------------------------- why study  in USA---------------------- */}
-                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in UK?</div>
+                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in USA?</div>
 
-                <WhyStudySlider />
+        <WhyStudySliderUk/>
 
 
 
@@ -113,23 +113,23 @@ const StudyinComponent = () => {
                         </div>
                         <div className='bg-[#30589F]  rounded-[38px] px-8 pt-16 max-md:px-3 max-md:pt-3 text-[15px] max-md:text-[10px] text-[#0E1B2C] p-10 w-full h-fit'>
                             <div className='flex  '>
-                                <div className='bg-white  py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4  text-center mr-6 mb-6 max-md:mr-3 max-md:mb-3 font-lato rounded-[30px] max-lg:px-[3.5rem]'>USA hosts more than a million international students</div>
-                                <div className='bg-white py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4 mb-6 max-md:mb-3 text-center  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Internships (CPT) up to 12 months while studying</div>
+                                <div className='bg-white  py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4  text-center mr-6 mb-6 max-md:mr-3 max-md:mb-3 font-lato rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
+                                <div className='bg-white py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4 mb-6 max-md:mb-3 text-center  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
                             </div>
 
                             <div className='flex '>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Opportunities for Research, Teaching and Graduate Assistantships</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[5.2rem] max-md:px-4 max-md:w-[50%] max-xl:px-[2.5rem] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Best of 12 Student Cities (QS 2023)</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[5.2rem] max-md:px-4 max-md:w-[50%] max-xl:px-[2.5rem] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
                             </div>
 
                             <div className='flex'>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.5rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Merit based and Need based scholarships</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Post-study stay back visas (OPT) up to 3 years for STEM programs</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.5rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
                             </div>
 
                             <div className='flex'>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mr-6 mb-6 max-md:mr-3 max-md:mb-3  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>Over 4500 accredited universities & institutions to choose from</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>25% of world’s top 100 universities are in the USA</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mr-6 mb-6 max-md:mr-3 max-md:mb-3  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  fact */}</div>
                             </div>
                         </div>
                     </div>
@@ -154,7 +154,7 @@ const StudyinComponent = () => {
                                     <img src={fee} alt='fee' className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Tuition fees</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$25000</div>
+                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$14,000</div>
                                     </div>
                                 </div>
 
@@ -162,7 +162,7 @@ const StudyinComponent = () => {
                                     <img src={accomodation} alt='accomodation' width={50} className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Living & Accomodation</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$15000</div>
+                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$9,600</div>
                                     </div>
                                 </div>
 
@@ -178,7 +178,7 @@ const StudyinComponent = () => {
                                     <img src={visa} alt='visa' className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Visa</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$510</div>
+                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$4</div>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@ const StudyinComponent = () => {
                                 <div className='flex justify-between mt-6 items-center'>
                                     <div>
                                         <div className=' font-dela max-lg:text-[13px]'>{u.university}</div>
-                                        <div className=' font-urban text-[#898C9A] font-urban text-[14px] max-lg:text-[11px]'>{u.place}</div>
+                                        <div className='  text-[#898C9A] font-urban text-[14px] max-lg:text-[11px]'>{u.place}</div>
                                     </div>
                                     <div className='font-urban  max-lg:text-[13px]'>QS Rank: {u.rank}</div>
                                 </div>
@@ -224,7 +224,7 @@ const StudyinComponent = () => {
                             Pros and Cons  
                             </div>
                         </div>
-                    <Faqs />
+                    <Faqsuk />
                     </div>
                 </div>
 
@@ -261,7 +261,7 @@ const StudyinComponent = () => {
                             Top Domains
                             </div>
                         </div>
-                    <Domain />
+                    <DomainUk />
                     </div>
                 </div>
                 <div>
@@ -321,4 +321,4 @@ const StudyinComponent = () => {
     )
 }
 
-export default StudyinComponent
+export default StudyinComponentUk
