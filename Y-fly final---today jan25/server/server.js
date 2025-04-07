@@ -28,6 +28,7 @@ app.use('/courses', courseRoutes);
 app.use('/university', require("./Routes/universityRoutes"));
 app.use('/profile-matcher', require("./Routes/profileMatcherRoutes"));
 app.use('/application', require("./Routes/apllicationRoutes"));
+app.use('/service', require("./Routes/serviceRotes"));
 
 // Connect to the database
 mongoose
