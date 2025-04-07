@@ -532,6 +532,7 @@ const CourseOverview = () => {
           <div className="font-dela text-sm sm:text-base text-center">
             ${similarCourse.tution_fee || "N/A"}
           </div>
+          
         </div>
       </div>
     </div>
