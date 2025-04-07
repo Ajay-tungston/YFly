@@ -3,7 +3,7 @@ import countries from '../assets/images/image/countries.svg'
 import Navbar from '../components/Navbar'
 
 import Footer from '../components/Footer'
-import StudyinComponent from '../components/StudyinComponent'
+import StudyinComponentIreland from '../components/StudyinComponentIreland'
 
 
 
@@ -35,7 +35,7 @@ const Studyin = () => {
 
 
             {/* ------------------------------------------------second section-------------------------------------------------------- */}
-            <StudyinComponent />
+            <StudyinComponentIreland />
 
             <div>
                

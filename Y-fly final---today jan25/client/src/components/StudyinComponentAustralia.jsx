@@ -14,7 +14,7 @@ import down from '../assets/images/image/down.svg'
 import WhyStudySliderAustralia from './WhyStudySliderAustralia'
 import Topcourse from "./Topcourse"
 import DomainGermany from "./DomainGermany"
-import Scholarships from './Scholarship'
+import ScholarshipAustralia from './ScholarshipAustralia'
 import Intake from './Intake'
 import FaqsAustralia from "../pages/FaqsAustralia"
 
@@ -95,7 +95,7 @@ const StudyinComponent = () => {
 
 
                 {/*---------------------------- why study  in USA---------------------- */}
-                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in UK?</div>
+                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in Australia?</div>
 
                 <WhyStudySliderAustralia />
 
@@ -104,7 +104,7 @@ const StudyinComponent = () => {
 
                 {/*----------------------------------------------- Quick facts--------------------------------------------- */}
                 <div>
-                    <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10 -mt-4 mb-8 '>Quick facts</div>
+                    <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10 -mt-28 mb-8 '>Quick facts</div>
                     <div className=' flex'>
                         <div className="hidden md:flex items-center justify-center  w-12 ">
                             <div className="text-[#BFBFBF]  font-semibold text-lg writing-mode-vertical-rl transform rotate-90 w text-[28px] -ml-36 " >
@@ -206,7 +206,7 @@ const StudyinComponent = () => {
                                 <div className='flex justify-between mt-6 items-center'>
                                     <div>
                                         <div className=' font-dela max-lg:text-[13px]'>{u.university}</div>
-                                        <div className=' font-urban text-[#898C9A] font-urban text-[14px] max-lg:text-[11px]'>{u.place}</div>
+                                        <div className='  text-[#898C9A] font-urban text-[14px] max-lg:text-[11px]'>{u.place}</div>
                                     </div>
                                     <div className='font-urban  max-lg:text-[13px]'>QS Rank: {u.rank}</div>
                                 </div>
@@ -249,7 +249,7 @@ const StudyinComponent = () => {
                             Top Scholarships
                             </div>
                         </div>
-                    <Scholarships />
+                    <ScholarshipAustralia />
                     </div>
                 </div>
 

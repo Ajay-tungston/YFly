@@ -38,7 +38,7 @@ import StudyinGermany from './pages/StudyinGermany';
 import StudyinNewzealand from './pages/StudyinNewzealand';
 import StudyinIreland from './pages/StudyinIreland';
 import StudyinComponentUk from './components/StudyinComponentUk';
-import WhyStudySlider from './components/WhyStudySliderUk';
+
 
 
 
@@ -89,7 +89,7 @@ const App = () => {
         <Route path='/enquiry' element={<EnquiryList/>}/>
         <Route path='/courseoverview/:id' element={<CourseOverview/>}/>
         <Route path='/Stuydinuk' element={<StudyinComponentUk/>}/>
-        <Route path='/whyuk' element={<WhyStudySlider/>}/>
+     
        
         
         

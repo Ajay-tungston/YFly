@@ -15,7 +15,7 @@ const WhyStudySlider = () => {
         <div className='flex '>
              <div className="hidden  md:flex items-center  h-screen -mt-40 -ml-48 ">
       <div className="text-[#BFBFBF]  font-urban text-lg writing-mode-vertical-rl transform rotate-90 w-72 text-[28px]">
-        Why study in Australia
+        Why study in Ireland
       </div>
     </div>
             <Swiper
@@ -62,14 +62,14 @@ const WhyStudySlider = () => {
                         </div>
 
                         <div className='px-7'>
-                            <div className='text-[#30589F] font-lato text-[15px] mt-3'>
-                            High Quality of Life 
+                            <div className='text-[#30589F] font-lato text-[15px] mt-3 h-[35px]'>
+                            Post-Graduation Work Opportunities
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato max-lg:text-[0.9rem]'>
-                            Australia offers a safe and clean living environment with cities ranked consistently among the best in the world for student living standards. With excellent public services, vibrant city life, and abundant natural beauty, students benefit from a balanced lifestyle. 
+                            International graduates are eligible to apply for a post-study work visa, allowing them to remain in the country for up to two years after completing their education. 
                             </div>
 
                         </div>
@@ -82,14 +82,14 @@ const WhyStudySlider = () => {
                             <img src={whystudy2} width={280} alt='why study img' className='rounded-t-[38px]' />
                         </div>
                         <div className='px-7'>
-                            <div className='text-[#30589F] font-lato text-[15px] mt-3 '>
-                            Diverse Student Community 
+                            <div className='text-[#30589F] font-lato text-[15px] mt-3 h-[35px]'>
+                            Vibrant and Growing Job Market
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato max-lg:text-[0.9rem]'>
-                            Australia is home to a multicultural student body, offering an enriching international experience. Studying in Australia means you’ll interact with people from all corners of the globe, helping you develop a broader worldview and cross-cultural understanding. 
+                            The country boasts a thriving economy with strong demand in sectors such as information technology, finance, healthcare, and engineering. 
                             </div>
 
                         </div>
@@ -104,13 +104,15 @@ const WhyStudySlider = () => {
 
                         <div className='px-7'>
                             <div className='text-[#30589F] font-lato text-[15px]  mt-3'>
-                            Research Opportunities
+                            World-Class Education System
+
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato max-lg:text-[0.9rem]' >
-                            Australia is at the forefront of global research and innovation, providing students with opportunities to engage in cutting-edge research in various fields such as medicine, engineering, technology, and environmental science. 
+                            Renowned for housing some of the world’s leading universities, this destination offers academic programs that are internationally recognized and respected.
+
                             </div>
 
                         </div>
@@ -127,13 +129,13 @@ const WhyStudySlider = () => {
 
                         <div className='px-7'>
                             <div className='text-[#30589F] font-lato text-[15px]  mt-3'>
-                            Strong Job Market
+                            English as the Primary Language
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato  max-lg:text-[0.9rem]' >
-                            Australia's thriving economy presents numerous opportunities for graduates. Sectors like healthcare, IT, engineering, and education continue to experience strong demand for skilled professionals. 
+                            With English being the official or dominant language, students face no language barriers when it comes to education, employment, or daily life.
                             </div>
 
                         </div>

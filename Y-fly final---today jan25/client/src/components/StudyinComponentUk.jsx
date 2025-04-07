@@ -95,7 +95,7 @@ const StudyinComponentUk = () => {
 
 
                 {/*---------------------------- why study  in USA---------------------- */}
-                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in USA?</div>
+                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in UK?</div>
 
         <WhyStudySliderUk/>
 
@@ -104,8 +104,8 @@ const StudyinComponentUk = () => {
 
                 {/*----------------------------------------------- Quick facts--------------------------------------------- */}
                 <div>
-                    <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10 -mt-4 mb-8 '>Quick facts</div>
-                    <div className=' flex'>
+                    <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10 -mt-28 mb-8 '>Quick facts</div>
+               <div className=' flex'>
                         <div className="hidden md:flex items-center justify-center  w-12 ">
                             <div className="text-[#BFBFBF]  font-semibold text-lg writing-mode-vertical-rl transform rotate-90 w text-[28px] -ml-36 " >
                                 Quick facts

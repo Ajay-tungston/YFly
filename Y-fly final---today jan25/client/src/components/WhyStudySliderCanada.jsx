@@ -15,7 +15,7 @@ const WhyStudySlider = () => {
         <div className='flex '>
              <div className="hidden  md:flex items-center  h-screen -mt-40 -ml-48 ">
       <div className="text-[#BFBFBF]  font-urban text-lg writing-mode-vertical-rl transform rotate-90 w-72 text-[28px]">
-        Why study in Australia
+        Why study in Canada
       </div>
     </div>
             <Swiper
@@ -63,13 +63,13 @@ const WhyStudySlider = () => {
 
                         <div className='px-7'>
                             <div className='text-[#30589F] font-lato text-[15px] mt-3'>
-                            High Quality of Life 
+                            High-Quality Education
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato max-lg:text-[0.9rem]'>
-                            Australia offers a safe and clean living environment with cities ranked consistently among the best in the world for student living standards. With excellent public services, vibrant city life, and abundant natural beauty, students benefit from a balanced lifestyle. 
+                            Students have access to globally recognized academic programs, advanced research opportunities, and innovative teaching methodologies, ensuring a world-class educational experience.
                             </div>
 
                         </div>
@@ -83,13 +83,13 @@ const WhyStudySlider = () => {
                         </div>
                         <div className='px-7'>
                             <div className='text-[#30589F] font-lato text-[15px] mt-3 '>
-                            Diverse Student Community 
+                            Abundant Work Opportunities
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato max-lg:text-[0.9rem]'>
-                            Australia is home to a multicultural student body, offering an enriching international experience. Studying in Australia means you’ll interact with people from all corners of the globe, helping you develop a broader worldview and cross-cultural understanding. 
+                            Graduates benefit from various work prospects, including eligibility for post-graduation work permits, allowing them to gain valuable international work experience in their field of study.
                             </div>
 
                         </div>
@@ -104,13 +104,14 @@ const WhyStudySlider = () => {
 
                         <div className='px-7'>
                             <div className='text-[#30589F] font-lato text-[15px]  mt-3'>
-                            Research Opportunities
+                            Pathways to Permanent Residency
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato max-lg:text-[0.9rem]' >
-                            Australia is at the forefront of global research and innovation, providing students with opportunities to engage in cutting-edge research in various fields such as medicine, engineering, technology, and environmental science. 
+                            Studying abroad can open doors to long-term immigration pathways, including options for permanent residency, especially for graduates who contribute to the local economy and workforce.
+
                             </div>
 
                         </div>
@@ -127,13 +128,15 @@ const WhyStudySlider = () => {
 
                         <div className='px-7'>
                             <div className='text-[#30589F] font-lato text-[15px]  mt-3'>
-                            Strong Job Market
+                            Diverse and Inclusive Environment
                             </div>
 
                             <div className='border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3'></div>
 
                             <div className='font-lato  max-lg:text-[0.9rem]' >
-                            Australia's thriving economy presents numerous opportunities for graduates. Sectors like healthcare, IT, engineering, and education continue to experience strong demand for skilled professionals. 
+                            International destinations often foster a multicultural and inclusive society that welcomes students from all backgrounds, promoting cross-cultural understanding and global citizenship.
+
+
                             </div>
 
                         </div>

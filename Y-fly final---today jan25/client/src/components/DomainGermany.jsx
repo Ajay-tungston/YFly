@@ -14,7 +14,7 @@ const industries = [
 const IndustryCard = ({ industry }) => (
   <div className="relative border rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-center md:items-start justify-between w-80 bg-white text-center md:text-left">
     {industry.opportunities && (
-      <span className="absolute top-0 right-0 bg-blue-600 text-black text-xs px-3 py-1 rounded-full border-2 border-black transform">
+      <span className="absolute top-0 right-0 bg-blue-600 text-black text-xs px-3 py-1 rounded-full border-2 border-black transform bg-[#9DC7FB] ">
         {industry.opportunities}
       </span>
     )}

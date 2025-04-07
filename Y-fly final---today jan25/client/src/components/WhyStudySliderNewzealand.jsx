@@ -1,153 +1,128 @@
-import React, { useState } from "react";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import React from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
+import whystudy1 from '../assets/images/image/whystudy1.svg'
+import whystudy2 from '../assets/images/image/whystudy2.svg'
+import whystudy3 from '../assets/images/image/whystudy3.svg'
+import 'swiper/css'
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import 'swiper/css/autoplay';
+import '../assets/styles/styles.css'
 
-const Pros = () => {
-  // Track which tab is active: "pros" or "cons"
-  const [activeTab, setActiveTab] = useState("pros");
-
-  // Track expanded items for Pros and Cons
-  const [expandedPros, setExpandedPros] = useState(null);
-  const [expandedCons, setExpandedCons] = useState(null);
-
-  // Sample data for Pros
-  const prosList = [
-    {
-      title: "Affordable Education",
-      content:
-        "Low or no tuition fees at public universities.",
-    },
-    {
-      title: "High-Quality Universities",
-      content:
-        "Globally ranked institutions with strong research.",
-    },
-    {
-      title: "Work Opportunities",
-      content:
-        "Part-time jobs and post-graduation work options.",
-    },
-    {
-      title: "Central Location",
-      content:
-        "Easy travel across Europe",
-    },
-    {
-      title: "Strong Economy",
-      content:  "Good job prospects in various industries.",
-    },
-    
-  ];
-
-  // Sample data for Cons
-  const consList = [
-    { title: "Language Barrier", content: "German is needed for daily life and some jobs." },
-    { title: "High Living Costs", content: "Expensive housing in major cities." },
-    { title: "Competitive Admission", content: "Limited spots in top programs." },
-    { title: "Strict Bureaucracy", content: "Length paperwork for visas and permits." },
-    { title: "Weather", content: "Cold winters and limited sunlight in some regions." },
-  ];
-
-  // Toggle handlers
-  const handleTogglePros = (index) => {
-    setExpandedPros(expandedPros === index ? null : index);
-  };
-
-  const handleToggleCons = (index) => {
-    setExpandedCons(expandedCons === index ? null : index);
-  };
-
-  return (
-    <div className="container mx-auto p-4">
-      {/* Button container: Center the buttons */}
-      <div className="flex flex-wrap justify-center mb-4 gap-8">
-        <button
-          onClick={() => setActiveTab("pros")}
-          className={`px-6 py-2 border rounded-[20px] w-32 transition-all duration-300 font-lato${
-            activeTab === "pros"
-              ? "bg-blue-600 text-black width-[278px] height-[78px] rounded-[26px] border-[5px] border-solid border-[#30589F] py-[21px] px-[111px] gap-[10px]"
-              : "border-gray-400 text-gray-700"
-          }`}
-        >
-          Pros
-        </button>
-        <button
-          onClick={() => setActiveTab("cons")}
-          className={`px-6 py-2 border rounded-[20px] w-32 transition-all duration-300 font-lato ${
-            activeTab === "cons"
-              ? "bg-gray-400 text-black width-[278px] height-[78px] rounded-[26px] border-[5px] border-solid border-[#30589F] py-[21px] px-[111px] gap-[10px]"
-              : "border-gray-400 text-gray-700"
-          }`}
-        >
-          Cons
-        </button>
-      </div>
-
-      {/* Content container */}
-      <div className="bg-[#30589F] rounded-[38px] px-6 pt-16 max-md:px-3 max-md:pt-3 text-[25px] max-md:text-[10px] text-[#0E1B2C] p-10 w-2/3 justify-center mt-10 mx-auto">
-        {/* Pros Section */}
-        {activeTab === "pros" && (
-          <div className="space-y-4">
-            {prosList.map((item, index) => {
-              const isExpanded = expandedPros === index;
-              return (
-                <div
-                  key={index}
-                  className="border-3 border-blue-600 rounded-[30px] shadow bg-white"
-                >
-                  <div
-                    className="flex justify-between items-center p-4 cursor-pointer"
-                    onClick={() => handleTogglePros(index)}
-                  >
-                    <h3 className="font-lato text-blue-600">{item.title}</h3>
-                    <div className="text-blue-600">
-                      {isExpanded ? <FiChevronUp /> : <FiChevronDown />}
-                    </div>
-                  </div>
-                  {isExpanded && (
-                    <div className="px-4 pb-4">
-                      <hr />
-                      <p className="text-[18px] text-gray-700 font-urban">{item.content}</p>
-                    </div>
-                  )}
+const WhyStudySlider = () => {
+    return (
+        <div className='flex'>
+            <div className="hidden md:flex items-center h-screen -mt-40 -ml-48">
+                <div className="text-[#BFBFBF] font-urban text-lg writing-mode-vertical-rl transform rotate-90 w-72 text-[28px]">
+                    Why study in New Zea-land
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Cons Section */}
-        {activeTab === "cons" && (
-          <div className="space-y-4">
-            {consList.map((item, index) => {
-              const isExpanded = expandedCons === index;
-              return (
-                <div
-                  key={index}
-                  className="border-3 border-red-600 rounded-[30px] shadow bg-white"
-                >
-                  <div
-                    className="flex justify-between items-center p-4 cursor-pointer"
-                    onClick={() => handleToggleCons(index)}
-                  >
-                    <h3 className="font-lato text-red-600">{item.title}</h3>
-                    <div className="text-red-600">
-                      {isExpanded ? <FiChevronUp /> : <FiChevronDown />}
+            </div>
+            <Swiper
+                breakpoints={{
+                    1440: {
+                        spaceBetween: 0,
+                        slidesPerView: 3,
+                    },
+                    1024: {
+                        spaceBetween: 0,
+                        slidesPerView: 2,
+                    },
+                    768: {
+                        spaceBetween: 0,
+                        slidesPerView: 2,
+                    },
+                    425: {
+                        spaceBetween: 20,
+                        slidesPerView: 1, // 1 slide per view on mobile
+                    },
+                    320: {
+                        spaceBetween: 20,
+                        slidesPerView: 1, // 1 slide per view on mobile
+                    },
+                }}
+                modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                scrollbar={{ draggable: true }}
+                spaceBetween={50}
+                slidesPerView={3}
+                className="h-[60vh] max-md:h-[65vh] w-full"
+            >
+                {/* Slide 1 */}
+                <SwiperSlide>
+                    <div className="w-[90%] max-md:w-[100%] border-[1px] py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white min-h-[350px]">
+                        <div className="flex justify-center">
+                            <img src={whystudy1} width={280} alt="why study" className="rounded-t-[38px]" />
+                        </div>
+                        <div className="px-7">
+                            <div className="text-[#30589F] font-lato text-[15px] mt-7">
+                            High-Quality Education
+                            </div>
+                            <div className="border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3"></div>
+                            <div className="font-lato max-lg:text-[0.9rem]">
+                            One of the most compelling reasons to study abroad is the access to world-class education. 
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  {isExpanded && (
-                    <div className="px-4 pb-4">
-                      <hr />
-                      <p className="font-urban text-[18px] text-gray-700">{item.content}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+                </SwiperSlide>
 
-export default Pros;
+                {/* Slide 2 */}
+                <SwiperSlide>
+                    <div className="w-[90%] max-md:w-[100%] border-[1px] py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white min-h-[350px]">
+                        <div className="flex justify-center">
+                            <img src={whystudy2} width={280} alt="why study" className="rounded-t-[38px]" />
+                        </div>
+                        <div className="px-7">
+                            <div className="text-[#30589F] font-lato text-[15px] mt-7">
+                            Work Opportunities
+                            </div>
+                            <div className="border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3"></div>
+                            <div className="font-lato max-lg:text-[0.9rem]">
+                            Studying abroad also opens the door to valuable work experiences. 
+                            </div>
+                        </div>
+                    </div>
+                </SwiperSlide>
+
+                {/* Slide 3 */}
+                <SwiperSlide>
+                    <div className="w-[90%] max-md:w-[100%] border-[1px] py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white min-h-[350px]">
+                        <div className="flex justify-center">
+                            <img src={whystudy3} width={300} alt="why study" className="rounded-t-[38px]" />
+                        </div>
+                        <div className="px-7">
+                            <div className="text-[#30589F] font-lato text-[15px] mt-3">
+                            Visa & PR Pathways
+
+                            </div>
+                            <div className="border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3"></div>
+                            <div className="font-lato max-lg:text-[0.9rem]">
+                            One of the long-term advantages of studying abroad is the potential pathway to permanent residency (PR). 
+                            </div>
+                        </div>
+                    </div>
+                </SwiperSlide>
+
+                {/* Slide 4 */}
+                <SwiperSlide>
+                    <div className="w-[90%] max-md:w-[100%] border-[1px] py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white min-h-[350px]">
+                        <div className="flex justify-center">
+                            <img src={whystudy3} width={300} alt="why study" className="rounded-t-[38px]" />
+                        </div>
+                        <div className="px-7">
+                            <div className="text-[#30589F] font-lato text-[15px] mt-1">
+                            Welcoming Environment
+                            </div>
+                            <div className="border-t-[0.5px] border-[#898C9A] my-5 max-lg:my-3"></div>
+                            <div className="font-lato max-lg:text-[0.9rem]">
+                            A significant factor influencing students' choice of study destination is the overall safety and inclusiveness of the country. 
+                            </div>
+                        </div>
+                    </div>
+                </SwiperSlide>
+            </Swiper>
+        </div>
+    )
+}
+
+export default WhyStudySlider;

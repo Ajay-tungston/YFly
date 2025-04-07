@@ -11,12 +11,12 @@ import airfare from '../assets/images/image/airfare.svg'
 import visa from '../assets/images/image/visa.svg'
 import harvard from '../assets/images/image/harvard.svg'
 import down from '../assets/images/image/down.svg'
-import WhyStudySliderGermany from './WhyStudySliderGermany'
+import WhyStudySliderCanada from './WhyStudySliderCanada'
 import Topcourse from "../components/Topcourse"
 import DomainGermany from "../components/DomainGermany"
-import ScholarshipGermany from "../components/ScholarshipGermany"
+import ScholarshipCanada from '../components/ScholarshipCanada'
 import Intake from '../components/Intake'
-import Faqsgermany from "../pages/Faqsgermany"
+import FaqsCanada from "../pages/FaqsCanada"
 
 const StudyinComponent = () => {
     const [drop1, setDrop1] = useState(false)
@@ -95,16 +95,16 @@ const StudyinComponent = () => {
 
 
                 {/*---------------------------- why study  in USA---------------------- */}
-                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in Germany?</div>
+                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in Canada?</div>
 
-                <WhyStudySliderGermany />
+                <WhyStudySliderCanada />
 
 
 
 
                 {/*----------------------------------------------- Quick facts--------------------------------------------- */}
                 <div>
-                    <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10 -mt-28 mb-8 '>Quick facts</div>
+                    <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10 -mt-28 mb-8'>Quick facts</div>
                     <div className=' flex'>
                         <div className="hidden md:flex items-center justify-center  w-12 ">
                             <div className="text-[#BFBFBF]  font-semibold text-lg writing-mode-vertical-rl transform rotate-90 w text-[28px] -ml-36 " >
@@ -113,23 +113,23 @@ const StudyinComponent = () => {
                         </div>
                         <div className='bg-[#30589F]  rounded-[38px] px-8 pt-16 max-md:px-3 max-md:pt-3 text-[15px] max-md:text-[10px] text-[#0E1B2C] p-10 w-full h-fit'>
                             <div className='flex  '>
-                                <div className='bg-white  py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4  text-center mr-6 mb-6 max-md:mr-3 max-md:mb-3 font-lato rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
-                                <div className='bg-white py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4 mb-6 max-md:mb-3 text-center  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
+                                <div className='bg-white  py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4  text-center mr-6 mb-6 max-md:mr-3 max-md:mb-3 font-lato rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
+                                <div className='bg-white py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4 mb-6 max-md:mb-3 text-center  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
                             </div>
 
                             <div className='flex '>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[5.2rem] max-md:px-4 max-md:w-[50%] max-xl:px-[2.5rem] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[5.2rem] max-md:px-4 max-md:w-[50%] max-xl:px-[2.5rem] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
                             </div>
 
                             <div className='flex'>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.5rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.5rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
                             </div>
 
                             <div className='flex'>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mr-6 mb-6 max-md:mr-3 max-md:mb-3  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
-                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/* facts */}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mr-6 mb-6 max-md:mr-3 max-md:mb-3  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
+                                <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[3.2rem] max-md:px-4 max-md:w-[50%] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
                             </div>
                         </div>
                     </div>
@@ -154,7 +154,7 @@ const StudyinComponent = () => {
                                     <img src={fee} alt='fee' className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Tuition fees</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$200</div>
+                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$25000</div>
                                     </div>
                                 </div>
 
@@ -162,7 +162,7 @@ const StudyinComponent = () => {
                                     <img src={accomodation} alt='accomodation' width={50} className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Living & Accomodation</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$10,000</div>
+                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$15000</div>
                                     </div>
                                 </div>
 
@@ -182,7 +182,7 @@ const StudyinComponent = () => {
                                     </div>
                                 </div>
                             </div>
-                        
+
 
                         </div>
                     </div>
@@ -224,7 +224,7 @@ const StudyinComponent = () => {
                             Pros and Cons  
                             </div>
                         </div>
-                    <Faqsgermany />
+                    <FaqsCanada />
                     </div>
                 </div>
 
@@ -249,7 +249,7 @@ const StudyinComponent = () => {
                             Top Scholarships
                             </div>
                         </div>
-                        <ScholarshipGermany />
+                    <ScholarshipCanada />
                     </div>
                 </div>
 
