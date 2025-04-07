@@ -63,9 +63,7 @@ const Profile = () => {
       
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile/${email}`);
 
-        const res = await axios.get(
-          `http://localhost:5000/user/profile/${email}`
-        );
+       
 
         if (res.data && res.data.user) {
           setUpdateFormData(res.data.user);

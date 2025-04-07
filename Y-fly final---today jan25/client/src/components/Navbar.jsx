@@ -344,14 +344,15 @@ const Navbar = () => {
 
                       {/* Content */}
                       <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                        <p className="text-[#fff] font-dela text-[0.7rem] md:text-[0.8rem] text-center">View More</p>
+                        <p className="text-[#fff] font-dela text-[0.7rem] md:text-[0.8rem] text-center">
+                          View More
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
           )}
         </div>
 
@@ -378,7 +379,7 @@ const Navbar = () => {
               aria-orientation="vertical"
               aria-labelledby="options-menu"
             >
-             <div className="grid grid-cols-6 gap-2">
+              <div className="grid grid-cols-6 gap-2">
                 <button
                   onClick={() => navigate("/coursefinder")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
@@ -537,71 +538,141 @@ const Navbar = () => {
               <div className="grid grid-cols-2 gap-4">
                 {/* Card 1 */}
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
-                  <img src={USA} alt="USA background" className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <img
+                    src={USA}
+                    alt="USA background"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                  />
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <img src={usa} alt="USA flag" className="w-[45px] h-auto rounded-[8px] mx-auto" />
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">USA</p>
+                    <img
+                      src={usa}
+                      alt="USA flag"
+                      className="w-[45px] h-auto rounded-[8px] mx-auto"
+                    />
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      USA
+                    </p>
                   </div>
                 </div>
 
                 {/* Card 2 */}
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
-                  <img src={UK} alt="UK background" className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <img
+                    src={UK}
+                    alt="UK background"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                  />
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <img src={uk} alt="UK flag" className="w-[45px] h-auto rounded-[8px] mx-auto" />
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">UK</p>
+                    <img
+                      src={uk}
+                      alt="UK flag"
+                      className="w-[45px] h-auto rounded-[8px] mx-auto"
+                    />
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      UK
+                    </p>
                   </div>
                 </div>
 
                 {/* Card 3 */}
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
-                  <img src={Canada} alt="Canada background" className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <img
+                    src={Canada}
+                    alt="Canada background"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                  />
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <img src={canada} alt="Canada flag" className="w-[45px] h-auto rounded-[8px] mx-auto" />
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">Canada</p>
+                    <img
+                      src={canada}
+                      alt="Canada flag"
+                      className="w-[45px] h-auto rounded-[8px] mx-auto"
+                    />
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      Canada
+                    </p>
                   </div>
                 </div>
 
                 {/* Card 4 */}
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
-                  <img src={Germany} alt="Germany background" className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <img
+                    src={Germany}
+                    alt="Germany background"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                  />
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <img src={germany} alt="Germany flag" className="w-[45px] h-auto rounded-[8px] mx-auto" />
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">Germany</p>
+                    <img
+                      src={germany}
+                      alt="Germany flag"
+                      className="w-[45px] h-auto rounded-[8px] mx-auto"
+                    />
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      Germany
+                    </p>
                   </div>
                 </div>
 
                 {/* Card 5 */}
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
-                  <img src={NewZealand} alt="New Zealand background" className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <img
+                    src={NewZealand}
+                    alt="New Zealand background"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                  />
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <img src={newzealand} alt="NZ flag" className="w-[45px] h-auto rounded-[8px] mx-auto" />
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">New Zealand</p>
+                    <img
+                      src={newzealand}
+                      alt="NZ flag"
+                      className="w-[45px] h-auto rounded-[8px] mx-auto"
+                    />
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      New Zealand
+                    </p>
                   </div>
                 </div>
 
                 {/* Card 6 */}
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
-                  <img src={Australia} alt="Australia background" className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <img
+                    src={Australia}
+                    alt="Australia background"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                  />
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <img src={australia} alt="Australia flag" className="w-[45px] h-auto rounded-[8px] mx-auto" />
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">Australia</p>
+                    <img
+                      src={australia}
+                      alt="Australia flag"
+                      className="w-[45px] h-auto rounded-[8px] mx-auto"
+                    />
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      Australia
+                    </p>
                   </div>
                 </div>
 
                 {/* Card 7 */}
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
-                  <img src={Ireland} alt="Ireland background" className="absolute inset-0 w-full h-full object-cover z-0" />
+                  <img
+                    src={Ireland}
+                    alt="Ireland background"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                  />
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <img src={ireland} alt="Ireland flag" className="w-[45px] h-auto rounded-[8px] mx-auto" />
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">Ireland</p>
+                    <img
+                      src={ireland}
+                      alt="Ireland flag"
+                      className="w-[45px] h-auto rounded-[8px] mx-auto"
+                    />
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      Ireland
+                    </p>
                   </div>
                 </div>
 
@@ -609,12 +680,13 @@ const Navbar = () => {
                 <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                   <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">View More</p>
+                    <p className="text-[#fff] font-dela text-[0.7rem] text-center mt-1">
+                      View More
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-
           )}
 
           <div
@@ -645,12 +717,6 @@ const Navbar = () => {
               <button
                 className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
                 onClick={() => navigate("/scholarship")}
-
-
-              <button
-                onClick={() => navigate("/scholarship")}
-                className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
-
               >
                 <img src={scholarship} alt="icons" />
                 Scholarship Finder

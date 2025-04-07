@@ -4,13 +4,10 @@ import add from "../assets/images/add.svg";
 import edit from "../assets/images/edit.svg";
 import trash from "../assets/images/greytrash.svg";
 import axios from "axios";
-import AddNewUniversity from "./AddNewUniversity";
-import EditUniversity from "./EditUniversity";
-import AddNewCourse from "./AddNewCourse";
 import AddNewService from "./AddNewService";
+import EditService from "./EditService";
 
 const ServiceList = () => {
-//   const [addingNewUniversity, setAddingNewUniversity] = useState(false);
 const [addingNewService, setAddingNewService] = useState(false);
   //   const [university, setUniversity] = useState([]);
   const [service, setService] = useState([]);
@@ -25,7 +22,7 @@ const [addingNewService, setAddingNewService] = useState(false);
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/service/get-all?page=${currentPage}&limit=${limit}&search=${searchQuery}`
       );
-      console.log(response);
+      console.log("Incredible",response);
       setService(response.data || []);
       setTotalPages(response?.data?.pagination?.pages);
       // setSelectedUniversity([]);
@@ -42,13 +39,13 @@ const [addingNewService, setAddingNewService] = useState(false);
     if (window.confirm("Are you sure you want to delete this course?")) {
       try {
         const response = await axios.delete(
-          `${process.env.REACT_APP_API_URL}/university/delete/${id}`
+          `${process.env.REACT_APP_API_URL}/service/delete/${id}`
         );
         fetchService();
       } catch (error) {
         console.error("Error deleting course:", error);
         if (error?.response?.status == 409) {
-          alert("This university has courses and cannot be deleted.");
+          alert("This Service has courses and cannot be deleted.");
         }
       }
     }
@@ -57,13 +54,13 @@ const [addingNewService, setAddingNewService] = useState(false);
   if (addingNewService) {
     return (
       <AddNewService
-        setAddingNewUniversity={setAddingNewService}
+        setAddingNewService={setAddingNewService}
         setEditOpen={setEditOpen}
       />
     );
   }
   if (editOpen) {
-    return <EditUniversity id={editOpen} setEditOpen={setEditOpen} />;
+    return <EditService id={editOpen} setEditOpen={setEditOpen} />;
   }
 
   return (

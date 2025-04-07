@@ -10,6 +10,7 @@ import IconTuition from "../assets/images/dollar-circle.png";
 import coin from "../assets/images/coin.svg";
 import { Buffer } from "buffer";
 import { FaChevronDown } from "react-icons/fa"; // Import dropdown icon
+import { faQ } from "@fortawesome/free-solid-svg-icons";
 
 const CourseOverview = () => {
   const { id } = useParams();
@@ -418,7 +419,7 @@ const CourseOverview = () => {
 
       {/* FAQ List */}
       <div className="w-full mt-8 grid gap-4">
-        {faqs.map((faq, index) => (
+        {countrySpecificFaqs.map((faq, index) => (
           <div
             key={index}
             className={`px-6 py-4 rounded-3xl border border-slate-900 cursor-pointer transition-all duration-300 ${

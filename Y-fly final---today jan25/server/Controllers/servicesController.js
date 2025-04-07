@@ -250,23 +250,226 @@ const getAllServiceWithPagination = async (req, res) => {
     });
   }
 };
-
 const getServiceById = async (req, res) => {
   try {
     const id = req.params.id;
     const service = await Service.findById(id).select("-service_image");
+
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
-    res.json(service);
+
+    res.json({ service }); // 🔧 Wrap service in an object (important!)
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server Error" });
+    console.error("Error in getServiceById:", error); // ← ADD THIS
+    res.status(500).json({
+      message: "Server Error",
+      error: error.message, // Temporarily send the error message
+    });
   }
 };
+
+const updateService = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Retrieve the service to update
+    const service = await Service.findById(id);
+    if (!service) {
+      // Remove uploaded file if service not found
+      if (req.files?.service_image) {
+        fs.unlinkSync(req.files.service_image.path);
+      }
+      return res.status(404).json({ message: "Service not found" });
+    }
+
+    // Merge incoming fields with the existing service data.
+    // If a field is not provided, fall back to the existing value.
+    const {
+      service_name = service.service_name,
+      price = service.price,
+      overview = service.overview,
+      procedure = service.procedure,
+      workflow = service.workflow,
+      benefits: rawBenefits,
+    } = req.fields;
+
+    // Process benefits field: if not provided, use existing benefits.
+    let benefits;
+    if (rawBenefits !== undefined) {
+      try {
+        // Attempt to parse as JSON (if sent as a stringified array)
+        benefits = JSON.parse(rawBenefits);
+      } catch (e) {
+        // Otherwise, treat it as a comma-separated string or a single string
+        benefits =
+          typeof rawBenefits === "string"
+            ? rawBenefits.split(",")
+            : [rawBenefits];
+      }
+      // Clean empty values and trim each benefit
+      benefits = Array.isArray(benefits)
+        ? benefits.map((b) => b.trim()).filter((b) => b)
+        : [benefits].filter(Boolean);
+    } else {
+      benefits = service.benefits; // fallback if not provided
+    }
+
+    // After merging, do your validation using the merged values
+    if (
+      !service_name ||
+      !price ||
+      !overview ||
+      !procedure ||
+      !workflow ||
+      benefits.length === 0
+    ) {
+      if (req.files?.service_image) {
+        fs.unlinkSync(req.files.service_image.path);
+      }
+      return res.status(400).json({
+        message: "Validation Error",
+        errors: {
+          service_name: !service_name ? "Service name is required" : undefined,
+          price: !price ? "Price is required" : undefined,
+          overview: !overview ? "Overview is required" : undefined,
+          benefits: benefits.length === 0 ? "At least one benefit is required" : undefined,
+          procedure: !procedure ? "Procedure is required" : undefined,
+          workflow: !workflow ? "Workflow steps are required" : undefined,
+        },
+      });
+    }
+
+    // Check for duplicate service name if it has changed
+    if (service_name !== service.service_name) {
+      const duplicate = await Service.findOne({ service_name });
+      if (duplicate && duplicate._id.toString() !== id) {
+        if (req.files?.service_image) {
+          fs.unlinkSync(req.files.service_image.path);
+        }
+        return res.status(409).json({ message: "Service already exists" });
+      }
+    }
+
+    // If a new image is provided, remove the old image and update the field
+    if (req.files?.service_image) {
+      if (service.service_image) {
+        try {
+          fs.unlinkSync(service.service_image);
+        } catch (err) {
+          console.error("Failed to remove old image:", err);
+        }
+      }
+      service.service_image = req.files.service_image.path;
+    }
+
+    // Update service fields with merged values
+    service.service_name = service_name;
+    service.price = price;
+    service.overview = overview;
+    service.benefits = benefits;
+    service.procedure = procedure;
+    service.workflow = workflow;
+
+    // Save the updated service
+    await service.save();
+
+    res.status(200).json({
+      message: "Service updated successfully",
+      service,
+    });
+  } catch (error) {
+    // Clean up uploaded file if an error occurs
+    if (req.files?.service_image) {
+      fs.unlinkSync(req.files.service_image.path);
+    }
+
+    // Handle file size error
+    if (error.code === "ETOOBIG") {
+      return res.status(400).json({
+        message: "Validation Error",
+        errors: {
+          service_image: "File size too large (max 5MB)",
+        },
+      });
+    }
+
+    // Handle Mongoose validation errors
+    if (error.name === "ValidationError") {
+      const errors = {};
+      for (const field in error.errors) {
+        switch (error.errors[field].kind) {
+          case "required":
+            errors[field] = `Please provide a ${field.replace("_", " ")}.`;
+            break;
+          case "min":
+            errors[field] = `${field.replace("_", " ")} must be at least ${error.errors[field].properties.min}.`;
+            break;
+          case "enum":
+            errors[field] = `Invalid ${field.replace("_", " ")}. Valid options: ${error.errors[field].properties.enumValues.join(", ")}.`;
+            break;
+          case "Number":
+            errors[field] = `${field.replace("_", " ")} must be a number.`;
+            break;
+          default:
+            errors[field] = error.errors[field].message;
+        }
+      }
+      return res.status(400).json({
+        message: "Validation Failed: Please check your input",
+        errors,
+      });
+    }
+
+    // Generic server error
+    res.status(500).json({
+      message: "Server Error",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
+const deleteService = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the service by ID
+    const service = await Service.findById(id);
+
+    // If not found, return 404
+    if (!service) {
+      return res.status(404).json({ message: "Service not found" });
+    }
+
+    // If there's an image associated, delete it from the file system
+    if (service.service_image) {
+      try {
+        fs.unlinkSync(service.service_image);
+      } catch (err) {
+        console.error("Failed to delete service image:", err);
+      }
+    }
+
+    // Delete the service from the database
+    await Service.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Service deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting service:", error);
+    res.status(500).json({
+      message: "Server Error",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
 module.exports = {
   addNewService,
   getAllServiceName,
   getAllServiceWithPagination,
   getServiceById,
+  updateService,
+  deleteService
 };
+
+
