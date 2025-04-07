@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import logo from "../assets/images/logo.svg";
 import dropdown from "../assets/images/nav-dropdown.svg";
+import axios from "axios";
 import menu from "../assets/images/menu.svg";
 import usa from "../assets/images/usa.svg";
 import uk from "../assets/images/uk.svg";
@@ -55,6 +56,10 @@ const Navbar = () => {
       }
     }
   }, [isAuthenticated, dispatch]);
+  const [services, setServices] = useState([]);
+
+ 
+
 
   // Dropdown states for desktop
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
@@ -117,6 +122,51 @@ const Navbar = () => {
     return () =>
       document.removeEventListener("click", handleClickOutside, true);
   }, []);
+
+ 
+    const serviceRef = useRef(null);
+    const [isServiceOpen, setIsServiceOpen] = useState(false);
+    const [showAll, setShowAll] = useState(false);
+
+    const handleService = () => setIsServiceOpen(!isServiceOpen);
+  
+    useEffect(() => {
+      const fetchServices = async () => {
+        try {
+          const res = await axios.get(`${process.env.REACT_APP_API_URL}/service/get-all`);
+          console.log("API response:", res.data); // just for debugging
+    
+          const serviceList = res.data.data; // 👈 accessing the correct array
+    
+          setServices(
+            serviceList.map((service) => ({
+              title: service.service_name,
+              icon: `${process.env.REACT_APP_API_URL}/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
+              route: "/sop",
+            }))
+          );
+        } catch (err) {
+          console.error("Error fetching services:", err);
+        }
+      };
+    
+      fetchServices();
+    }, []);
+    
+
+
+  // const services = [
+  //   { title: "Document Translation", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "Attestation Service", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "Content Write Expert Consultation", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "Profile Evaluation", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "Scholarship Essay Writing", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "University Shortlisting", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "Education Loan", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "Detailed Personal Consultation", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "LinkedIn Portfolio", route: "/cvpreparation", icon: "/course1.png" },
+  //   { title: "Project Quality Analysis", route: "/cvpreparation", icon: "/course1.png" }
+  // ];
   return (
     <nav className="w-11/12 top-0 absolute max-sm:h-[4vh] tracking-wider mt-4 font-urban px-7 py-4 bg-white rounded-full flex justify-between items-center">
       <div className="flex items-center">
@@ -156,8 +206,9 @@ const Navbar = () => {
                 {/* First Row */}
                 <div className="flex items-center gap-2 px-0 py-2">
                   {/* Card 1 */}
-                  <div className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div onClick ={()=>navigate('/study-usa')}className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                     {/* Background */}
+                    
                     <img
                       src={USA}
                       alt="USA background"
@@ -405,72 +456,123 @@ const Navbar = () => {
                 </button>
 
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/coursefinder")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Coming Soon
                 </button>
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/coursefinder")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Coming Soon
                 </button>
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/courseSoon")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Coming Soon
                 </button>
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/courseSoon")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Coming Soon
                 </button>
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/courseSoon")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Coming Soon
                 </button>
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/courseSoon")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Coming Soon
                 </button>
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/courseSoon")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Course Soon
                 </button>
                 <button
-                  onClick={() => navigate("/coursefinder")}
+                  // onClick={() => navigate("/course Soon")}
                   className="flex items-center gap-2 px-3 justify-center w-[10vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem]"
                 >
                   <img src={course} alt="icons" />
-                  Course Finder
+                  Course Soon
                 </button>
               </div>
             </div>
           )}
         </div>
 
-        <div
+        {/* <div
           className="flex gap-2 cursor-pointer"
           onClick={() => navigate("/services")}
         >
           Services
+        </div> */}
+
+<div ref={serviceRef}>
+      <div className="flex gap-2 cursor-pointer" onClick={handleService}>
+        Services
+        <img
+          src={dropdown}
+          alt="dropdown"
+          width={16}
+          className={isServiceOpen ? "rotate-180 transition-transform" : ""}
+        />
+      </div>
+
+      {isServiceOpen && (
+        <div
+          className="absolute left-[18%] z-50 px-2 py-2 rounded-[20px] shadow-lightshad bg-white mt-[1rem] border focus:outline-none"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="options-menu"
+        >
+          <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
+            {(showAll ? services : services.slice(0, 8)).map(
+              (service, index) => (
+                <button
+                  key={index}
+                  onClick={() => navigate(service.route)}
+                  className="flex items-center gap-2 px-4 justify-between w-[220px] h-[60px] rounded-[10px] border border-black text-[#2b7cd6] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 font-dela text-[0.8rem]"
+                >
+                  {service.title}
+                  <img
+                    src={service.icon}
+                    alt="icon"
+                    className="w-5 h-5 object-cover"
+                  />
+                </button>
+              )
+            )}
+          </div>
+
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="flex items-center gap-2 text-[#2b7cd6] transition font-dela text-[1rem]"
+            >
+              {showAll ? "View less" : "View more"}
+              <span>{showAll ? "▲" : "▼"}</span>
+            </button>
+          </div>
         </div>
+      )}
+    </div>
+
         <div
           className="flex gap-2 cursor-pointer"
           onClick={() => navigate("/contactus")}
