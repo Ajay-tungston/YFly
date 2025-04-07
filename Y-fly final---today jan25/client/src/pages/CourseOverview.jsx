@@ -45,30 +45,22 @@ const CourseOverview = () => {
   }, [id]);
 
   const [openIndex, setOpenIndex] = useState(null);
+  const updateFaqsForCountry = (country) => {
+    if (!country) country = "this country"; // Prevent null values
+    const faqs = [
+      { question: "Can you work while studying in the USA?", answer: "Yes, international students can work up to 20 hours per week on campus during academic sessions." },
+      { question: "What are the English language proficiency tests in the USA?", answer: "Common tests include TOEFL, IELTS, and Duolingo English Test." },
+      { question: "What are other standardized tests in the USA?", answer: "Some common tests include SAT, ACT, GRE, GMAT, and LSAT depending on the program." },
+      { question: "What are the popular courses in the USA?", answer: "Popular fields include Engineering, Computer Science, Business, and Medicine." },
+      { question: "Are there any scholarships available in the USA?", answer: "Yes! Many universities and organizations offer merit-based and need-based scholarships." },
+    ];
 
-  const faqs = [
-    {
-      question: "Can you work while studying in the USA?",
-      answer: "Yes, international students can work up to 20 hours per week on campus during academic sessions.",
-    },
-    {
-      question: "What are the English language proficiency tests in the USA?",
-      answer: "Common tests include TOEFL, IELTS, and Duolingo English Test.",
-    },
-    {
-      question: "What are other standardized tests in the USA?",
-      answer: "Some common tests include SAT, ACT, GRE, GMAT, and LSAT depending on the program.",
-    },
-    {
-      question: "What are the popular courses in the USA?",
-      answer: "Popular fields include Engineering, Computer Science, Business, and Medicine.",
-    },
-    {
-      question: "Are there any scholarships available in the USA?",
-      answer: "Yes! Many universities and organizations offer merit-based and need-based scholarships.",
-    },
-  ];
-
+    return faqs.map(faq => ({
+      question: faq.question.replace(/USA/g, country),
+      answer: faq.answer.replace(/USA/g, country),
+    }));
+  };
+  const countrySpecificFaqs=updateFaqsForCountry(course?.country)
   // Get similar courses based on discipline, excluding the current course
   const getSimilarCourses = () => {
     if (!course || !allCourses || allCourses.length === 0) return [];

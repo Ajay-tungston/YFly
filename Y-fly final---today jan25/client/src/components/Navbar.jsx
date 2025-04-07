@@ -641,9 +641,16 @@ const Navbar = () => {
                 <img src={course} alt="icons" />
                 Course Finder
               </button>
+
               <button
                 className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
                 onClick={() => navigate("/scholarship")}
+
+
+              <button
+                onClick={() => navigate("/scholarship")}
+                className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
+
               >
                 <img src={scholarship} alt="icons" />
                 Scholarship Finder

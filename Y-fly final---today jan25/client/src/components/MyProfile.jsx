@@ -16,6 +16,7 @@ const Profile = () => {
     educationLevel: false,
     workExperience: false,
     proficiencyExam: false,
+    academicTest: false,
   });
 
   // Local input state for inline editing
@@ -26,6 +27,9 @@ const Profile = () => {
     months_of_experience: "",
     exam_name: "",
     exam_score: "",
+    test_name: "",
+    verbal_score: "",
+    quant_score: "",
   });
 
   // Update inputValues when formData is fetched or updated
@@ -34,9 +38,13 @@ const Profile = () => {
       first_name: formData.first_name || "",
       last_name: formData.last_name || "",
       education_level: formData.education_details?.education_level || "",
-      months_of_experience: formData.work_experience?.months_of_experience || "",
+      months_of_experience:
+        formData.work_experience?.months_of_experience || "",
       exam_name: formData.proficiency_exam?.exam_name || "",
       exam_score: formData.proficiency_exam?.score || "",
+      test_name: formData.academic_test?.test_name || "",
+      verbal_score: formData.academic_test?.verbal_score || "",
+      quant_score: formData.academic_test?.quant_score || "",
     });
   }, [formData]);
 
@@ -52,8 +60,13 @@ const Profile = () => {
       try {
         const email = localStorage.getItem("email");
         if (!email) throw new Error("Email not found in localStorage");
-        // Assuming the GET request returns the full user object including user_id.
+      
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile/${email}`);
+
+        const res = await axios.get(
+          `http://localhost:5000/user/profile/${email}`
+        );
+
         if (res.data && res.data.user) {
           setUpdateFormData(res.data.user);
         } else {
@@ -110,15 +123,28 @@ const Profile = () => {
     await persistUpdate(updateData);
     setEditMode((prev) => ({ ...prev, educationLevel: false }));
   };
-
   const saveWorkExperience = async () => {
     const updateData = {
       work_experience: {
+        ...formData.work_experience,
         months_of_experience: inputValues.months_of_experience,
       },
     };
-    await persistUpdate(updateData);
-    setEditMode((prev) => ({ ...prev, workExperience: false }));
+
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/user/update/${formData.user_id}`,
+        updateData
+      );
+
+      if (res.data && res.data.user) {
+        setUpdateFormData(res.data.user);
+      }
+
+      setEditMode((prev) => ({ ...prev, workExperience: false }));
+    } catch (err) {
+      console.error("Error updating work experience:", err);
+    }
   };
 
   const saveProficiencyExam = async () => {
@@ -131,7 +157,18 @@ const Profile = () => {
     await persistUpdate(updateData);
     setEditMode((prev) => ({ ...prev, proficiencyExam: false }));
   };
-
+  const saveAcademicTest = async () => {
+    const updateData = {
+      academic_test: {
+        test_name: inputValues.test_name,
+        verbal_score: inputValues.verbal_score,
+        quant_score: inputValues.quant_score,
+      },
+    };
+    await persistUpdate(updateData);
+    setEditMode((prev) => ({ ...prev, academicTest: false }));
+  };
+  console.log();
   // Convert array fields to comma-separated strings for display
   const displayCountries =
     formData.countries && formData.countries.length
@@ -209,9 +246,7 @@ const Profile = () => {
                   />
                 ) : (
                   <FaPen
-                    onClick={() =>
-                      setEditMode({ ...editMode, name: true })
-                    }
+                    onClick={() => setEditMode({ ...editMode, name: true })}
                     className="text-gray-500 cursor-pointer"
                   />
                 )}
@@ -219,32 +254,35 @@ const Profile = () => {
               <hr />
               {/* Test Score & Qualifications */}
               <div className="flex justify-between text-sm text-gray-700 p-4 border border-[#E7E7E7]">
-  <div>
-    <span>📖 Test Score</span>
-    <p className="text-gray-600">
-      {formData.proficiency_exam?.exam_name
-        ? `${formData.proficiency_exam.exam_name} - ${formData.proficiency_exam.score}`
-        : "No test score available"}
-    </p>
-  </div>
-  <div>
-    <span>📜 Qualifications</span>
-    <p className="text-gray-600">
-      {formData.education_details?.degree
-        ? `${formData.education_details.degree}`
-        : "No degree available"}
-    </p>
-    {formData.education_details?.certifications &&
-      formData.education_details.certifications.length > 0 && (
-        <ul className="list-disc ml-4 text-gray-600">
-          {formData.education_details.certifications.map((cert, index) => (
-            <li key={index}>{cert}</li>
-          ))}
-        </ul>
-      )}
-  </div>
-</div>
+                {/* 📖 Test Score Section */}
+                <div>
+                  <span>📖 Test Score</span>
+                  <p className="text-gray-600">
+                    {inputValues.exam_name
+                      ? `${inputValues.exam_name} - ${inputValues.exam_score}`
+                      : "No test score available"}
+                  </p>
 
+                  {/* Academic Test Scores */}
+                </div>
+
+                {/* 📜 Qualifications Section */}
+                <div>
+                  <span>📜 Qualifications</span>
+
+                  {/* Only show academic tests instead of education details */}
+                  {inputValues.test_name &&
+                  inputValues.test_name !== "Haven’t taken" ? (
+                    <p className="text-gray-600">
+                      {inputValues.test_name} - Verbal:{" "}
+                      {inputValues.verbal_score || "N/A"}, Quant:{" "}
+                      {inputValues.quant_score || "N/A"}
+                    </p>
+                  ) : (
+                    <p className="text-gray-600">No academic test available</p>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Education & Work Experience */}
@@ -289,8 +327,8 @@ const Profile = () => {
                       onChange={handleInputChange}
                       className="border border-gray-300 rounded px-2 py-1"
                     />
-                  ) : formData.work_experience?.has_experience ? (
-                    `${formData.work_experience.months_of_experience || "N/A"} months`
+                  ) : formData.work_experience?.months_of_experience ? (
+                    `${formData.work_experience.months_of_experience} months` 
                   ) : (
                     "No"
                   )}
@@ -424,7 +462,11 @@ const Profile = () => {
                 marginBottom: "1.5rem",
               }}
             >
-              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis placerat gravida aliquet at. Nisi urna quam massa pellentesque lectus odio sagittis. Tortor massa in rhoncus purus nunc scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat eget urna varius eu nibh in sed est.
+              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
+              placerat gravida aliquet at. Nisi urna quam massa pellentesque
+              lectus odio sagittis. Tortor massa in rhoncus purus nunc
+              scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
+              eget urna varius eu nibh in sed est.
             </p>
             <button className="bg-white text-[#001f3f] border border-[#001f3f] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#001f3f] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0">
               Book a call →

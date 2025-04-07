@@ -57,6 +57,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     };
     fetchUniversities();
   }, []);
+
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
@@ -74,7 +75,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
 
     fetchScholarships();
   }, []);
-  console.log(scholarshipOptions)
+
   const handleCancel = () => {
     setAddingNewCourse(false); // Close the form and return to the scholarship list
   };
