@@ -28,7 +28,7 @@ const addNewService = async (req, res) => {
         : [benefits].filter(Boolean);
   
       console.log('Processed benefits:', benefits);
-  
+    
       // Get the uploaded image file
       const serviceImage = req.files?.service_image;
   
