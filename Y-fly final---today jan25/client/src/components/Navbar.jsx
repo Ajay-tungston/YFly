@@ -276,8 +276,9 @@ const Navbar = () => {
           )}
         </div>
 
-        <div>Services</div>
-        <div>Contact Us</div>
+        
+        <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/services')} >Services</div>
+          <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/contactus')}>Contact Us</div>
       </div>
 
       {/* My Profile Button */}
@@ -433,25 +434,48 @@ const Navbar = () => {
               }
             />
           </div>
+
           {isMajorProductOpen && ( 
             <div className="flex  flex-col items-center px-4 py-2 space-y-2 bg-white border rounded-[20px] shadow-lightshad focus:outline-none">
               <button
                onClick={() => navigate("/coursefinder")}
+
+          {isMajorProductOpen && (
+            <div className="flex flex-col items-center px-4 py-2 space-y-2 bg-white border rounded-[20px] shadow-lightshad focus:outline-none">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent the click from bubbling up
+                  navigate("/coursefinder");
+                  setIsOpen(false);
+                }}
+
                 className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
               >
                 <img src={course} alt="icons" />
                 Course Finder
               </button>
+
               <button
                 className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
                 onClick={() => navigate("/scholarship")}
+
+
+              <button
+                onClick={() => navigate("/scholarship")}
+                className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
+
               >
                 <img src={scholarship} alt="icons" />
                 Scholarship Finder
               </button>
               <button
+
                 className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
                 onClick={() => navigate("/profilematcher")}
+
+                onClick={() => navigate("/coursefinder")}
+                className="flex gap-2 px-3 justify-center w-[90vw] rounded-[10px] border text-[#2b7cd6] border-black hover:shadow-lightshad active:scale-95 transition-transform duration-150 py-4 font-dela text-[0.8rem] items-center"
+
               >
                 <img src={ai} alt="icons" />
                 AI Profile Matcher
@@ -459,8 +483,8 @@ const Navbar = () => {
             </div>
           )}
 
-          <div>Services</div>
-          <div>Contact Us</div>
+          <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/services')} >Services</div>
+          <div className= "flex flex-col items-center gap-2 cursor-pointer" onClick={()=>navigate('/contactus')}>Contact Us</div>
           <button
             className="border-[#30589F] border-[2px] text-[#30589F] px-4 py-2 rounded-full"
             onClick={() => navigate("/login")}

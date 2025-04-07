@@ -57,6 +57,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     };
     fetchUniversities();
   }, []);
+
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
@@ -74,7 +75,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
 
     fetchScholarships();
   }, []);
-  console.log(scholarshipOptions)
+
   const handleCancel = () => {
     setAddingNewCourse(false); // Close the form and return to the scholarship list
   };
@@ -529,7 +530,6 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
       scholarship_applicable: updatedScholarships,
     }));
   };
-
   const handleTuitionFeeChange = (value) => {
     setAddCourseData((prevData) => ({
       ...prevData,
@@ -960,7 +960,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
                 )
               }
             >
-              <option value="Select" disabled>
+              <option value="Select" >
                 Select Requirement
               </option>
               <option value="gre">GRE</option>
