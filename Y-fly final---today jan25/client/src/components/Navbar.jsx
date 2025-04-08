@@ -197,7 +197,7 @@ const Navbar = () => {
           </div>
           {isDestinationOpen && (
             <div
-              className="absolute pl-4 w-[30vw] py-5 z-10 space-y-2 rounded-[20px] shadow-lightshad bg-[#fff] mt-[1rem] border focus:outline-none"
+              className="absolute pl-4 w-[28vw] py-5 z-10 space-y-2 rounded-[20px] shadow-lightshad bg-[#fff] mt-[1rem] border focus:outline-none"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="options-menu"
@@ -214,7 +214,7 @@ const Navbar = () => {
                       alt="USA background"
                       className="absolute inset-0 w-full h-full object-cover  z-0"
                     />
-                    <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
+                    <div  className= "absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
 
                     {/* Content */}
                     <div className="relative z-10 flex flex-col items-center justify-center h-full">
@@ -230,7 +230,7 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 2 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div onClick={()=>navigate('/study-uk')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                     {/* Background */}
                     <img
                       src={UK}
@@ -255,7 +255,7 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 3 */}
-                  <div className="group  relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div onClick={()=>navigate('/study-canada')} className="group  relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                     {/* Background */}
                     <img
                       src={Canada}
@@ -278,7 +278,7 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 4 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div onClick={()=>navigate('/study-germany')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                     {/* Background */}
                     <img
                       src={Germany}
@@ -304,7 +304,7 @@ const Navbar = () => {
                 {/* Second Row */}
                 <div className="flex items-center gap-2 px-0 py-0">
                   {/* Card 5 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div onClick={()=>navigate('/study-australia')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                     {/* Background */}
                     <img
                       src={Australia}
@@ -327,7 +327,7 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 6 */}
-                  <div className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div onClick={()=>navigate('/study-ireland')} className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                     {/* Background */}
                     <img
                       src={Ireland}
@@ -350,7 +350,7 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 7 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div onClick={()=>navigate('/study-new-zealand')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
                     {/* Background */}
                     <img
                       src={NewZealand}
