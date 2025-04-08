@@ -89,7 +89,7 @@ const StudyinComponent = () => {
     }
     return (
         <div>
-            <div className=" bg-white bg-cover bg-center rounded-[200px] max-md:rounded-[80px] pt-16 px-24 pb-32 mt-10 max-xl:px-16 max-lg:px-10 max-md:px-5"
+            <div className=" bg-white bg-cover bg-center rounded-[200px] max-md:rounded-[80px] pt-16 px-24 pb-32 mt-10 max-xl:px-16 max-lg:px-10 max-md:px-5 "
                 style={{ backgroundImage: `url(${grid})` }}>
 
 
@@ -104,19 +104,18 @@ const StudyinComponent = () => {
 
                 {/*----------------------------------------------- Quick facts--------------------------------------------- */}
                 <div>
-                    <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10 -mt-28 mb-8'>Quick facts</div>
-                    <div className=' flex'>
-                        <div className="hidden md:flex items-center justify-center  w-12 ">
+                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4  pl-10  mb-8 '>Quick facts</div>
+                <div className=' flex'>
                             <div className="text-[#BFBFBF]  font-semibold text-lg writing-mode-vertical-rl transform rotate-90 w text-[28px] -ml-36 " >
                                 Quick facts
                             </div>
                         </div>
-                        <div className='bg-[#30589F]  rounded-[38px] px-8 pt-16 max-md:px-3 max-md:pt-3 text-[15px] max-md:text-[10px] text-[#0E1B2C] p-10 w-full h-fit'>
-                            <div className='flex  '>
-                                <div className='bg-white  py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4  text-center mr-6 mb-6 max-md:mr-3 max-md:mb-3 font-lato rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
-                                <div className='bg-white py-[1.8rem] w-[50%] px-16 max-xl:px-7 max-md:px-4 mb-6 max-md:mb-3 text-center  font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
+                        <div className="bg-[#30589F]  rounded-[38px] px-8 pt-16 max-md:px-3 max-md:pt-3 text-[15px] max-md:text-[10px] text-[#0E1B2C] p-10 w-full h-fit">
+                        <div className="hidden md:flex items-center justify-center  w-12  ">
+                            <div className="text-[#BFBFBF]  font-semibold text-lg writing-mode-vertical-rl transform rotate-90 w text-[28px] -ml-36 " >
+                                Quick facts
                             </div>
-
+                        </div>
                             <div className='flex '>
                                 <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[4rem] max-md:px-4 max-md:w-[50%] mb-6 mr-6 max-md:mr-3 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
                                 <div className='bg-white py-[1.8rem]  w-[50%] text-center px-[5.2rem] max-md:px-4 max-md:w-[50%] max-xl:px-[2.5rem] mb-6 max-md:mb-3 font-lato  rounded-[30px] max-lg:px-[3.5rem]'>{/*  facts*/}</div>
@@ -134,7 +133,7 @@ const StudyinComponent = () => {
                         </div>
                     </div>
 
-                </div>
+               
                 {/*---------------------------------- Cost of studying ---------------------------------------*/}
                 <div>
                     <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem]  pl-10 mt-16 mb-8'>Cost of studying</div>
@@ -214,7 +213,7 @@ const StudyinComponent = () => {
 
                     </div>
                 </div>
-</div>
+
                 {/*---------------------------------- FAQs------------------------------- */}
                 <div>
                     <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem]  pl-10 mt-16 mb-8 '>Pros and Cons </div>
@@ -276,9 +275,8 @@ const StudyinComponent = () => {
                     </div>
                 </div>
 
-            </div>
-            {/* Image and Call to Action */}
-            <section>
+             {/* Image and Call to Action */}
+              <section>
                 <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
                     {/* Left Image */}
                     <div className="flex-shrink-0 relative w-full h-[403px] md:w-[571px] md:h-[403px] mx-auto md:mx-0 rounded-[20px] overflow-hidden">
@@ -316,7 +314,8 @@ const StudyinComponent = () => {
                     </div>
                 </div>
             </section>
-
+</div>
+</div>
         </div>
     )
 }
