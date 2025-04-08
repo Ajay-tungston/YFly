@@ -124,27 +124,14 @@ const Navbar = () => {
   const [showAll, setShowAll] = useState(false);
 
   const handleService = () => setIsServiceOpen(!isServiceOpen);
-  const [services, setServices] = useState([]);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/service/get-all`
+          `${process.env.REACT_APP_API_URL}/service/get-name`
         );
-        console.log("API response:", res.data); // just for debugging
-
-        const serviceList = res.data.data; // 👈 accessing the correct array
-
-        setServices(
-          serviceList.map((service) => ({
-            title: service.service_name,
-            icon: `${
-              process.env.REACT_APP_API_URL
-            }/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
-            route: "/sop",
-          }))
-        );
+        setServices(res?.data?.data);
       } catch (err) {
         console.error("Error fetching services:", err);
       }
@@ -565,12 +552,12 @@ const Navbar = () => {
                   (service, index) => (
                     <button
                       key={index}
-                      onClick={() => navigate(service.route)}
+                      onClick={() => navigate(`/services/${service?._id}`)}
                       className="flex items-center gap-2 px-4 justify-between w-[220px] h-[60px] rounded-[10px] border border-black text-[#2b7cd6] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 font-dela text-[0.8rem]"
                     >
-                      {service.title}
+                      {service?.service_name}
                       <img
-                        src={service.icon}
+                        src={service?.imageUrl}
                         alt="icon"
                         className="w-5 h-5 object-cover"
                       />
