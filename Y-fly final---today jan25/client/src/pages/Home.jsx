@@ -34,11 +34,11 @@ const Home = () => {
           <div className="flex justify-center">
             
 
-            <button class="cursor-pointer flex items-center overflow-hidden z-100 group px-10 py-3 max-xl:py-2 max-lg:py-1 top-[12rem] max-xl:top-[9rem] max-lg:top-[7.5rem] max-md:hidden text-[2rem]  absolute font-urban text-white border-white border-[2px] font-semibold  rounded-full ">
-              <span class="relative font-bold z-10 text-white group-hover:text-[#30589f] text-xl max-xl:text-[1rem] duration-500">WELCOME TO YFLY</span>
+            <button class="cursor-pointer flex items-center overflow-hidden z-100 mt-24  group px-10 py-3 max-xl:py-2 max-lg:py-1 top-[12rem] max-xl:top-[9rem] max-lg:top-[7.5rem] max-md:hidden text-[2rem]  absolute font-urban text-white border-white border-[2px] font-semibold  rounded-full ">
+              <span class="relative font-bold z-10 text-white group-hover:text-[#30589f]  text-xl max-xl:text-[1rem] duration-500">WELCOME TO YFLY</span>
             
             </button>
-            <div className="text-white absolute text-[5.6rem] max-xl:text-[4.2rem] max-xl:leading-[4.8rem] max-lg:text-[3.4rem] max-lg:leading-[3.5rem] max-md:text-[1.5rem] max-md:leading-[1.8rem] top-[38%] max-xl:top-[39%] max-lg:top-[42%] font-dela tracking-wide leading-[6rem] text-center">
+            <div className="text-white absolute text-[5.6rem] max-xl:text-[4.2rem] mt-10 max-xl:leading-[4.8rem] max-lg:text-[3.4rem] max-lg:leading-[3.5rem] max-md:text-[1.5rem] max-md:leading-[1.8rem] top-[38%] max-xl:top-[39%] max-lg:top-[42%] font-dela tracking-wide leading-[6rem] text-center">
               <p>Giving flight</p>
               <p>to your dreams.</p>
             </div> 
@@ -120,6 +120,13 @@ const Home = () => {
                       bibendum quam ultrices ultrices ac eu orci. Hac venenatis
                         mi purus venenatis et vulputate vel aliquet.</p>
                   </div>
+                  <div className='block min-w-[32%] max-md:min-w-[45%] pb-8 bg-[#0F62AF] hover:shadow-rad shadow-cards rounded-[55px]'>
+                    <img src={card3} alt='card3' className='w-96 px-8 mt-[2rem]'/>
+                    <p className='font-bold font-urban text-[1.5rem] px-8 max-lg:px-6 py-4 text-white'>Test Preparation</p>
+                    <p className='font-normal font-urban text-[1.1rem] max-xl:text-[1rem] text-white px-8 max-lg:px-6'>Lorem ipsum dolor sit amet consectetur. Cursus nibh aliquam
+                      bibendum quam ultrices ultrices ac eu orci. Hac venenatis
+                        mi purus venenatis et vulputate vel aliquet.</p>
+                  </div>
               </div>
             </div>
             </div>
@@ -193,7 +200,7 @@ const Home = () => {
 
        
         </div>
-        <Contactus />
+       
         {/* footer section */}
         <Footer/>
 

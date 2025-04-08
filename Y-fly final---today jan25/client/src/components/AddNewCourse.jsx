@@ -57,6 +57,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     };
     fetchUniversities();
   }, []);
+
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
@@ -74,7 +75,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
 
     fetchScholarships();
   }, []);
-  console.log(scholarshipOptions)
+
   const handleCancel = () => {
     setAddingNewCourse(false); // Close the form and return to the scholarship list
   };
@@ -529,7 +530,6 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
       scholarship_applicable: updatedScholarships,
     }));
   };
-
   const handleTuitionFeeChange = (value) => {
     setAddCourseData((prevData) => ({
       ...prevData,
@@ -960,11 +960,12 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
                 )
               }
             >
-              <option value="Select" disabled>
+              <option value="Select" >
                 Select Requirement
               </option>
               <option value="gre">GRE</option>
               <option value="gmat">GMAT</option>
+              <option value="ielts">IELTS</option>
               <option value="ielts">IELTS</option>
               <option value="tofel">TOFEL</option>
               <option value="pte">PTE</option>
@@ -1286,26 +1287,23 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
         </button>
       </div>
       <div className="border-[#BFBFBF] border-b-[1px] my-5"></div>
-     
-      {/* Scholarship Applicable Section */}
-      <div className="font-urban mr-10 max-xl:mr-0 mt-4">
+      {/* Scholarship Applicable section */}
+      
+<div className="font-urban mr-10 max-xl:mr-0 mt-4">
   {addCourseData.scholarship_applicable.map((item, index) => (
     <div key={index} className="flex text-[0.9rem] mt-4 items-center">
       <div className="w-[20%] max-xl:w-[15%]">Scholarship Applicable</div>
       <select
-        className="w-[30%] px-5 py-2 text-black border-[#898C9A] bg-[#F9F9F9] rounded-md"
+        className="w-[30%] px-5 py-2 text-[#898C9A] border-[#898C9A] bg-[#F9F9F9] rounded-md"
         value={item.scholarship}
         onChange={(e) => handleScholarshipChange(index, e.target.value)}
       >
-        <option value="Select" >
+        <option value="Select Scholarship">
           Select
         </option>
         {scholarshipOptions.map((scholarship) => (
-          <option key={scholarship._id
-          } value={scholarship.scholarship_name
-}>
-            {scholarship.scholarship_name
-}
+          <option key={scholarship._id} value={scholarship.scholarship_name}>
+            {scholarship.scholarship_name}
           </option>
         ))}
       </select>
@@ -1330,7 +1328,18 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
   </button>
 </div>
 
- 
+
+        {/* Submit and Cancel buttons */}
+        <div className="mt-6">
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md mr-4">
+            Submit
+          </button>
+          <button type="button" className="px-4 py-2 bg-gray-600 text-white rounded-md" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+
+       
       <div className="border-[#BFBFBF] border-b-[1px] my-5"></div>
       {/*Tuition fees section */}
       <div className="font-urban mr-10 max-xl:mr-0">
