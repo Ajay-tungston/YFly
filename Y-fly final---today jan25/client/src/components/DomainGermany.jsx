@@ -2,12 +2,12 @@ import React from "react";
 
 const industries = [
   { name: "Hospital & health care", image: "/images/domain1.png" },
-  { name: "Accounting & Financial Services", image: "/images/domain2.png", opportunities: "700,000 opportunities" },
-  { name: "Construction", image: "/images/domain3.png", opportunities: "611,000 opportunities" },
+  { name: "Accounting & Financial Services", image: "/images/domain2.png"},
+  { name: "Construction", image: "/images/domain3.png"},
   { name: "Information Technology", image: "/images/domain5.png" },
   { name: "Government Administration", image: "/images/domain6.png" },
-  { name: "Education Management", image: "/images/domain7.png", opportunities: "905,000 opportunities" },
-  { name: "Retail, Marketing & Advertising", image: "/images/domain6.png", opportunities: "730,000 opportunities" },
+  { name: "Education Management", image: "/images/domain7.png" },
+  { name: "Retail, Marketing & Advertising", image: "/images/domain6.png" },
   { name: "Health Wellness & Fitness", image: "/images/domain8.png" },
 ];
 

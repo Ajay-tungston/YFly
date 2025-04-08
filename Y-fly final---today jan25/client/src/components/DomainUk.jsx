@@ -1,20 +1,20 @@
 import React from "react";
 
 const industries = [
-  { name: "Hospital & health care", image: "/images/domain1.png" },
-  { name: "Accounting & Financial Services", image: "/images/domain2.png", opportunities: "700,000 opportunities" },
-  { name: "Construction", image: "/images/domain3.png", opportunities: "611,000 opportunities" },
-  { name: "Information Technology", image: "/images/domain5.png" },
-  { name: "Government Administration", image: "/images/domain6.png" },
-  { name: "Education Management", image: "/images/domain7.png", opportunities: "905,000 opportunities" },
-  { name: "Retail, Marketing & Advertising", image: "/images/domain6.png", opportunities: "730,000 opportunities" },
-  { name: "Health Wellness & Fitness", image: "/images/domain8.png" },
+  { name: "Hospital & health care", image: "/images/domain1.png",opportunities: "870,000 opportunities" },
+  { name: "Accounting & Financial Services", image: "/images/domain2.png", opportunities: "851,000 opportunities" },
+  { name: "Construction", image: "/images/domain3.png", opportunities: "708,000 opportunities" },
+  { name: "Information Technology", image: "/images/domain5.png",opportunities: "803,000 opportunities" },
+  { name: "Government Administration", image: "/images/domain6.png",opportunities: "414,000 opportunities" },
+  { name: "Education Management", image: "/images/domain7.png", opportunities: "505,000 opportunities" },
+  { name: "Retail, Marketing & Advertising", image: "/images/domain6.png", opportunities: "736,000 opportunities" },
+  { name: "Health Wellness & Fitness", image: "/images/domain8.png",opportunities: "396,000 opportunities" },
 ];
 
 const IndustryCard = ({ industry }) => (
   <div className="relative border rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-center md:items-start justify-between w-80 bg-white text-center md:text-left">
     {industry.opportunities && (
-      <span className="absolute top-0 right-0 bg-blue-600 text-black text-xs px-3 py-1 rounded-full border-2 border-black transform bg-[#9DC7FB] ">
+      <span className="absolute top-0 right-0 bg-blue-600 text-blue text-xs px-3 py-1 rounded-full border-2 border-black transform bg-[#9DC7FB] ">
         {industry.opportunities}
       </span>
     )}
