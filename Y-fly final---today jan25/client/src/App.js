@@ -52,7 +52,7 @@ const App = () => {
         <Route path='/coursefinder' element={<Coursefinder/>}/>
         <Route path='/profilematcher' element={<Profilematcher/>}/>
         <Route path='/scholarship' element={<ScholarshipFinder/>}/>
-        <Route path='/sop' element={<SopWriting/>}/>
+        <Route path='/services/:id' element={<SopWriting/>}/>
         <Route path='/university' element={<UniversityOverview/>}/>
         <Route path='/forgotpassword' element={<ForgotPassword/>}/>
         <Route path='/resetpassword' element={<ResetPassword/>} />

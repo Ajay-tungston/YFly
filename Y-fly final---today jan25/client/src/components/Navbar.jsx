@@ -58,9 +58,6 @@ const Navbar = () => {
   }, [isAuthenticated, dispatch]);
   const [services, setServices] = useState([]);
 
- 
-
-
   // Dropdown states for desktop
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [isMajorProductOpen, setIsMajorProductOpen] = useState(false);
@@ -123,37 +120,26 @@ const Navbar = () => {
       document.removeEventListener("click", handleClickOutside, true);
   }, []);
 
- 
-    const serviceRef = useRef(null);
-    const [isServiceOpen, setIsServiceOpen] = useState(false);
-    const [showAll, setShowAll] = useState(false);
+  const serviceRef = useRef(null);
+  const [isServiceOpen, setIsServiceOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
-    const handleService = () => setIsServiceOpen(!isServiceOpen);
-  
-    useEffect(() => {
-      const fetchServices = async () => {
-        try {
-          const res = await axios.get(`${process.env.REACT_APP_API_URL}/service/get-all`);
-          console.log("API response:", res.data); // just for debugging
-    
-          const serviceList = res.data.data; // 👈 accessing the correct array
-    
-          setServices(
-            serviceList.map((service) => ({
-              title: service.service_name,
-              icon: `${process.env.REACT_APP_API_URL}/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
-              route: "/sop",
-            }))
-          );
-        } catch (err) {
-          console.error("Error fetching services:", err);
-        }
-      };
-    
-      fetchServices();
-    }, []);
-    
+  const handleService = () => setIsServiceOpen(!isServiceOpen);
 
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/service/get-name`
+        );
+        setServices(res?.data?.data);
+      } catch (err) {
+        console.error("Error fetching services:", err);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   // const services = [
   //   { title: "Document Translation", route: "/cvpreparation", icon: "/course1.png" },
@@ -206,9 +192,12 @@ const Navbar = () => {
                 {/* First Row */}
                 <div className="flex items-center gap-2 px-0 py-2">
                   {/* Card 1 */}
-                  <div onClick ={()=>navigate('/study-usa')}className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-usa")}
+                    className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
-                    
+
                     <img
                       src={USA}
                       alt="USA background"
@@ -523,55 +512,55 @@ const Navbar = () => {
           Services
         </div> */}
 
-<div ref={serviceRef}>
-      <div className="flex gap-2 cursor-pointer" onClick={handleService}>
-        Services
-        <img
-          src={dropdown}
-          alt="dropdown"
-          width={16}
-          className={isServiceOpen ? "rotate-180 transition-transform" : ""}
-        />
-      </div>
-
-      {isServiceOpen && (
-        <div
-          className="absolute left-[18%] z-50 px-2 py-2 rounded-[20px] shadow-lightshad bg-white mt-[1rem] border focus:outline-none"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="options-menu"
-        >
-          <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
-            {(showAll ? services : services.slice(0, 8)).map(
-              (service, index) => (
-                <button
-                  key={index}
-                  onClick={() => navigate(service.route)}
-                  className="flex items-center gap-2 px-4 justify-between w-[220px] h-[60px] rounded-[10px] border border-black text-[#2b7cd6] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 font-dela text-[0.8rem]"
-                >
-                  {service.title}
-                  <img
-                    src={service.icon}
-                    alt="icon"
-                    className="w-5 h-5 object-cover"
-                  />
-                </button>
-              )
-            )}
+        <div ref={serviceRef}>
+          <div className="flex gap-2 cursor-pointer" onClick={handleService}>
+            Services
+            <img
+              src={dropdown}
+              alt="dropdown"
+              width={16}
+              className={isServiceOpen ? "rotate-180 transition-transform" : ""}
+            />
           </div>
 
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="flex items-center gap-2 text-[#2b7cd6] transition font-dela text-[1rem]"
+          {isServiceOpen && (
+            <div
+              className="absolute left-[18%] z-50 px-2 py-2 rounded-[20px] shadow-lightshad bg-white mt-[1rem] border focus:outline-none"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
             >
-              {showAll ? "View less" : "View more"}
-              <span>{showAll ? "▲" : "▼"}</span>
-            </button>
-          </div>
+              <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
+                {(showAll ? services : services.slice(0, 8)).map(
+                  (service, index) => (
+                    <button
+                      key={index}
+                      onClick={() => navigate(`/services/${service?._id}`)}
+                      className="flex items-center gap-2 px-4 justify-between w-[220px] h-[60px] rounded-[10px] border border-black text-[#2b7cd6] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 font-dela text-[0.8rem]"
+                    >
+                      {service?.service_name}
+                      <img
+                        src={service?.imageUrl}
+                        alt="icon"
+                        className="w-5 h-5 object-cover"
+                      />
+                    </button>
+                  )
+                )}
+              </div>
+
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={() => setShowAll(!showAll)}
+                  className="flex items-center gap-2 text-[#2b7cd6] transition font-dela text-[1rem]"
+                >
+                  {showAll ? "View less" : "View more"}
+                  <span>{showAll ? "▲" : "▼"}</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
 
         <div
           className="flex gap-2 cursor-pointer"
