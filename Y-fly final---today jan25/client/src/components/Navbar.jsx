@@ -16,7 +16,7 @@ import scholarship from "../assets/images/teacher.svg";
 import ai from "../assets/images/aiblink.svg";
 import { useDispatch, useSelector } from "react-redux";
 import Countries from "./Countries";
-import { token } from "../Redux/store";
+import { logout, token } from "../Redux/store";
 import Australia from "../assets/images/countrybg/Australia.png";
 import USA from "../assets/images/countrybg/USA.png";
 import Ireland from "../assets/images/countrybg/Ireland.png";
@@ -28,7 +28,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu state
   const navigate = useNavigate();
   const location = useLocation();
-
+  const dispatch = useDispatch();
   const hideLoginPaths = [
     "/experience",
     "/selectcourses",
@@ -41,23 +41,22 @@ const Navbar = () => {
   ];
 
   const shouldShowButton = !hideLoginPaths.includes(location.pathname);
-
-  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
+
   useEffect(() => {
     if (!isAuthenticated) {
       const getToken = localStorage.getItem("authToken");
       if (getToken) {
-        dispatch(
-          token({
-            getToken,
-          })
-        );
+        dispatch(token({ token: getToken })); // fix: token key must match action.payload.token
       }
     }
   }, [isAuthenticated, dispatch]);
-  const [services, setServices] = useState([]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    dispatch(logout());
+    navigate("/");
+  };
   // Dropdown states for desktop
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [isMajorProductOpen, setIsMajorProductOpen] = useState(false);
@@ -126,32 +125,32 @@ const Navbar = () => {
 
   const handleService = () => setIsServiceOpen(!isServiceOpen);
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/service/get-all`
-        );
-        console.log("API response:", res.data); // just for debugging
+  // useEffect(() => {
+  //   const fetchServices = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         `${process.env.REACT_APP_API_URL}/service/get-all`
+  //       );
+  //       console.log("API response:", res.data); // just for debugging
 
-        const serviceList = res.data.data; // 👈 accessing the correct array
+  //       const serviceList = res.data.data; // 👈 accessing the correct array
 
-        setServices(
-          serviceList.map((service) => ({
-            title: service.service_name,
-            icon: `${
-              process.env.REACT_APP_API_URL
-            }/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
-            route: "/sop",
-          }))
-        );
-      } catch (err) {
-        console.error("Error fetching services:", err);
-      }
-    };
+  //       setServices(
+  //         serviceList.map((service) => ({
+  //           title: service.service_name,
+  //           icon: `${
+  //             process.env.REACT_APP_API_URL
+  //           }/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
+  //           route: "/sop",
+  //         }))
+  //       );
+  //     } catch (err) {
+  //       console.error("Error fetching services:", err);
+  //     }
+  //   };
 
-    fetchServices();
-  }, []);
+  //   fetchServices();
+  // }, []);
 
   // const services = [
   //   { title: "Document Translation", route: "/cvpreparation", icon: "/course1.png" },
@@ -560,7 +559,7 @@ const Navbar = () => {
               aria-orientation="vertical"
               aria-labelledby="options-menu"
             >
-              <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
+              {/* <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
                 {(showAll ? services : services.slice(0, 8)).map(
                   (service, index) => (
                     <button
@@ -577,7 +576,7 @@ const Navbar = () => {
                     </button>
                   )
                 )}
-              </div>
+              </div> */}
 
               <div className="flex justify-end mt-4">
                 <button
@@ -598,6 +597,14 @@ const Navbar = () => {
         >
           Contact Us
         </div>
+        {isAuthenticated && (
+          <>
+            {/* Logout */}
+            <div className="flex gap-2 cursor-pointer" onClick={handleLogout}>
+              Logout
+            </div>
+          </>
+        )}
       </div>
 
       {/* My Profile Button */}
@@ -608,22 +615,24 @@ const Navbar = () => {
         Login
       </button> */}
       <>
-        {shouldShowButton &&
-          (isAuthenticated ? (
+        {isAuthenticated ? (
+          <>
+            {/* My Profile */}
             <button
-              className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
               onClick={() => navigate("/myprofile")}
+              className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
             >
               My Profile
             </button>
-          ) : (
-            <button
-              className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
-          ))}
+          </>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+          >
+            Login
+          </button>
+        )}
       </>
 
       {/* Mobile Menu Toggle */}
@@ -1010,23 +1019,28 @@ const Navbar = () => {
             Contact Us
           </div>
           <>
-          {shouldShowButton &&
-            (isAuthenticated ? (
-              <button
-                className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-                onClick={() => navigate("/myprofile")}
-              >
-                My Profile
-              </button>
+            {isAuthenticated ? (
+              <>
+                <div
+                  className="flex  items-center gap-2 cursor-pointer"
+                  onClick={handleLogout}
+                >Logout</div>
+                <button
+                  className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+                  onClick={() => navigate("/myprofile")}
+                >
+                  My Profile
+                </button>
+              </>
             ) : (
               <button
-                className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+                className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
                 onClick={() => navigate("/login")}
               >
                 Login
               </button>
-            ))}
-            </>
+            )}
+          </>
         </div>
       )}
     </nav>
