@@ -37,6 +37,7 @@
     "react-scroll-parallax": "^3.4.5",
     "react-toastify": "^11.0.2",
     "redux": "^5.0.1",
+    "sweetalert2": "^11.17.2",
     "swiper": "^11.1.12",
     "web-vitals": "^2.1.4"
   },

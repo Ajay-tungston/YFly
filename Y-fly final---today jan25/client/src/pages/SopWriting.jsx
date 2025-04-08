@@ -6,9 +6,12 @@ import grid from "../assets/images/image/grid.svg";
 import Footer from "../components/Footer";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 const SopWriting = () => {
   const params = useParams();
   const [service, setService] = useState([]);
+  const [userEmail , setUserEmail] = useState(localStorage.getItem("email"));
+
   console.log(service);
 
   useEffect(() => {
@@ -23,7 +26,44 @@ const SopWriting = () => {
       }
     };
     fetchService();
-  }, []);
+  }, [params]);
+
+  const handelApplay = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/service/applay`,
+        {
+          service_id: params?.id,
+          user_email: userEmail
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      // alert("Application submitted successfully")
+      Swal.fire({
+        title: "Application submitted successfully",
+        icon: "success",
+        draggable: true
+      });
+      console.log(response.data);
+    } catch (error) {
+      if(error?.response?.status===400){
+        // alert("Application already submitted")
+        Swal.fire({
+          title: "Application already submitted",
+          icon: "warning",
+          draggable: true
+        });
+      }
+      else{
+        alert("something went wrong")
+      }
+      console.error(error);
+    }
+  };
 
   return (
     <div className="bg-[#0E1B2C] pb-10">
@@ -51,6 +91,7 @@ const SopWriting = () => {
                                         border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] 
                                         hover:border-b-[6px] rounded-full border-[1px] border-[#0E1B2C] 
                                         font-urban "
+            onClick={handelApplay}
           >
             Apply
           </button>
@@ -78,7 +119,7 @@ const SopWriting = () => {
         <ul className="text-black list-decimal text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-[4rem] max-lg:px-10 max-md:px-5 py-3">
           {service?.benefits?.map((benefit, index) => (
             <li key={index}>{benefit}</li>
-            ))}
+          ))}
         </ul>
 
         {/* procedure */}
@@ -86,75 +127,55 @@ const SopWriting = () => {
           Procedure
         </div>
         <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-10 max-lg:px-5 max-md:px-0 py-3">
-           {service?.procedure} 
+          {service?.procedure}
         </p>
 
         {/* workflow */}
         <div className="text-[#2b7cd6] font-dela text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
           Workflow
         </div>
-        {/* apply online */}
-        <div className="font-urban font-extrabold text-[1.5rem] max-xl:text-[1.3rem] max-md:text-[1rem] px-[3rem] max-lg:px-5 max-md:px-0 pb-2 pt-5 text-[#30589f] tracking-wide">
-          Apply Online
-        </div>
-        <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-[4rem] max-lg:px-10 max-md:px-5 ">
-          Place the order using the link on this page.
+        <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-10 max-lg:px-5 max-md:px-0 py-3">
+          {service?.workflow}
         </p>
-        <br />
-        {/* submit your details */}
-        <div className="font-urban font-extrabold text-[1.5rem] max-xl:text-[1.3rem] max-md:text-[1rem] px-[3rem] max-lg:px-5 max-md:px-0 py-2 text-[#30589f] tracking-wide">
-          Submit Your Details
-        </div>
-        <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-[4rem] max-lg:px-10 max-md:px-5">
-          Submit your details via an online preferences form.
-        </p>
-        <br />
-        {/* workflow */}
-        <div className="font-urban font-extrabold text-[1.5rem] max-xl:text-[1.3rem] max-md:text-[1rem] px-[3rem] max-lg:px-5 max-md:px-0 py-2 text-[#30589f] tracking-wide">
-          Workflow
-        </div>
-        <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-[4rem] max-lg:px-10 max-md:px-5">
-          Order Creation & Timeline: The SOP order willl be created once you
-          fill in the preferences and submit the form.
-        </p>
-        <br />
-        {/* dirst draft delivery */}
-        <div className="font-urban font-extrabold text-[1.5rem] max-xl:text-[1.3rem] max-md:text-[1rem] px-[3rem] max-lg:px-5 max-md:px-0 py-2 text-[#30589f] tracking-wide">
-          First Draft Delivery
-        </div>
-        <ul className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] list-disc font-urban tracking-wide px-[4rem] max-lg:px-10 max-md:px-5 py-3">
-          <li>
-            Once the order is recieved, we will prepare the first draft and send
-            the Google Doc file link through email.
-          </li>
-          <li>
-            There will be two rounds of review after the first draft is
-            delivered.
-          </li>
-        </ul>
-
-        <br />
-        {/* student reviews and order completion */}
-        <div className="font-urban font-extrabold text-[1.5rem] max-xl:text-[1.3rem] max-md:text-[1rem] px-[3rem] max-lg:px-5 max-md:px-0 py-2 text-[#30589f] tracking-wide">
-          Student Reviews and Order Completion
-        </div>
-        <ul className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] list-disc font-urban tracking-wide px-[4rem] max-lg:px-10 max-md:px-5 py-3">
-          <li>
-            In the first review, any major changes you request will be
-            accomodated.
-          </li>
-          <li>In the second review, only minor changes will be made.</li>
-          <li>
-            Please leave comments in the Google Doc file for any chnages
-            required.
-          </li>
-          <li>
-            The order will be completed after we recieve confirmation that you
-            are satisfied with the changes made during the Student Review phase.
-          </li>
-        </ul>
       </div>
+      <section>
+        <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
+          {/* Left Image */}
+          <div className="flex-shrink-0 relative w-full h-[403px] md:w-[571px] md:h-[403px] mx-auto md:mx-0 rounded-[20px] overflow-hidden">
+            <img
+              src="/images/dummy.png" // Replace with your actual image path
+              alt="Support Agent"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
+          {/* Right Text */}
+          <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#001f3f]">
+              Ready to flight your dreams?
+            </h2>
+            <p
+              className="text-[#001f3f] text-sm md:text-base leading-relaxed"
+              style={{
+                fontFamily: "'Roboto', sans-serif",
+                fontWeight: "400",
+                lineHeight: "1.75",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
+              placerat gravida aliquet at. Nisi urna quam massa pellentesque
+              lectus odio sagittis. Tortor massa in rhoncus purus nunc
+              scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
+              eget urna varius eu nibh in sed est.
+            </p>
+
+            <button className="bg-white text-[#001f3f] border border-[#001f3f] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#001f3f] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0">
+              Book a call →
+            </button>
+          </div>
+        </div>
+      </section>
       {/* ---------------------------footer------------------------------------ */}
       <Footer />
     </div>

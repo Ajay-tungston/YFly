@@ -1,5 +1,5 @@
 const express = require('express');
-const { addNewService, getAllServiceWithPagination, getAllServiceName, getServiceById, updateService, deleteService } = require('../Controllers/servicesController');
+const { addNewService, getAllServiceWithPagination, getAllServiceName, getServiceById, updateService, deleteService, applyForService, getServiceApplications } = require('../Controllers/servicesController');
 const router = express.Router();
 const formidable = require('express-formidable');
 const fs = require('fs');
@@ -23,4 +23,6 @@ router.get("/get-name",getAllServiceName)
 router.get("/get/:id",getServiceById)
 router.put('/update/:id', updateService)
 router.delete('/delete/:id', deleteService)
+router.post("/applay",applyForService)
+router.get ("/application",getServiceApplications)
 module.exports = router;
