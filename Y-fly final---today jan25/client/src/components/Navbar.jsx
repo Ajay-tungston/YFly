@@ -124,33 +124,34 @@ const Navbar = () => {
   const [showAll, setShowAll] = useState(false);
 
   const handleService = () => setIsServiceOpen(!isServiceOpen);
+  const [services, setServices] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchServices = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         `${process.env.REACT_APP_API_URL}/service/get-all`
-  //       );
-  //       console.log("API response:", res.data); // just for debugging
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/service/get-all`
+        );
+        console.log("API response:", res.data); // just for debugging
 
-  //       const serviceList = res.data.data; // 👈 accessing the correct array
+        const serviceList = res.data.data; // 👈 accessing the correct array
 
-  //       setServices(
-  //         serviceList.map((service) => ({
-  //           title: service.service_name,
-  //           icon: `${
-  //             process.env.REACT_APP_API_URL
-  //           }/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
-  //           route: "/sop",
-  //         }))
-  //       );
-  //     } catch (err) {
-  //       console.error("Error fetching services:", err);
-  //     }
-  //   };
+        setServices(
+          serviceList.map((service) => ({
+            title: service.service_name,
+            icon: `${
+              process.env.REACT_APP_API_URL
+            }/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
+            route: "/sop",
+          }))
+        );
+      } catch (err) {
+        console.error("Error fetching services:", err);
+      }
+    };
 
-  //   fetchServices();
-  // }, []);
+    fetchServices();
+  }, []);
 
   // const services = [
   //   { title: "Document Translation", route: "/cvpreparation", icon: "/course1.png" },
@@ -559,7 +560,7 @@ const Navbar = () => {
               aria-orientation="vertical"
               aria-labelledby="options-menu"
             >
-              {/* <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
+              <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
                 {(showAll ? services : services.slice(0, 8)).map(
                   (service, index) => (
                     <button
@@ -576,7 +577,7 @@ const Navbar = () => {
                     </button>
                   )
                 )}
-              </div> */}
+              </div>
 
               <div className="flex justify-end mt-4">
                 <button
@@ -597,33 +598,26 @@ const Navbar = () => {
         >
           Contact Us
         </div>
-        {isAuthenticated && (
-          <>
-            {/* Logout */}
-            <div className="flex gap-2 cursor-pointer" onClick={handleLogout}>
-              Logout
-            </div>
-          </>
-        )}
       </div>
 
-      {/* My Profile Button */}
-      {/* <button
-        className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-        onClick={() => navigate("/login")}
-      >
-        Login
-      </button> */}
       <>
         {isAuthenticated ? (
           <>
-            {/* My Profile */}
-            <button
-              onClick={() => navigate("/myprofile")}
-              className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
-            >
-              My Profile
-            </button>
+            {location.pathname === "/myprofile" ? (
+              <div
+                className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+                onClick={handleLogout}
+              >
+                Logout
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate("/myprofile")}
+                className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+              >
+                My Profile
+              </button>
+            )}
           </>
         ) : (
           <button
@@ -1018,28 +1012,33 @@ const Navbar = () => {
           >
             Contact Us
           </div>
-          <>
-            {isAuthenticated ? (
-              <>
-                <div
-                  className="flex  items-center gap-2 cursor-pointer"
-                  onClick={handleLogout}
-                >Logout</div>
-                <button
-                  className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-                  onClick={() => navigate("/myprofile")}
-                >
-                  My Profile
-                </button>
-              </>
+         <>
+          {isAuthenticated ? (
+            <>
+            {location.pathname === "/myprofile" ? (
+              <div
+                className="inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+                onClick={handleLogout}
+              >
+                Logout
+              </div>
             ) : (
               <button
                 className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/myprofile")}
               >
-                Login
+                My Profile
               </button>
             )}
+            </>
+          ) : (
+            <button
+              className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          )}
           </>
         </div>
       )}
