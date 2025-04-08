@@ -58,9 +58,6 @@ const Navbar = () => {
   }, [isAuthenticated, dispatch]);
   const [services, setServices] = useState([]);
 
- 
-
-
   // Dropdown states for desktop
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [isMajorProductOpen, setIsMajorProductOpen] = useState(false);
@@ -123,37 +120,38 @@ const Navbar = () => {
       document.removeEventListener("click", handleClickOutside, true);
   }, []);
 
- 
-    const serviceRef = useRef(null);
-    const [isServiceOpen, setIsServiceOpen] = useState(false);
-    const [showAll, setShowAll] = useState(false);
+  const serviceRef = useRef(null);
+  const [isServiceOpen, setIsServiceOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
-    const handleService = () => setIsServiceOpen(!isServiceOpen);
-  
-    useEffect(() => {
-      const fetchServices = async () => {
-        try {
-          const res = await axios.get(`${process.env.REACT_APP_API_URL}/service/get-all`);
-          console.log("API response:", res.data); // just for debugging
-    
-          const serviceList = res.data.data; // 👈 accessing the correct array
-    
-          setServices(
-            serviceList.map((service) => ({
-              title: service.service_name,
-              icon: `${process.env.REACT_APP_API_URL}/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
-              route: "/sop",
-            }))
-          );
-        } catch (err) {
-          console.error("Error fetching services:", err);
-        }
-      };
-    
-      fetchServices();
-    }, []);
-    
+  const handleService = () => setIsServiceOpen(!isServiceOpen);
 
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/service/get-all`
+        );
+        console.log("API response:", res.data); // just for debugging
+
+        const serviceList = res.data.data; // 👈 accessing the correct array
+
+        setServices(
+          serviceList.map((service) => ({
+            title: service.service_name,
+            icon: `${
+              process.env.REACT_APP_API_URL
+            }/${service.service_image.replace(/\\/g, "/")}`, // normalize slashes
+            route: "/sop",
+          }))
+        );
+      } catch (err) {
+        console.error("Error fetching services:", err);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   // const services = [
   //   { title: "Document Translation", route: "/cvpreparation", icon: "/course1.png" },
@@ -206,15 +204,18 @@ const Navbar = () => {
                 {/* First Row */}
                 <div className="flex items-center gap-2 px-0 py-2">
                   {/* Card 1 */}
-                  <div onClick ={()=>navigate('/study-usa')}className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-usa")}
+                    className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
-                    
+
                     <img
                       src={USA}
                       alt="USA background"
                       className="absolute inset-0 w-full h-full object-cover  z-0"
                     />
-                    <div  className= "absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
+                    <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
 
                     {/* Content */}
                     <div className="relative z-10 flex flex-col items-center justify-center h-full">
@@ -230,7 +231,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 2 */}
-                  <div onClick={()=>navigate('/study-uk')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-uk")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={UK}
@@ -255,7 +259,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 3 */}
-                  <div onClick={()=>navigate('/study-canada')} className="group  relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-canada")}
+                    className="group  relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Canada}
@@ -278,7 +285,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 4 */}
-                  <div onClick={()=>navigate('/study-germany')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-germany")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Germany}
@@ -304,7 +314,10 @@ const Navbar = () => {
                 {/* Second Row */}
                 <div className="flex items-center gap-2 px-0 py-0">
                   {/* Card 5 */}
-                  <div onClick={()=>navigate('/study-australia')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-australia")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Australia}
@@ -327,7 +340,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 6 */}
-                  <div onClick={()=>navigate('/study-ireland')} className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-ireland")}
+                    className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Ireland}
@@ -350,7 +366,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 7 */}
-                  <div onClick={()=>navigate('/study-new-zealand')} className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-new-zealand")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={NewZealand}
@@ -523,55 +542,55 @@ const Navbar = () => {
           Services
         </div> */}
 
-<div ref={serviceRef}>
-      <div className="flex gap-2 cursor-pointer" onClick={handleService}>
-        Services
-        <img
-          src={dropdown}
-          alt="dropdown"
-          width={16}
-          className={isServiceOpen ? "rotate-180 transition-transform" : ""}
-        />
-      </div>
-
-      {isServiceOpen && (
-        <div
-          className="absolute left-[18%] z-50 px-2 py-2 rounded-[20px] shadow-lightshad bg-white mt-[1rem] border focus:outline-none"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="options-menu"
-        >
-          <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
-            {(showAll ? services : services.slice(0, 8)).map(
-              (service, index) => (
-                <button
-                  key={index}
-                  onClick={() => navigate(service.route)}
-                  className="flex items-center gap-2 px-4 justify-between w-[220px] h-[60px] rounded-[10px] border border-black text-[#2b7cd6] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 font-dela text-[0.8rem]"
-                >
-                  {service.title}
-                  <img
-                    src={service.icon}
-                    alt="icon"
-                    className="w-5 h-5 object-cover"
-                  />
-                </button>
-              )
-            )}
+        <div ref={serviceRef}>
+          <div className="flex gap-2 cursor-pointer" onClick={handleService}>
+            Services
+            <img
+              src={dropdown}
+              alt="dropdown"
+              width={16}
+              className={isServiceOpen ? "rotate-180 transition-transform" : ""}
+            />
           </div>
 
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="flex items-center gap-2 text-[#2b7cd6] transition font-dela text-[1rem]"
+          {isServiceOpen && (
+            <div
+              className="absolute left-[18%] z-50 px-2 py-2 rounded-[20px] shadow-lightshad bg-white mt-[1rem] border focus:outline-none"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
             >
-              {showAll ? "View less" : "View more"}
-              <span>{showAll ? "▲" : "▼"}</span>
-            </button>
-          </div>
+              <div className="grid grid-cols-4 gap-4 max-w-[1000px]">
+                {(showAll ? services : services.slice(0, 8)).map(
+                  (service, index) => (
+                    <button
+                      key={index}
+                      onClick={() => navigate(service.route)}
+                      className="flex items-center gap-2 px-4 justify-between w-[220px] h-[60px] rounded-[10px] border border-black text-[#2b7cd6] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 font-dela text-[0.8rem]"
+                    >
+                      {service.title}
+                      <img
+                        src={service.icon}
+                        alt="icon"
+                        className="w-5 h-5 object-cover"
+                      />
+                    </button>
+                  )
+                )}
+              </div>
+
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={() => setShowAll(!showAll)}
+                  className="flex items-center gap-2 text-[#2b7cd6] transition font-dela text-[1rem]"
+                >
+                  {showAll ? "View less" : "View more"}
+                  <span>{showAll ? "▲" : "▼"}</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
 
         <div
           className="flex gap-2 cursor-pointer"
@@ -639,7 +658,19 @@ const Navbar = () => {
             <div className="flex flex-col items-center px-4 py-4 bg-white border rounded-[20px] shadow-lightshad focus:outline-none space-y-3">
               <div className="grid grid-cols-2 gap-4">
                 {/* Card 1 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-usa")}
+                  onTouchEnd={() => navigate("/study-usa")}
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    // Add keyboard support
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-usa");
+                    }
+                  }}
+                >
                   <img
                     src={USA}
                     alt="USA background"
@@ -659,13 +690,28 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 2 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-uk")}
+                  onTouchEnd={() => navigate("/study-uk")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-uk");
+                    }
+                  }}
+                >
+                  {" "}
                   <img
                     src={UK}
                     alt="UK background"
                     className="absolute inset-0 w-full h-full object-cover z-0"
                   />
-                  <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
+                  <div
+                    onClick={() => navigate("/study-uk")}
+                    className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"
+                  ></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
                     <img
                       src={uk}
@@ -679,7 +725,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 3 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-canada")}
+                  onTouchEnd={() => navigate("/study-canada")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-canada");
+                    }
+                  }}
+                >
                   <img
                     src={Canada}
                     alt="Canada background"
@@ -699,14 +756,25 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 4 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-germany")}
+                  onTouchEnd={() => navigate("/study-germany")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-germany");
+                    }
+                  }}
+                >
                   <img
                     src={Germany}
                     alt="Germany background"
-                    className="absolute inset-0 w-full h-full object-cover z-0"
+                    className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" // Added pointer-events-none
                   />
-                  <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
-                  <div className="relative z-10 flex flex-col items-center justify-center h-full">
+                  <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5] pointer-events-none"></div>
+                  <div className="relative z-10 flex flex-col items-center justify-center h-full w-full">
                     <img
                       src={germany}
                       alt="Germany flag"
@@ -719,7 +787,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 5 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-new-zealand")}
+                  onTouchEnd={() => navigate("/study-new-zealand")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button" // Better accessibility
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-new-zealand");
+                    }
+                  }}
+                >
                   <img
                     src={NewZealand}
                     alt="New Zealand background"
@@ -739,7 +818,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 6 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-australia")}
+                  onTouchEnd={() => navigate("/study-australia")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-australia");
+                    }
+                  }}
+                >
                   <img
                     src={Australia}
                     alt="Australia background"
@@ -759,7 +849,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 7 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-ireland")}
+                  onTouchEnd={() => navigate("/study-ireland")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-ireland");
+                    }
+                  }}
+                >
                   <img
                     src={Ireland}
                     alt="Ireland background"
@@ -908,12 +1009,24 @@ const Navbar = () => {
           >
             Contact Us
           </div>
-          <button
-            className="border-[#30589F] border-[2px] text-[#30589F] px-4 py-2 rounded-full"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </button>
+          <>
+          {shouldShowButton &&
+            (isAuthenticated ? (
+              <button
+                className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+                onClick={() => navigate("/myprofile")}
+              >
+                My Profile
+              </button>
+            ) : (
+              <button
+                className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </button>
+            ))}
+            </>
         </div>
       )}
     </nav>

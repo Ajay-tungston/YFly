@@ -28,11 +28,11 @@ const Home = () => {
           </div>
           
           {/* <div className="flex justify-center"> */}
-            <Navbar/>   
+            
           {/* </div>   */}
           
           <div className="flex justify-center">
-            
+          <Navbar/>   
 
             <button class="cursor-pointer flex items-center overflow-hidden z-100 mt-24  group px-10 py-3 max-xl:py-2 max-lg:py-1 top-[12rem] max-xl:top-[9rem] max-lg:top-[7.5rem] max-md:hidden text-[2rem]  absolute font-urban text-white border-white border-[2px] font-semibold  rounded-full ">
               <span class="relative font-bold z-10 text-white group-hover:text-[#30589f]  text-xl max-xl:text-[1rem] duration-500">WELCOME TO YFLY</span>
