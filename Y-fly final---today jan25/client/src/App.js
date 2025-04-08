@@ -90,6 +90,7 @@ const App = () => {
         <Route path='/courseoverview/:id' element={<CourseOverview/>}/>
         <Route path='/Stuydinuk' element={<StudyinComponentUk/>}/>
      
+     
        
         
         

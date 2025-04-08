@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import bgvideo from '../assets/images/bg-yfly.mp4';
 import grid from '../assets/images/image/grid.svg'
 import card1 from '../assets/images/card1.svg';
 import card2 from '../assets/images/card2.svg';
@@ -13,8 +12,8 @@ import Footer from '../components/Footer';
 import Trainings from '../components/Trainings';
 import TopUniversity from '../components/TopUniversity';
 import TopSchool from '../components/TopSchool';
-
-
+import backvideo from '../assets/images/loop.mp4'
+import InfoGraphic from '../components/Infographics';
 
 const Home = () => {
   return (
@@ -24,7 +23,7 @@ const Home = () => {
         {/* first-section */}
         <div className="relative">
           <div>
-            <video src={bgvideo} alt="video" autoPlay muted loop disablePictureInPicture className="w-full rounded-b-[300px] max-sm:rounded-b-[100px] md:rounded-b-[200px]"/>   
+            <video src={backvideo} alt="video" autoPlay muted loop disablePictureInPicture className="w-full rounded-b-[300px] max-sm:rounded-b-[100px] md:rounded-b-[200px]"/>   
           </div>
           
           {/* <div className="flex justify-center"> */}
@@ -197,7 +196,7 @@ const Home = () => {
             </div>
           </div>
         
-
+         <InfoGraphic/>
        
         </div>
        

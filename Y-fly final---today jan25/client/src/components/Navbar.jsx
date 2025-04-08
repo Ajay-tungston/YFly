@@ -90,7 +90,7 @@ const Navbar = () => {
   //   document.addEventListener("mousedown", handleClickOutside);
   //   return () => document.removeEventListener("mousedown", handleClickOutside);
   // }, []);
-
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Check if click was on an interactive element
@@ -124,7 +124,7 @@ const Navbar = () => {
   const [showAll, setShowAll] = useState(false);
 
   const handleService = () => setIsServiceOpen(!isServiceOpen);
-
+  const[services,setServices]=useState([]);
   useEffect(() => {
     const fetchServices = async () => {
       try {
