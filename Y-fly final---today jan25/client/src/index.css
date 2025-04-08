@@ -5,14 +5,65 @@
 
 .swiper-slide {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     height: 100%; /* Ensure slides take full height of the container */
+    width: 100%; /* Ensure slides take full width of the container */
+   
 }
 
 .slide-content {
-    flex-grow: 1; /* Make sure the content takes up available space */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+/* Ensure swiper container has relative positioning */
+.swiper-custom {
+    position: relative; /* Make sure swiper container is positioned relative */
+}
+
+/* Default horizontal scrollbar styling */
+.swiper-custom .swiper-scrollbar {
+    position: absolute;
+    bottom: 5px; /* Default position from bottom */
+    left: 0;
+    right: 0;
+    height: 3px; /* Set smaller height for horizontal scrollbar */
+    background-color: rgba(0, 0, 0, 0.1); /* Light background */
+}
+
+/* For screens up to 768px width */
+@media (max-width: 768px) {
+    .swiper-custom .swiper-scrollbar {
+        bottom: 10px; /* Move scrollbar up slightly */
+        height: 5px; /* Make scrollbar even smaller */
+    }
+}
+
+/* For screens up to 425px width */
+@media (max-width: 425px) {
+    .swiper-custom .swiper-scrollbar {
+        bottom: 20px; /* Move scrollbar up more */
+        height: 4px; /* Make scrollbar even smaller */
+    }
+}
+
+/* For screens larger than 1024px, reduce the scrollbar size */
+@media (min-width: 1024px) {
+    .swiper-custom .swiper-scrollbar {
+        bottom: 5px; /* Keep at default position */
+        height: 4px; /* Make scrollbar smaller */
+    }
+}
+
+/* For screens larger than 1440px, make scrollbar even smaller */
+@media (min-width: 1440px) {
+    .swiper-custom .swiper-scrollbar {
+        bottom: 5px; /* Keep at default position */
+        height: 3px; /* Make scrollbar very small */
+        width: 50px; /* Control the width of the scrollbar */
+      
+    }
 }
