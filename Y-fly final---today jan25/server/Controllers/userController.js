@@ -436,7 +436,17 @@ exports.getUserDetails = async (req, res) => {
     }
     
     // Find the user by email
-    const user = await User.findOne({ email }).lean();
+    const user = await User.findOne({ email }).populate({
+      path: "appliedCourses",
+      populate: {
+        path: "course",
+        select: "university_name course_level discipline area_of_study",
+        populate: {
+          path: "university_name",
+          select: "university_name ",
+        }
+      },
+    }).lean();
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

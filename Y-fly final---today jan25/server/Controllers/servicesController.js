@@ -1,6 +1,9 @@
 const path = require("path");
 const Service = require("../Models/Services");
+const User = require("../Models/userSchema");
+const ServiceApplication = require("../Models/ServiceApplicaion");
 const fs = require("fs");
+const ServiceApplicaion = require("../Models/ServiceApplicaion");
 
 const addNewService = async (req, res) => {
   try {
@@ -257,6 +260,7 @@ const getAllServiceWithPagination = async (req, res) => {
     });
   }
 };
+
 const getServiceById = async (req, res) => {
   try {
     const id = req.params.id;
@@ -480,6 +484,71 @@ const deleteService = async (req, res) => {
   }
 };
 
+const applyForService = async (req, res) => {
+  try {
+    const { user_email, service_id } = req.fields;
+    const user = await User.findOne({ email: user_email });
+    console.log(user);
+    const service = await Service.findById(service_id);
+    if (!user || !service) {
+      return res.status(404).json({ message: "User or service not found" });
+    }
+    const existingApplication = await ServiceApplication.findOne({
+      user: user._id,
+      service: service_id,
+    });
+    if (existingApplication) {
+      return res
+        .status(400)
+        .json({ message: "You have already applied for this service" });
+    }
+    const newApplication = new ServiceApplication({
+      user: user._id,
+      service: service_id,
+    });
+    await newApplication.save();
+    res.status(201).json({ message: "Application submitted successfully" });
+  } catch (error) {
+    console.error("Error applying for service:", error);
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+const getServiceApplications = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const query = {};
+
+    // Get services with pagination
+    const applications = await ServiceApplicaion.find(query)
+      .populate("user", "first_name last_name email")
+      .populate("service", "service_name price")
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .lean();
+
+    const total = await ServiceApplicaion.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      data: applications,
+      pagination: {
+        total,
+        page: Number(page),
+        pages: Math.ceil(total / limit),
+        limit: Number(limit),
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
 module.exports = {
   addNewService,
   getAllServiceName,
@@ -487,4 +556,6 @@ module.exports = {
   getServiceById,
   updateService,
   deleteService,
+  applyForService,
+  getServiceApplications,
 };

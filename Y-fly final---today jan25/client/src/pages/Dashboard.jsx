@@ -8,6 +8,7 @@ import ScholarshipList from "../components/ScholarshipList";
 import AddNewUniversity from "../components/AddNewUniversity";
 import UniversityList from "../components/UniversityList";
 import ServiceList from "../components/ServiceList";
+import ServiceApplicationList from "../components/ServiceApplicationList";
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState("enquiries");
@@ -53,6 +54,8 @@ const Dashboard = () => {
         return <UniversityList />;
       case "services":
         return <ServiceList />;
+        case "service-applications":
+          return <ServiceApplicationList />;
       default:
         return <EnquiryList />; // Default case if none match
     }

@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
     verbal_score: { type: Number, required: false },
     quant_score: { type: Number, required: false },
   },
+  appliedCourses: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Application',
+  }]
 });
 
 module.exports = mongoose.model("User", userSchema);

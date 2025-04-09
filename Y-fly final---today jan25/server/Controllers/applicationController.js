@@ -81,6 +81,13 @@ const addApplication = async (req, res) => {
     });
 
     await application.save();
+
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { appliedCourses: application._id } },
+      { new: true }
+    );
+    
     res.status(201).json({ success: true, data: application });
   } catch (error) {
     deleteUploadedFiles(files);

@@ -54,7 +54,7 @@ const [addingNewService, setAddingNewService] = useState(false);
   if (addingNewService) {
     return (
       <AddNewService
-        setAddingNewService={setAddingNewService}
+        setAddingService={setAddingNewService}
         setEditOpen={setEditOpen}
       />
     );
@@ -93,12 +93,12 @@ const [addingNewService, setAddingNewService] = useState(false);
               <img src={add} alt="add" width={15} className="mr-1" />
               Add Service
             </button>
-            <button
+            {/* <button
               onClick={handleDelete}
               className="bg-[#f71919] text-white px-5 py-1 rounded-md shadow-md hover:bg-[#700000] transition mt-3"
             >
               Delete
-            </button>
+            </button> */}
           </div>
         </div>
 

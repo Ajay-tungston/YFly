@@ -92,12 +92,12 @@ const UniversityList = () => {
               <img src={add} alt="add" width={15} className="mr-1" />
               Add University
             </button>
-            <button
+            {/* <button
               onClick={handleDelete}
               className="bg-[#f71919] text-white px-5 py-1 rounded-md shadow-md hover:bg-[#700000] transition mt-3"
             >
               Delete
-            </button>
+            </button> */}
           </div>
         </div>
 

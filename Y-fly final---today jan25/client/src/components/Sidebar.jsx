@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import yfly from '../assets/images/yflywhite.svg'
 import logoutimg from '../assets/images/logout.svg'
 import { useDispatch } from 'react-redux';
@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Sidebar = ({ setSelectedComponent }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [serviceOpen, setServiceOpen] = useState(false);
     const handleLogout = () => {
         // Show toast notification
         toast.success('Logout successful!', {
@@ -40,7 +41,21 @@ const Sidebar = ({ setSelectedComponent }) => {
                     <button onClick={() => setSelectedComponent('courses')} className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Courses</button>
                     <button onClick={() => setSelectedComponent('scholarships')} className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Scholarships</button>
                     <button onClick={() => setSelectedComponent('university')} className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Universities</button>
-                    <button onClick={() => setSelectedComponent('services')}className='py-3 w-[100%] pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>Services</button>
+                    <div>
+                        <button
+                            onClick={() => setServiceOpen(!serviceOpen)}
+                            className='py-3 w-full pl-10 text-white text-left hover:bg-white rounded-[15px] hover:text-[#30589F] flex justify-between items-center pr-4'
+                        >
+                            <span>Services</span>
+                            <span>{serviceOpen ? '▲' : '▼'}</span>
+                        </button>
+                        {serviceOpen && (
+                            <div className='text-sm text-white flex flex-col gap-2'>
+                                <button onClick={() => setSelectedComponent('services')} className='pl-12 py-3 text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>View Services</button>
+                                <button onClick={() => setSelectedComponent('service-applications')} className='pl-12 py-3 text-left hover:bg-white rounded-[15px] hover:text-[#30589F]'>View Applications</button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             <div>
