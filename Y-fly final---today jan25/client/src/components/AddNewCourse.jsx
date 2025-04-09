@@ -43,6 +43,8 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
   });
   const [universities, setUniversities] = useState([]);
   const [scholarshipOptions, setScholarshipOptions] = useState([]);
+const[recruiterFileErr, setRecruiterFileErr] = useState("");
+
   useEffect(() => {
     
     const fetchUniversities = async () => {
@@ -163,7 +165,6 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
           style: { backgroundColor: "#30589F", color: "white" },
       });
       // window.location.reload();
-      
       // Reset form after successful submission
       setAddCourseData({
         course_level: "",
@@ -476,15 +477,32 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
   };
 
   const handleTopRecruitersFileChange = (index, e) => {
-    if (e.target.files[0]) {
+    const file = e.target.files[0];
+  
+    if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      const maxSize = 2 * 1024 * 1024; // 2MB
+  
+      if (!allowedTypes.includes(file.type)) {
+        setRecruiterFileErr('Please upload a valid image file (JPG, JPEG, or PNG).');
+        return;
+      }
+  
+      if (file.size > maxSize) {
+        setRecruiterFileErr('File size should be less than 2MB.');
+        return;
+      }
+      setRecruiterFileErr("")
       const updatedRecruiters = [...addCourseData.top_recruiters];
-      updatedRecruiters[index].logo = e.target.files[0];
+      updatedRecruiters[index].logo = file;
+  
       setAddCourseData((prevData) => ({
         ...prevData,
         top_recruiters: updatedRecruiters,
       }));
     }
   };
+  
 
   const handleAddTopRecruiters = () => {
     setAddCourseData((prevData) => ({
@@ -1263,6 +1281,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
                 className="hidden"
                 onChange={(e) => handleTopRecruitersFileChange(index, e)}
               />
+              {recruiterFileErr&&<p className="text-[#cf3333]">{recruiterFileErr}</p>}
             </div>
             {/* Remove Button */}
             {index > 0 && (

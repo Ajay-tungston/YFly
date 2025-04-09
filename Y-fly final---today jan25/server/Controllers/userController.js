@@ -443,7 +443,7 @@ exports.getUserDetails = async (req, res) => {
         select: "university_name course_level discipline area_of_study",
         populate: {
           path: "university_name",
-          select: "university_name ",
+          select: "university_name university_logo",
         }
       },
     }).lean();

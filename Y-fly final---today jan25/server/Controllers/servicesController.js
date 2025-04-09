@@ -30,7 +30,6 @@ const addNewService = async (req, res) => {
       ? benefits.map((b) => b.trim()).filter((b) => b)
       : [benefits].filter(Boolean);
 
-    console.log("Processed benefits:", benefits);
 
     // Get the uploaded image file
     const serviceImage = req.files?.service_image;
@@ -488,7 +487,6 @@ const applyForService = async (req, res) => {
   try {
     const { user_email, service_id } = req.fields;
     const user = await User.findOne({ email: user_email });
-    console.log(user);
     const service = await Service.findById(service_id);
     if (!user || !service) {
       return res.status(404).json({ message: "User or service not found" });

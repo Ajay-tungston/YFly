@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { FaPen, FaSave } from "react-icons/fa";
 import Footer from "../components/Footer";
 import axios from "axios";
+import MyProfilepop from "./MyProfilepop";
 
 const Profile = () => {
   // Initialize formData as an empty object to avoid undefined errors.
@@ -33,6 +34,8 @@ const Profile = () => {
     quant_score: "",
   });
 
+  const [showAppliesCourse, setShowAppliesCourse] = useState(false);
+
   // Update inputValues when formData is fetched or updated
   useEffect(() => {
     setInputValues({
@@ -61,10 +64,10 @@ const Profile = () => {
       try {
         const email = localStorage.getItem("email");
         if (!email) throw new Error("Email not found in localStorage");
-      
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile/${email}`);
 
-       
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user/profile/${email}`
+        );
 
         if (res.data && res.data.user) {
           setUpdateFormData(res.data.user);
@@ -266,11 +269,19 @@ const Profile = () => {
                 </div>
 
                 {/* 📜 Qualifications Section */}
-                <div>
-                  <span>📜 Qualifications</span>
+                <div className="flex flex-col px-4 gap-4">
+                  <button
+                    className="w-[180px] h-[52px] rounded-[10px] bg-black text-white p-[10px] self-start"
+                    onClick={() => setShowAppliesCourse(true)}
+                  >
+                    View Applied Courses
+                  </button>
 
+                  <span className="w-[180px] h-[52px] rounded-[10px] p-[10px] flex items-center self-start">
+                    📜 Qualifications
+                  </span>
                   {/* Only show academic tests instead of education details */}
-                  {inputValues.test_name &&
+                  {/* {inputValues.test_name &&
                   inputValues.test_name !== "Haven’t taken" ? (
                     <p className="text-gray-600">
                       {inputValues.test_name} - Verbal:{" "}
@@ -279,7 +290,7 @@ const Profile = () => {
                     </p>
                   ) : (
                     <p className="text-gray-600">No academic test available</p>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -327,7 +338,7 @@ const Profile = () => {
                       className="border border-gray-300 rounded px-2 py-1"
                     />
                   ) : formData.work_experience?.months_of_experience ? (
-                    `${formData.work_experience.months_of_experience} months` 
+                    `${formData.work_experience.months_of_experience} months`
                   ) : (
                     "No"
                   )}
@@ -475,6 +486,7 @@ const Profile = () => {
       </section>
 
       <Footer />
+      {showAppliesCourse && <MyProfilepop data={formData?.appliedCourses} setShowAppliesCourse={setShowAppliesCourse}/>}
     </div>
   );
 };

@@ -6,10 +6,11 @@ import trash from "../assets/images/greytrash.svg";
 import axios from "axios";
 import AddNewService from "./AddNewService";
 import EditService from "./EditService";
+import { Oval } from "react-loader-spinner";
 
 const ServiceList = () => {
-const [addingNewService, setAddingNewService] = useState(false);
-  //   const [university, setUniversity] = useState([]);
+  const [addingNewService, setAddingNewService] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [service, setService] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -18,16 +19,18 @@ const [addingNewService, setAddingNewService] = useState(false);
   const limit = 10;
   // Fetch the courses from the backend
   const fetchService = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/service/get-all?page=${currentPage}&limit=${limit}&search=${searchQuery}`
       );
-  
       setService(response.data || []);
       setTotalPages(response?.data?.pagination?.pages);
       // setSelectedUniversity([]);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -101,8 +104,6 @@ const [addingNewService, setAddingNewService] = useState(false);
             </button> */}
           </div>
         </div>
-
-       
       </div>
 
       <div className="mt-8 text-[0.9rem]">
@@ -128,26 +129,31 @@ const [addingNewService, setAddingNewService] = useState(false);
           </div>
           <div className="border-[#BFBFBF] border-b-[1px]"></div>
         </div>
-
-        {service?.data?.length > 0 ? (
+        {isLoading ? (
+          <div className="w-full h-[500px] flex justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
+              <Oval
+                visible={true}
+                height="40"
+                width="40"
+                color="#2d87cc"
+                secondaryColor="#b0b0b0"
+                strokeWidth={3}
+                ariaLabel="oval-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+              <div className="mt-2 text-black px-3 py-1 rounded-md">
+                <p className="text-center">Loading...</p>
+              </div>
+            </div>
+          </div>
+        ) : service?.data?.length > 0 ? (
           <>
             {service?.data?.map((list, index) => (
               <div key={list._id}>
                 <div className="font-urban flex py-3 px-3">
                   <div className="w-[10%] flex items-center">
-                    {/* <input
-                  type="checkbox"
-                  checked={selectedUniversity.includes(list._id)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedUniversity([...selectedUniversity, list._id]);
-                    } else {
-                      setSelectedUniversity(
-                        selectedUniversity.filter((id) => id !== list._id)
-                      );
-                    }
-                  }}
-                /> */}
                     {index + 1 + (currentPage - 1) * limit}
                   </div>
                   <div className="w-[30%]">{list.service_name}</div>
@@ -208,7 +214,7 @@ const [addingNewService, setAddingNewService] = useState(false);
             </div>
           </>
         ) : (
-          <p className="text-center pt-16">no data available</p>
+          <p className="text-center pt-16">No data found</p>
         )}
       </div>
     </div>
