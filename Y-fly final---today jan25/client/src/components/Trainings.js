@@ -18,9 +18,9 @@ const Trainings = () => {
 
   return (
     <div>
-      <button className='px-8 ml-[7.5rem] max-xl:ml-[4rem] max-md:ml-0 mt-[7rem] max-md:mt-[5rem] mb-8 py-3 max-md:py-1 border-[2px] bg-white font-bold font-urban rounded-full tracking-wider max-lg:text-[1rem] text-[1.2rem]'>
-        Our Trainings
-      </button>
+  <button className='px-8 py-3 mx-auto block border-[2px] bg-white font-bold font-urban rounded-full tracking-wider text-[1.2rem] max-lg:text-[1rem] max-md:py-1 mt-[7rem] max-md:mt-[5rem] mb-8'>
+  Our Trainings
+</button>
       <div className='overflow-hidden w-full border-black border-[1px] bg-white px-10 py-5 shadow-lightshad rounded-full'>
         <div className='marquee flex justify-around items-center'>
           {items.concat(items).map((item, index) => (

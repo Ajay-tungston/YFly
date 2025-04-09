@@ -163,7 +163,8 @@ const CourseOverview = () => {
   />
   <div>
     <div className="text-gray-500 text-sm font-bold font-urban">
-      Course Level
+ 
+      <div>{course.course_level}</div>
     </div>
     <div className="w-full relative bg-white rounded-[80px] md:rounded-[120px] lg:rounded-[200px] overflow-hidden p-4 sm:p-6 md:p-12">
       {/* Background Section */}
@@ -323,11 +324,11 @@ const CourseOverview = () => {
     <div className="text-[#1e40af] text-lg sm:text-2xl md:text-3xl font-black font-['Urbanist'] leading-6 ">
         Top Recruiters
       </div>
-    <div className="mt-8 bg-white rounded-[48px] shadow-md outline outline-1 outline-slate-900 p-4 sm:p-6 md:p-8 flex flex-col gap-8">
+    <div className="mt-8 bg-[#fff] rounded-[48px] shadow-md outline outline-1 outline-slate-900 p-4 sm:p-6 md:p-8 flex flex-col gap-8">
       <div className="flex flex-wrap justify-start gap-4">
         {course.top_recruiters && course.top_recruiters.length > 0 ? (
           course.top_recruiters.map((recruiter, index) => (
-            <div key={recruiter._id || index} className="px-4 py-4 bg-white rounded-3xl shadow-md outline outline-1 outline-slate-900 flex flex-col justify-center items-center gap-4">
+            <div key={recruiter._id || index} className="px-4 py-4 bg-[#fff] w-32 rounded-3xl shadow-md outline outline-1 outline-slate-900 flex flex-col justify-center items-center gap-4">
               <img
                 src={getRecruiterLogo(recruiter)}
                 alt={recruiter.recruiters_logo || "Recruiter Logo"}

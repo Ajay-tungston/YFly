@@ -25,7 +25,7 @@ const TopUniversity = () => {
 
   return (
     <div>
-      <button className='px-8 ml-[7.5rem] max-xl:ml-[4rem] max-md:ml-0 mt-[6rem] max-md:mt-[4rem] mb-8 py-3 max-md:py-1 border-[2px] bg-white font-bold font-urban rounded-full tracking-wider max-lg:text-[1rem] text-[1.2rem]'>
+      <button className='px-8 mx-auto block max-xl:ml-[4rem] max-md:ml-0 mt-[6rem] max-md:mt-[4rem] mb-8 py-3 max-md:py-1 border-[2px] bg-white font-bold font-urban rounded-full tracking-wider max-lg:text-[1rem] text-[1.2rem]'>
         Featured Universities
       </button>
       <div className='overflow-hidden rounded-full w-full border-black border-[1px] bg-white px-10 py-5 shadow-lightshad'>
