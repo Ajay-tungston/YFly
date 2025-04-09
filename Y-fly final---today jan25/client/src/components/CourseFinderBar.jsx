@@ -242,7 +242,7 @@ const CourseDropdown = ({
                     dbValues.courseTitle
                       .filter((title) =>
                         title
-                          .toLowerCase()
+                          ?.toLowerCase()
                           .includes(courseTitleDropdownSearch.toLowerCase())
                       )
                       .map((title, idx) => (

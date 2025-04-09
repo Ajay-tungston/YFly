@@ -51,7 +51,7 @@ const WhyStudySlider = () => {
                 className="swiper-custom"
             >
                 <SwiperSlide>
-                    <div className="w-full h-[390px] flex flex-col justify-between border-[1px] py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white">
+                    <div className="w-full h-[390px] flex flex-col justify-between border-[1px] mb-6 md:mb-0 py-6 border-black rounded-[38px] hover:shadow-right-bottom bg-white">
                         <div className="flex justify-center">
                             <img src={whystudy1} width={250} alt="why study" className="rounded-t-[38px]" />
                         </div>

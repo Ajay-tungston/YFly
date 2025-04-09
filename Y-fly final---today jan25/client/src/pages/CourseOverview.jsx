@@ -320,6 +320,9 @@ const CourseOverview = () => {
     </div>
 
     {/* Top Recruiters */}
+    <div className="text-[#1e40af] text-lg sm:text-2xl md:text-3xl font-black font-['Urbanist'] leading-6 ">
+        Top Recruiters
+      </div>
     <div className="mt-8 bg-white rounded-[48px] shadow-md outline outline-1 outline-slate-900 p-4 sm:p-6 md:p-8 flex flex-col gap-8">
       <div className="flex flex-wrap justify-start gap-4">
         {course.top_recruiters && course.top_recruiters.length > 0 ? (

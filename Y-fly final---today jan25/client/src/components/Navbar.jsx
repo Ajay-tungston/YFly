@@ -987,12 +987,65 @@ const Navbar = () => {
             </div>
           )}
 
-          <div
-            className="flex  items-center gap-2 cursor-pointer"
-            onClick={() => navigate("/services")}
+        {/* Wrapper for Services dropdown */}
+        <div ref={serviceRef} className="relative w-full flex justify-center">
+  {/* Services Button */}
+  <div
+    className="flex items-center gap-2 cursor-pointer"
+    onClick={() => setIsServiceOpen(!isServiceOpen)}
+  >
+    Services
+    <img
+      src={dropdown}
+      alt="dropdown"
+      width={16}
+      className={`${isServiceOpen ? "rotate-180" : ""} transition-transform`}
+    />
+  </div>
+
+  {/* Dropdown Menu */}
+  {isServiceOpen && (
+    <div
+      className={`z-50 bg-white border shadow-lightshad rounded-[20px] mt-4 px-4 py-4 absolute left-1/2 transform -translate-x-1/2 w-[90vw] max-w-[1000px]`}
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="options-menu"
+    >
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+        {(showAll ? services : services.slice(0, 8)).map((service, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              navigate(`/services/${service?._id}`);
+              setIsServiceOpen(false);
+            }}
+            className="flex items-center justify-between gap-2 px-4 w-full h-[60px] rounded-[10px] border border-black text-[#2b7cd6] hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 font-dela text-[0.8rem]"
           >
-            Services
-          </div>
+            {service?.service_name}
+            <img
+              src={service?.imageUrl}
+              alt="icon"
+              className="w-5 h-5 object-cover"
+            />
+          </button>
+        ))}
+      </div>
+
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="flex items-center gap-2 text-[#2b7cd6] transition font-dela text-[1rem]"
+        >
+          {showAll ? "View less" : "View more"}
+          <span>{showAll ? "▲" : "▼"}</span>
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+
+
           <div
             className="flex  items-center gap-2 cursor-pointer"
             onClick={() => navigate("/contactus")}
