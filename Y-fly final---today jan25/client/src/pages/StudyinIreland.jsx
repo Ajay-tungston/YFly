@@ -25,7 +25,7 @@ const Studyin = () => {
                 </div>
 
                 <div className='flex justify-center'>
-                    <div className=' text-center text-white text-[5.5rem] max-xl:text-[4rem] max-lg:text-[3rem] max-md:text-[1rem] max-lg:leading-[55px] max-md:leading-[25px]  max-xl:leading-[70px] leading-[100px] font-dela absolute top-[17rem] max-xl:top-[15rem] max-lg:top-[12rem] max-md:top-[5rem]'>Study in<br /> Ireland</div>
+                    <div className=' text-center text-white text-[5.5rem] max-xl:text-[4rem] max-lg:text-[3rem] max-md:text-[1rem] max-lg:leading-[55px] max-md:leading-[25px]  max-xl:leading-[70px] leading-[100px] font-lato absolute top-[17rem] max-xl:top-[15rem] max-lg:top-[12rem] max-md:top-[5rem]'>Study in<br /> Ireland</div>
                 </div>
 
                 <div className=' flex justify-center'>

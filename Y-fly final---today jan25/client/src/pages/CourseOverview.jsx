@@ -123,7 +123,7 @@ const CourseOverview = () => {
       >
         <div className="flex flex-col items-center justify-center h-full text-white">
           {/* University name */}
-          <h1 className="font-dela text-5xl max-md:text-3xl text-center mb-3 drop-shadow-md">
+          <h1 className="font-lato text-5xl max-md:text-3xl text-center mb-3 drop-shadow-md">
             {course.university_name?.university_name}
           </h1>
 
@@ -150,7 +150,7 @@ const CourseOverview = () => {
 
       <div className="bg-[#fff] bg-cover bg-center  rounded-[80px] md:rounded-[120px] h-[4700px] md:h-[4000px] lg:rounded-[200px] min-h-screen pt-16 pb-24 mt-10 px-4 sm:px-8 md:px-16 lg:px-24">
   {/* Course Details Title */}
-  <div className="relative text-[#1e40af] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-[36px] sm:leading-[62.40px] mb-8">
+  <div className="relative text-[#1e40af] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-[36px] sm:leading-[62.40px] mb-8">
     Course Details
   </div>
 
@@ -189,7 +189,7 @@ const CourseOverview = () => {
             <div className="text-zinc-400 text-lg sm:text-2xl font-bold font-['Urbanist'] mb-2">
               Intakes
             </div>
-            <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['Dela_Gothic_One'] leading-6 sm:leading-9">
+            <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['lato_Gothic_One'] leading-6 sm:leading-9">
               {course.intakes.map((intake, index) => (
                 <div key={index}>
                   {intake.month} {intake.year}
@@ -208,7 +208,7 @@ const CourseOverview = () => {
             <div className="text-zinc-400 text-lg sm:text-2xl font-bold font-['Urbanist'] mb-2">
               Deadline
             </div>
-            <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['Dela_Gothic_One'] leading-6 sm:leading-9">
+            <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['lato_Gothic_One'] leading-6 sm:leading-9">
               {new Date(course.application_deadline).toLocaleDateString()}
             </div>
           </div>
@@ -218,7 +218,7 @@ const CourseOverview = () => {
 
     <div className="px-4 sm:px-8 md:px-16 pt-8 flex flex-col gap-6">
       {/* Overview Section */}
-      <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-[36px] sm:leading-[62.40px]">
+      <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-[36px] sm:leading-[62.40px]">
         Overview
       </div>
       <div className="w-full max-w-5xl mx-auto bg-white rounded-xl p-4 sm:p-8 text-black text-base sm:text-lg md:text-2xl font-normal font-['Urbanist'] leading-6 sm:leading-8 text-left">
@@ -227,7 +227,7 @@ const CourseOverview = () => {
     </div>
 
     {/* Eligibility Requirements */}
-    <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-[36px] sm:leading-[62.40px] mt-8">
+    <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-[36px] sm:leading-[62.40px] mt-8">
       Eligibility Requirements
     </div>
     <br />
@@ -235,7 +235,7 @@ const CourseOverview = () => {
       {/* Requirements Card */}
       <div className="w-full max-w-md p-4 sm:p-6 bg-white rounded-[48px] shadow-md outline outline-1 outline-slate-900 flex flex-col gap-6">
         <div className="pb-6 border-b border-zinc-400">
-          <div className="text-[#1e40af] text-xl sm:text-2xl font-normal font-['Dela_Gothic_One']">
+          <div className="text-[#1e40af] text-xl sm:text-2xl font-normal font-['lato_Gothic_One']">
             Requirements
           </div>
         </div>
@@ -254,7 +254,7 @@ const CourseOverview = () => {
       {/* Test Requirements Card */}
       <div className="w-full max-w-md p-4 sm:p-6 bg-white rounded-[48px] shadow-md outline outline-1 outline-slate-900 flex flex-col gap-6">
         <div className="pb-6 border-b border-zinc-400">
-          <div className="text-[#1e40af] text-xl sm:text-2xl font-normal font-['Dela_Gothic_One']">
+          <div className="text-[#1e40af] text-xl sm:text-2xl font-normal font-['lato_Gothic_One']">
             Test Requirements
           </div>
         </div>
@@ -273,14 +273,14 @@ const CourseOverview = () => {
     <br />
 
     {/* Application Requirements */}
-    <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-[36px] sm:leading-[62.40px] mt-8">
+    <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-[36px] sm:leading-[62.40px] mt-8">
       Application Requirements
     </div>
     <br />
     <div className="w-full max-w-4xl mx-auto bg-white rounded-[48px] shadow-md outline outline-1 outline-slate-900 p-4 sm:p-6 md:p-12 flex flex-col gap-6">
       <div className="w-full flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <div className="text-[#1e40af] text-xl sm:text-2xl font-normal font-['Dela_Gothic_One']">
+          <div className="text-[#1e40af] text-xl sm:text-2xl font-normal font-['lato_Gothic_One']">
             Requirements
           </div>
         </div>
@@ -296,7 +296,7 @@ const CourseOverview = () => {
 
     {/* Career Outcomes */}
     <div className="px-4 sm:px-8 md:px-16 pt-8 flex flex-col gap-4">
-      <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-[36px] sm:leading-[62.40px]">
+      <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-[36px] sm:leading-[62.40px]">
         Career Outcomes
       </div>
       <div className="text-[#1e40af] text-lg sm:text-2xl md:text-3xl font-black font-['Urbanist'] leading-6">
@@ -344,7 +344,7 @@ const CourseOverview = () => {
     </div>
 
     {/* Fees & Scholarships */}
-    <div className="justify-start text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight mt-8">
+    <div className="justify-start text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-tight mt-8">
       Fees & Scholarships
     </div>
     <br />
@@ -359,7 +359,7 @@ const CourseOverview = () => {
           <div className="text-zinc-400 text-lg sm:text-xl font-bold font-['Urbanist'] leading-loose">
             Tuition fees
           </div>
-          <div className="text-blue-800 text-2xl font-normal font-['Dela_Gothic_One'] leading-loose">
+          <div className="text-blue-800 text-2xl font-normal font-['lato_Gothic_One'] leading-loose">
             {course.tution_fee ? `$${course.tution_fee}` : "N/A"}
           </div>
         </div>
@@ -376,7 +376,7 @@ const CourseOverview = () => {
         <div className="px-4 py-4 bg-white rounded-3xl outline outline-1 outline-slate-900 flex justify-center items-center gap-3">
           <div className="flex justify-center items-center gap-2">
             <div className="inline-flex flex-col justify-start items-start">
-              <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['Dela_Gothic_One'] leading-loose">
+              <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['lato_Gothic_One'] leading-loose">
                 {course.scholarship_applicable}
               </div>
             </div>
@@ -384,7 +384,7 @@ const CourseOverview = () => {
         </div>
         {/* Department Funding */}
         <div className="px-4 py-4 bg-white rounded-3xl outline outline-1 outline-slate-900 flex justify-center items-center gap-3">
-          <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['Dela_Gothic_One'] leading-loose">
+          <div className="text-[#1e40af] text-lg sm:text-2xl font-normal font-['lato_Gothic_One'] leading-loose">
             Funding Options
           </div>
         </div>
@@ -413,7 +413,7 @@ const CourseOverview = () => {
 
     <div className="px-4 sm:px-6">
       {/* FAQs Section Title */}
-      <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight mt-8">
+      <div className="text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-tight mt-8">
         FAQs
       </div>
 
@@ -429,7 +429,7 @@ const CourseOverview = () => {
           >
             {/* Question & Dropdown Icon */}
             <div className="flex justify-between items-center">
-              <h3 className="flex-1 text-lg sm:text-2xl font-normal font-['Dela_Gothic_One'] leading-loose">
+              <h3 className="flex-1 text-lg sm:text-2xl font-normal font-['lato_Gothic_One'] leading-loose">
                 {faq.question}
               </h3>
               <FaChevronDown
@@ -451,7 +451,7 @@ const CourseOverview = () => {
         ))}
       </div>
       {/* Similar Courses Section */}
-      <div className="justify-start text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['Dela_Gothic_One'] leading-tight mt-8">
+      <div className="justify-start text-[#2563eb] text-2xl sm:text-4xl md:text-5xl font-normal font-['lato_Gothic_One'] leading-tight mt-8">
         Similar Courses
       </div>
     {/* Similar Courses Section */}
@@ -503,7 +503,7 @@ const CourseOverview = () => {
       </div>
 
       {/* Course Info */}
-      <div className="mt-4 font-dela text-sm sm:text-base text-center">
+      <div className="mt-4 font-lato text-sm sm:text-base text-center">
         {similarCourse.course_level} in {similarCourse.discipline} - {similarCourse.area_of_study}
       </div>
       <div className="border-t border-gray-300 my-4"></div>
@@ -514,7 +514,7 @@ const CourseOverview = () => {
           <div className="text-gray-500 font-urban font-bold text-center text-sm">
             Deadline
           </div>
-          <div className="font-dela text-sm sm:text-base text-center">
+          <div className="font-lato text-sm sm:text-base text-center">
             {new Date(similarCourse.application_deadline).toLocaleDateString()}
           </div>
         </div>
@@ -522,7 +522,7 @@ const CourseOverview = () => {
           <div className="text-gray-500 font-urban font-bold text-center text-sm">
             Total cost
           </div>
-          <div className="font-dela text-sm sm:text-base text-center">
+          <div className="font-lato text-sm sm:text-base text-center">
             ${similarCourse.tution_fee || "N/A"}
           </div>
           

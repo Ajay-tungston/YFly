@@ -28,7 +28,7 @@ const SopWriting = () => {
     fetchService();
   }, [params]);
 
-  const handelApplay = async () => {
+  const hanlatopplay = async () => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/service/applay`,
@@ -74,7 +74,7 @@ const SopWriting = () => {
 
         <div className="flex justify-center">
           <div className=" absolute top-[15rem] max-md:top-[9rem] text-center  tracking-wide leading-tight ">
-            <p className="text-black font-dela  text-[5.4rem] max-xl:text-[3.8rem] max-md:text-[2rem] max-lg:text-[3rem] capitalize">
+            <p className="text-black font-lato  text-[5.4rem] max-xl:text-[3.8rem] max-md:text-[2rem] max-lg:text-[3rem] capitalize">
               {service?.service_name}
             </p>
             <p className="text-black py-4 font-pop font-bold  text-[2rem] max-md:text-[1.2rem] max-lg:text-[1.5rem]">
@@ -91,7 +91,7 @@ const SopWriting = () => {
                                         border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] 
                                         hover:border-b-[6px] rounded-full border-[1px] border-[#0E1B2C] 
                                         font-urban "
-            onClick={handelApplay}
+            onClick={hanlatopplay}
           >
             Apply
           </button>
@@ -102,7 +102,7 @@ const SopWriting = () => {
         className=" bg-white bg-cover bg-center rounded-[200px] max-lg:rounded-[120px] max-md:rounded-[80px] pt-24 px-24 pb-32 mt-10 max-xl:px-16 max-lg:px-10 max-md:px-5"
         style={{ backgroundImage: `url(${grid})` }}
       >
-        <div className="text-[#2b7cd6] font-dela text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
+        <div className="text-[#2b7cd6] font-lato text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
           Overview
         </div>
         <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-10 max-lg:px-5 max-md:px-0  py-3">
@@ -110,7 +110,7 @@ const SopWriting = () => {
         </p>
 
         {/* BENEFITS */}
-        <div className="text-[#2b7cd6] font-dela text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
+        <div className="text-[#2b7cd6] font-lato text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
           Benefits
         </div>
         <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-10 max-lg:px-5 max-md:px-0 py-3">
@@ -123,7 +123,7 @@ const SopWriting = () => {
         </ul>
 
         {/* procedure */}
-        <div className="text-[#2b7cd6] font-dela text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
+        <div className="text-[#2b7cd6] font-lato text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
           Procedure
         </div>
         <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-10 max-lg:px-5 max-md:px-0 py-3">
@@ -131,7 +131,7 @@ const SopWriting = () => {
         </p>
 
         {/* workflow */}
-        <div className="text-[#2b7cd6] font-dela text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
+        <div className="text-[#2b7cd6] font-lato text-[2rem] max-xl:text-[1.6rem] max-md:text-[1.2rem]">
           Workflow
         </div>
         <p className="text-black text-[1.1rem] max-xl:text-[1rem] max-md:text-[0.8rem] font-urban tracking-wide px-10 max-lg:px-5 max-md:px-0 py-3">
@@ -151,7 +151,7 @@ const SopWriting = () => {
 
           {/* Right Text */}
           <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#001f3f]">
+            <h2 className="text-2xl md:text-3xl font-lato text-[#001f3f]">
               Ready to flight your dreams?
             </h2>
             <p

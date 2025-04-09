@@ -71,10 +71,10 @@ const ProficiencyExam = () => {
             <img src={IconBack} alt="Back" className="w-8 h-8" />
           </button>
           <div className="w-full">
-            <h2 className="text-[1.2rem] max-xl:text-[1.1rem] max-lg:text-[1rem] max-md:text-[0.9rem] font-dela text-center text-[#2b7cd6]">
+            <h2 className="text-[1.2rem] max-xl:text-[1.1rem] max-lg:text-[1rem] max-md:text-[0.9rem] font-lato text-center text-[#2b7cd6]">
               Have you taken or planning to take any English proficiency exam?
             </h2>
-            <div className="flex flex-wrap justify-around my-8 max-md:my-6 font-dela text-[#2b7cd6] text-[1.1rem] max-xl:text-[1rem] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
+            <div className="flex flex-wrap justify-around my-8 max-md:my-6 font-lato text-[#2b7cd6] text-[1.1rem] max-xl:text-[1rem] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
               {["TOEFL", "IELTS", "PTE", "Haven’t taken"].map((exam) => (
                 <button
                   key={exam}
@@ -100,7 +100,7 @@ const ProficiencyExam = () => {
             {/* If an exam is already taken, show the score input */}
             {selectedExam && selectedExam !== "Haven’t taken" && (
               <div className="text-center mb-12 max-md:mb-6">
-                <label className="block text-[1.1rem] max-xl:text-[1rem] max-lg:text-[0.9rem] max-md:text-[0.8rem] tracking-wider text-[#2b7cd6] font-dela font-bold mb-2">
+                <label className="block text-[1.1rem] max-xl:text-[1rem] max-lg:text-[0.9rem] max-md:text-[0.8rem] tracking-wider text-[#2b7cd6] font-lato font-bold mb-2">
                   Your score
                 </label>
                 <input

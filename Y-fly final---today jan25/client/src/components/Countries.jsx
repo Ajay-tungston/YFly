@@ -77,7 +77,7 @@ const Countries = ({ onOpenDegree }) => {
         <Navbar />
         <div className="flex flex-col items-center justify-center flex-1 w-full">
           <div className="bg-white py-14 max-md:py-7 px-12 max-lg:px-10 max-md:px-5 rounded-[72px] shadow-lightshad w-[60%] max-xl:w-[75%] max-md:w-[85%]">
-            <h2 className="max-md:text-[0.8rem] max-xl:text-[1.1rem] max-lg:text-[0.9rem] text-[1.3rem] font-dela text-center text-[#2b7cd6] mb-8 max-md:mb-4">
+            <h2 className="max-md:text-[0.8rem] max-xl:text-[1.1rem] max-lg:text-[0.9rem] text-[1.3rem] font-lato text-center text-[#2b7cd6] mb-8 max-md:mb-4">
               Which country do you wish to pursue your education in?
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 max-lg:gap-3 max-md:gap-2">
@@ -89,7 +89,7 @@ const Countries = ({ onOpenDegree }) => {
                     selectedCountries.includes(country.name)
                       ? 'bg-[#30589f] text-white shadow-btn'
                       : 'bg-white text-[#2b7cd6]'
-                  } border border-[#0e1b2c] active:scale-95 transition transform duration-150 hover:shadow-lightshad max-md:text-[0.7rem] max-lg:text-[0.8rem] font-dela py-6 max-lg:py-3 px-2 rounded-3xl`}
+                  } border border-[#0e1b2c] active:scale-95 transition transform duration-150 hover:shadow-lightshad max-md:text-[0.7rem] max-lg:text-[0.8rem] font-lato py-6 max-lg:py-3 px-2 rounded-3xl`}
                 >
                   {country.flag && (
                     <img src={country.flag} alt={`${country.name} flag`} width={80} className="mx-auto rounded-[8px] mb-1 max-md:w-[4rem]"/>
@@ -104,7 +104,7 @@ const Countries = ({ onOpenDegree }) => {
                   openToAllSelected || selectedCountries.length > 0
                     ? 'bg-[#2b7cd6] text-white shadow-btn'
                     : 'bg-white text-[#2b7cd6]'
-                } border border-[#0e1b2c] shadow-lightshad sm:text-[0.4rem] max-md:text-[0.7rem] lg:text-[1rem] font-dela active:scale-95 transition transform duration-150 py-6 px-2 rounded-3xl`}
+                } border border-[#0e1b2c] shadow-lightshad sm:text-[0.4rem] max-md:text-[0.7rem] lg:text-[1rem] font-lato active:scale-95 transition transform duration-150 py-6 px-2 rounded-3xl`}
               >
                 {selectedCountries.length > 0 ? 'Continue' : 'Open to all'}
               </button>

@@ -499,7 +499,7 @@ const Profilematcher = () => {
             <button className="absolute top-[10rem] text-[#0F62AF] border-[2px] max-md:hidden border-[#0F62AF] px-5 py-2 rounded-full font-bold font-urban">
               AI PROFILE MATCHER
             </button>
-            <div className="absolute text-center top-[13.5rem] font-dela text-[5.4rem] leading-[6.5rem] max-xl:text-[4rem] max-xl:leading-[4.8rem] max-lg:text-[3.2rem] max-lg:leading-[3.5rem]  max-md:text-[1.8rem] max-md:leading-[3rem]">
+            <div className="absolute text-center top-[13.5rem] font-lato text-[5.4rem] leading-[6.5rem] max-xl:text-[4rem] max-xl:leading-[4.8rem] max-lg:text-[3.2rem] max-lg:leading-[3.5rem]  max-md:text-[1.8rem] max-md:leading-[3rem]">
               Your personalised
               <br /> course search.
             </div>
@@ -793,7 +793,7 @@ const Profilematcher = () => {
                                   <div className="bg-[#FFE0B2] inline-block px-4 py-1 rounded-[20px] font-bold text-[#C9851E] text-[14px] font-urban">
                                     {i?.state},{i?.country}
                                   </div>
-                                  <div className="font-dela text-[13px] mt-2">
+                                  <div className="font-lato text-[13px] mt-2">
                                     {i?.university_name}
                                   </div>
 
@@ -804,7 +804,7 @@ const Profilematcher = () => {
                                       <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
                                         University type
                                       </div>
-                                      <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                      <div className="font-lato text-[13px] max-xl:text-[12px]">
                                         {/* {i?.intakes[0].month} {i?.intakes[0].year} */}
                                         {i?.university_type}
                                       </div>
@@ -851,7 +851,7 @@ const Profilematcher = () => {
                                   <div className="bg-[#FFE0B2] inline-block px-4 py-1 rounded-[20px] font-bold text-[#C9851E] text-[14px] font-urban">
                                     {i?.state},{i?.country}
                                   </div>
-                                  <div className="font-dela text-[13px] mt-2">
+                                  <div className="font-lato text-[13px] mt-2">
                                     {i?.university_name}
                                   </div>
 
@@ -862,7 +862,7 @@ const Profilematcher = () => {
                                       <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
                                         University type
                                       </div>
-                                      <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                      <div className="font-lato text-[13px] max-xl:text-[12px]">
                                         {i?.university_type}
                                       </div>
                                     </div>
@@ -941,7 +941,7 @@ const Profilematcher = () => {
                                   <div className="bg-[#B2D7FF] inline-block px-4 py-1 rounded-[20px] font-bold text-[#2B7CD6] text-[14px] font-urban">
                                     {i?.state},{i?.country}
                                   </div>
-                                  <div className="font-dela text-[13px] mt-2">
+                                  <div className="font-lato text-[13px] mt-2">
                                     {i?.university_name}
                                   </div>
                                   <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
@@ -951,7 +951,7 @@ const Profilematcher = () => {
                                       <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
                                         University type
                                       </div>
-                                      <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                      <div className="font-lato text-[13px] max-xl:text-[12px]">
                                         {i?.university_type}
                                       </div>
                                     </div>
@@ -997,7 +997,7 @@ const Profilematcher = () => {
                                   <div className="bg-[#B2D7FF] inline-block px-4 py-1 rounded-[20px] font-bold text-[#2B7CD6] text-[14px] font-urban">
                                     {i?.state},{i?.country}
                                   </div>
-                                  <div className="font-dela text-[13px] mt-2">
+                                  <div className="font-lato text-[13px] mt-2">
                                     {i?.university_name}
                                   </div>
                                   <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
@@ -1007,7 +1007,7 @@ const Profilematcher = () => {
                                       <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
                                         University type
                                       </div>
-                                      <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                      <div className="font-lato text-[13px] max-xl:text-[12px]">
                                         {i?.university_type}
                                       </div>
                                     </div>
@@ -1086,7 +1086,7 @@ const Profilematcher = () => {
                                   <div className="bg-[#B2FFE3] inline-block px-4 py-1 rounded-[20px] font-bold text-[#209F71] text-[14px] font-urban">
                                     {i?.state},{i?.country}
                                   </div>
-                                  <div className="font-dela text-[13px] mt-2">
+                                  <div className="font-lato text-[13px] mt-2">
                                     {i?.university_name}
                                   </div>
                                   <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
@@ -1096,7 +1096,7 @@ const Profilematcher = () => {
                                       <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
                                         University type
                                       </div>
-                                      <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                      <div className="font-lato text-[13px] max-xl:text-[12px]">
                                         {i?.university_type}
                                       </div>
                                     </div>
@@ -1142,7 +1142,7 @@ const Profilematcher = () => {
                                   <div className="bg-[#B2FFE3] inline-block px-4 py-1 rounded-[20px] font-bold text-[#209F71] text-[14px] font-urban">
                                     {i?.state},{i?.country}
                                   </div>
-                                  <div className="font-dela text-[13px] mt-2">
+                                  <div className="font-lato text-[13px] mt-2">
                                     {i?.university_name}
                                   </div>
                                   <div className="border-t-[0.5px] border-[#bfc0c5] my-4"></div>
@@ -1152,7 +1152,7 @@ const Profilematcher = () => {
                                       <div className="text-[#898C9A] font-urban font-bold text-[13px] max-xl:text-[12px]">
                                         University type
                                       </div>
-                                      <div className="font-dela text-[13px] max-xl:text-[12px]">
+                                      <div className="font-lato text-[13px] max-xl:text-[12px]">
                                         {i?.university_type}
                                       </div>
                                     </div>
@@ -1208,7 +1208,7 @@ const Profilematcher = () => {
               <div className=" flex justify-around">
                 <div className="bg-white w-[40%] max-md:w-[95%] absolute top-[30%] rounded-[30px] p-8">
                   <div className="flex justify-between items-center mb-5">
-                    <div className="font-dela  text-[18px]">
+                    <div className="font-lato  text-[18px]">
                       Recommended courses
                     </div>
                     <button onClick={handleModal}>
@@ -1253,7 +1253,7 @@ const Profilematcher = () => {
                         alt="harward"
                       />
                     </div>
-                    <div className="font-dela text-[13px]">
+                    <div className="font-lato text-[13px]">
                       {/* {selectedCourse?.course_level} of{" "}
                       {selectedCourse?.discipline} in{" "}
                       {selectedCourse?.area_of_study} */}
@@ -1264,7 +1264,7 @@ const Profilematcher = () => {
                   </div>
 
                   <div>
-                    <div className="py-5 font-dela text-[18px]">
+                    <div className="py-5 font-lato text-[18px]">
                       Course Details
                     </div>
 
@@ -1275,7 +1275,7 @@ const Profilematcher = () => {
                           <div className="font-urban text-[14px]">
                             Tuition Fee
                           </div>
-                          <div className="font-dela text-[13px]">
+                          <div className="font-lato text-[13px]">
                             ${selectedCourse?.tution_fee}
                           </div>
                         </div>
@@ -1294,14 +1294,14 @@ const Profilematcher = () => {
                               ?.filter((i) => i.requirementType === "Min GPA")
                               ?.map((i) => (
                                 <div
-                                  className="font-dela text-[13px]"
+                                  className="font-lato text-[13px]"
                                   key={i.id || i?.minGPA}
                                 >
                                   {i.minGPA}-10(Gpa)
                                 </div>
                               ))
                           ) : (
-                            <div className="font-dela text-[13px]">N/A</div>
+                            <div className="font-lato text-[13px]">N/A</div>
                           )}
                         </div>
                       </div>
@@ -1312,7 +1312,7 @@ const Profilematcher = () => {
                         <img src={wallet} alt="wallet" />
                         <div className="ml-3">
                           <div className="font-urban text-[14px]">Duration</div>
-                          <div className="font-dela text-[13px]">
+                          <div className="font-lato text-[13px]">
                             {selectedCourse?.course_duration}
                           </div>
                         </div>
@@ -1322,7 +1322,7 @@ const Profilematcher = () => {
                         <img src={wallet} alt="wallet" />
                         <div className="ml-3">
                           <div className="font-urban text-[14px]">Intake</div>
-                          <div className="font-dela text-[13px]">
+                          <div className="font-lato text-[13px]">
                             {selectedCourse?.intakes?.map((i, index) => (
                               <>
                                 <span className="hidden md:flex">
@@ -1353,7 +1353,7 @@ const Profilematcher = () => {
                             Requirement
                           </div>
                           {selectedCourse?.testRequirements?.map((i) => (
-                            <div className="font-dela text-[13px]">
+                            <div className="font-lato text-[13px]">
                               Overall score of {i?.overallScore}, for (
                               {i?.testRequirementName})
                             </div>
@@ -1386,7 +1386,7 @@ const Profilematcher = () => {
             <div className="bg-black bg-opacity-50 h-[100vh] fixed inset-0 ">
               <div className=" flex justify-around">
                 <div className="bg-white w-[40%] max-md:w-[95%] absolute top-[20%] rounded-[30px] p-8">
-                  <div className="font-dela">Apply Now</div>
+                  <div className="font-lato">Apply Now</div>
 
                   <div className="my-5">
                     {/* intake year */}
@@ -1405,7 +1405,7 @@ const Profilematcher = () => {
                           {availableYears.map((year) => (
                             <div
                               key={year}
-                              className={`py-3 px-5 mt-2 font-dela border-black border-[1px] rounded-[15px] text-center cursor-pointer 
+                              className={`py-3 px-5 mt-2 font-lato border-black border-[1px] rounded-[15px] text-center cursor-pointer 
           ${
             selectedYear === year ? "bg-[#2B7CD6] text-white" : "text-[#2B7CD6]"
           }`}
@@ -1437,7 +1437,7 @@ const Profilematcher = () => {
                             {availableMonths.map((month) => (
                               <div
                                 key={month}
-                                className={`py-3 px-5 mt-2 font-dela border-black border-[1px] rounded-[15px] text-center mr-4 cursor-pointer
+                                className={`py-3 px-5 mt-2 font-lato border-black border-[1px] rounded-[15px] text-center mr-4 cursor-pointer
               ${
                 selectedMonth === month
                   ? "bg-[#2B7CD6] text-white"
@@ -1484,7 +1484,7 @@ const Profilematcher = () => {
               <div className="bg-black bg-opacity-50 msx-h-[80vh] overflow-y-scroll fixed inset-0">
                 <div className="flex justify-around">
                   <div className="bg-white w-[40%] max-md:w-[95%] absolute top-[5%] rounded-[30px] p-8">
-                    <div className="font-dela">Apply Now</div>
+                    <div className="font-lato">Apply Now</div>
                     {errMsg && <p className="text-[#c81f1f] text-center">{errMsg}</p>}
                     <div className="my-5">
                       {/* Identity Documents */}
@@ -1501,7 +1501,7 @@ const Profilematcher = () => {
                         {identitydoc && (
                           <div>
                             {/* Passport Front */}
-                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px]">
+                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-lato border-black border-[1px] rounded-[15px]">
                               Passport Front
                               <input
                                 type="file"
@@ -1526,7 +1526,7 @@ const Profilematcher = () => {
                             </div>
 
                             {/* Passport Back */}
-                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px]">
+                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-lato border-black border-[1px] rounded-[15px]">
                               Passport Back
                               <input
                                 type="file"
@@ -1551,7 +1551,7 @@ const Profilematcher = () => {
                             </div>
 
                             {/* CV/Resume */}
-                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-dela border-black border-[1px] rounded-[15px]">
+                            <div className="py-3 px-5 mt-2 text-[14px] flex justify-between text-[#2B7CD6] font-lato border-black border-[1px] rounded-[15px]">
                               CV/Resume
                               <input
                                 type="file"
@@ -1903,7 +1903,45 @@ const Profilematcher = () => {
           </>
           {showPopup && <SuccessPopup onClose={() => setShowPopup(false)} />}
         </div>
+        <section className="px-4 md:px-0">
+        <div className="bg-[#5cc7f1] rounded-[80px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto -mt-32 md:-mt-[150px]">
+          {/* Left Image */}
+          <div className="flex-shrink-0 w-full h-[250px] md:w-[571px] md:h-[403px] rounded-[20px] overflow-hidden">
+            <img
+              src="/images/dummy.png"
+              alt="Support Agent"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
+          {/* Right Text */}
+          <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
+            <h2 className="text-2xl md:text-3xl font-lato text-[#001f3f]">
+              Ready to flight your dreams?
+            </h2>
+            <p
+              className="text-[#001f3f] text-sm md:text-base leading-relaxed"
+              style={{
+                fontFamily: "'Roboto', sans-serif",
+                fontWeight: "400",
+                lineHeight: "1.75",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
+              placerat gravida aliquet at. Nisi urna quam massa pellentesque
+              lectus odio sagittis. Tortor massa in rhoncus purus nunc
+              scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
+              eget urna varius eu nibh in sed est.
+            </p>
+            <button className="bg-[#2B7CD6] text-white border border-[#2B7CD6] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#2B7CD6] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0 shadow-[3px_3px_0px_0px_#001426]">
+                            Book a call →
+                        </button>
+          </div>
+        </div>
+      </section>
+
+      
         {/* <Contactus /> */}
         <Footer />
       </div>
