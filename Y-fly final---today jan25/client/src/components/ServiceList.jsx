@@ -22,7 +22,7 @@ const [addingNewService, setAddingNewService] = useState(false);
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/service/get-all?page=${currentPage}&limit=${limit}&search=${searchQuery}`
       );
-      console.log("Incredible",response);
+  
       setService(response.data || []);
       setTotalPages(response?.data?.pagination?.pages);
       // setSelectedUniversity([]);

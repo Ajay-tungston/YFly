@@ -38,6 +38,7 @@ import StudyinGermany from './pages/StudyinGermany';
 import StudyinNewzealand from './pages/StudyinNewzealand';
 import StudyinIreland from './pages/StudyinIreland';
 import StudyinComponentUk from './components/StudyinComponentUk';
+import ScrollToTop from './components/ScrollToTop';
 
 
 
@@ -50,7 +51,7 @@ const ProtectedRoute = ({ children }) => {
 const App = () => {
   return (
     <>
-   
+   <ScrollToTop/>
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/signup' element={<SignupPageMain/>}/>

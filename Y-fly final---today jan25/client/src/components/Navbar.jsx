@@ -111,6 +111,9 @@ const Navbar = () => {
       if (mobileRef.current && !mobileRef.current.contains(event.target)) {
         setIsOpen(false);
       }
+      if(serviceRef.current && !serviceRef.current.contains(event.target)){
+        setIsServiceOpen(false);
+      }
     };
 
     // Use click instead of mousedown and proper event phase

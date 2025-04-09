@@ -84,7 +84,7 @@ const CourseSideBar = ({
   const testRequirementDropdown = () => {
     setIsNineOpen(!isNineOpen);
   };
-  console.log("dbValues =", dbValues);
+
   return (
     <>
       <div className="w-[15%] max-xl:w-[27%] font-urban  bg-[#fff] rounded-[50px] border-[1px] max-h-[1000px] border-black flex flex-col max-lg:hidden overflow-y-auto">

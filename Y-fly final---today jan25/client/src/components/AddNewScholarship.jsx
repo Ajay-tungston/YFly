@@ -55,13 +55,12 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
             }
         }
         // Debugging: Log FormData entries
-        console.log('FormData contents:');
+     
         for (let pair of formData.entries()) {
-            console.log(pair[0], ':', pair[1]);
+           
         }
         
-        console.log('Test Requirements State:', testRequirements);
-        console.log('Special Restrictions State:', specialRestrictions);
+        
 
         formData.append('brochure', brochure);
         formData.append('testRequirements', JSON.stringify(testRequirements));
@@ -79,7 +78,6 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
            
      
           
-            console.log(response.data);
         
             // Reset state to clear all fields
             setAddScholarship({

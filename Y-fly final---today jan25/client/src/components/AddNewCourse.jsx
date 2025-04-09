@@ -62,7 +62,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
     const fetchScholarships = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/scholarships/get-all`);
-        console.log("Scholarship response:", response.data);
+   
         // If your API returns an object, extract the array accordingly. For example:
         const scholarshipsArray = Array.isArray(response.data)
           ? response.data
@@ -163,7 +163,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
           style: { backgroundColor: "#30589F", color: "white" },
       });
       // window.location.reload();
-      // console.log(response.data);
+      
       // Reset form after successful submission
       setAddCourseData({
         course_level: "",
@@ -313,7 +313,7 @@ const AddNewCourse = ({ setAddingNewCourse }) => {
   // Test Requirements
   const handleTestRequirementChange = (index, field, value) => {
     const updatedTestRequirements = [...addCourseData.testRequirements];
-    console.log(updatedTestRequirements);
+  
 
     // Ensure the index exists in the array before updating
     if (index >= 0 && index < updatedTestRequirements.length) {

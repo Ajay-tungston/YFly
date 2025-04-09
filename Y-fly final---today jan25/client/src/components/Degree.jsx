@@ -12,7 +12,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
   const navigate = useNavigate();
 
   const handleSelectDegree = (degree) => {
-    console.log("Selected Degree:", degree); // Debug: Check the degree value
+     // Debug: Check the degree value
     setSelectedDegree(degree);
     updateFormData({
       ...formData,

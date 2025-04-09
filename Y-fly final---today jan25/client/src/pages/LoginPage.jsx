@@ -81,7 +81,7 @@ const verifyOTP = async (e) => {
 
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/verifyotp`, { email, otp });
-    console.log("Backend response:", response.data);
+  
     setMessage(response.data.message);
 
     // Update the form context with the email so that it is available for later pages
@@ -98,7 +98,7 @@ const verifyOTP = async (e) => {
     // Store token in localStorage
     localStorage.setItem("authToken", response.data.token);
     localStorage.setItem("email", response.data.email);
-console.log(response)
+
     // Redirect based on firstLogin flag
     if (response.data.firstLogin) {
       navigate("/countries"); // Redirect to selection pages for first-time login

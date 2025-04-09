@@ -16,7 +16,7 @@ const useAxiosPrivate = () => {
         return config;
       },
       (error) => {
-        console.log("no token");
+        
         return Promise.reject(error);
       }
     );

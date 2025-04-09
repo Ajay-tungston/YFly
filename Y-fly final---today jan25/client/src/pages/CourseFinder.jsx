@@ -154,7 +154,7 @@ const Coursefinder = () => {
             data.data
           );
           setDbValues(transformedOptions);
-          // console.log("Database Values (transformed):", transformedOptions);
+       
         }
       })
       .catch((error) =>
@@ -317,7 +317,7 @@ const Coursefinder = () => {
                               data.data
                             );
                             const logoSrc = `data:${contentType};base64,${base64String}`;
-                            // console.log("Logo src:", logoSrc); // Debug log
+                            
                             return (
                               <img
                                 src={logoSrc}

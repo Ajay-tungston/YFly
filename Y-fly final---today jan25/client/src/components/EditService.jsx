@@ -23,7 +23,7 @@ const EditService = ({ id, setEditOpen }) => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/service/get/${id}`
         );
-        console.log("API response:", response.data); // Log the entire response
+   
 
         // Safely access the service data
         const serviceData = response.data?.service;

@@ -48,7 +48,7 @@ const SopWriting = () => {
         icon: "success",
         draggable: true
       });
-      console.log(response.data);
+     
     } catch (error) {
       if(error?.response?.status===400){
         // alert("Application already submitted")

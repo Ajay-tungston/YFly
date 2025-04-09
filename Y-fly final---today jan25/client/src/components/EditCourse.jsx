@@ -166,8 +166,7 @@ const EditCourse = (props, setEditingCourse) => {
     });
 
     try {
-      console.log("Payload:", editCourse);
-      console.log("FormData:", formData);
+      
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/courses/edit/${props.id}`,
         formData
@@ -299,7 +298,7 @@ const EditCourse = (props, setEditingCourse) => {
   // Test Requirements
   const handleTestRequirementChange = (index, field, value) => {
     const updatedTestRequirements = [...editCourse.testRequirements];
-    console.log(updatedTestRequirements);
+    
 
     // Ensure the index exists in the array before updating
     if (index >= 0 && index < updatedTestRequirements.length) {

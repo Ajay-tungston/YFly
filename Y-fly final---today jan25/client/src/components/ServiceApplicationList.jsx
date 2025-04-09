@@ -4,7 +4,7 @@ import axios from "axios";
 
 const ServiceApplicationList = () => {
   const [applicatinData, setApplicationData] = useState([]);
-  console.log(applicatinData);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const limit = 10;

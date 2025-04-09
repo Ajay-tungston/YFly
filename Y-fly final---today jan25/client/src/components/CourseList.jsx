@@ -247,7 +247,7 @@ const CourseList = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/courses/get-all`);
-        console.log('Fetched courses:', response.data.courses);
+       
         setCourses(response.data.courses || []); // Use fallback to avoid errors
       } catch (error) {
         console.error('Error in fetching courses:', error);

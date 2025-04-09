@@ -7,7 +7,7 @@ import axios from "axios";
 const Profile = () => {
   // Initialize formData as an empty object to avoid undefined errors.
   const [formData, setUpdateFormData] = useState({});
-  console.log("formData=",formData)
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -167,7 +167,7 @@ const Profile = () => {
     await persistUpdate(updateData);
     setEditMode((prev) => ({ ...prev, academicTest: false }));
   };
-  console.log();
+
   // Convert array fields to comma-separated strings for display
   const displayCountries =
     formData.countries && formData.countries.length
