@@ -55,13 +55,11 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
             }
         }
         // Debugging: Log FormData entries
-        console.log('FormData contents:');
         for (let pair of formData.entries()) {
             console.log(pair[0], ':', pair[1]);
         }
         
-        console.log('Test Requirements State:', testRequirements);
-        console.log('Special Restrictions State:', specialRestrictions);
+        
 
         formData.append('brochure', brochure);
         formData.append('testRequirements', JSON.stringify(testRequirements));
@@ -79,7 +77,6 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
            
      
           
-            console.log(response.data);
         
             // Reset state to clear all fields
             setAddScholarship({
@@ -2332,7 +2329,7 @@ const AddNewScholarship = ({ setAddingNewScholarship }) => {
         {/* university section */}
         <div className='font-urban mr-10 max-xl:mr-0 '>
                 <div className='flex items-center text-[0.9rem]'>
-                    <div className='w-[20%] max-xl:w-[20%] '>Upload University Logo</div>
+                    <div className='w-[20%] max-xl:w-[20%] '>Upload Brochure</div>
                     <div className='flex'>
                         <div className=''>
                             <label htmlFor="upload-brochure"
