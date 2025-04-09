@@ -138,8 +138,8 @@ const SopWriting = () => {
           {service?.workflow}
         </p>
       </div>
-      <section>
-        <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
+      <section className=" px-4 md:px-0">
+        <div className="bg-[#5BC7F1] rounded-[80px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
           {/* Left Image */}
           <div className="flex-shrink-0 relative w-full h-[403px] md:w-[571px] md:h-[403px] mx-auto md:mx-0 rounded-[20px] overflow-hidden">
             <img
