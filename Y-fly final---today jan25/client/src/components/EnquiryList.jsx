@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import profile from "../assets/images/profile.svg";
 import axios from "axios";
+import { Oval } from "react-loader-spinner";
 
 const EnquiryList = () => {
   const [enquiryData, setEnquiryData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const limit = 10;
 
   const [selectedApplication, setSelectedApplication] = useState(null);
@@ -13,6 +15,7 @@ const EnquiryList = () => {
 
   // Fetch the courses from the backend
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/application/get-all?page=${currentPage}&limit=${limit}`
@@ -22,6 +25,8 @@ const EnquiryList = () => {
       // setSelectedUniversity([]);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -84,82 +89,108 @@ const EnquiryList = () => {
           <div className="border-[#BFBFBF] border-b-[1px]"></div>
         </div>
 
-        {/* List */}
-        {/* {paginatedCourses.map((list) => ( */}
-        {enquiryData?.data?.map((list, index) => (
-          <div key={list._id}>
-            <div className="font-urban flex py-3 px-3">
-              <div className="w-[5%] flex items-center">
-                {index + 1 + (currentPage - 1) * limit}
-              </div>
-              <div className="w-[15%]">
-                {list?.user?.first_name}{" "}
-                {list?.user?.last_name && list?.user?.last_name}
-              </div>
-              <div className="w-[20%] ">{list?.user?.email}</div>
-              <div className="w-[30%]">
-                {list?.course?.course_level}{" "}
-                {list?.course?.course_level !== "MBA"
-                  ? `of ${list?.course?.discipline} `
-                  : "in"}{" "}
-                {list?.course?.area_of_study}
-              </div>
-              <div className="w-[20%] ">
-                {list?.course?.university_name?.university_name}
-              </div>
-              <div className="w-[10%] flex">
-             
-                {list?.isOpened ? (
-                  <button
-                    className="mr-4 border border-[#30589F] text-[#30589F] rounded-lg py-1 px-2 active:bg-[#30589F] active:text-white"
-                    onClick={() => handleView(list, false)}
-                  >
-                    viewed
-                  </button>
-                ):   <button
-                className="mr-4 border border-[#30589F] text-[#30589F] rounded-lg py-1 px-2 active:bg-[#30589F] active:text-white"
-                onClick={() => handleView(list, true)}
-              >
-                view
-              </button>}
+        {isLoading ? (
+          <div className="w-full h-[500px] flex justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
+              <Oval
+                visible={true}
+                height="40"
+                width="40"
+                color="#2d87cc"
+                secondaryColor="#b0b0b0"
+                strokeWidth={3}
+                ariaLabel="oval-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+              <div className="mt-2 text-black px-3 py-1 rounded-md">
+                <p className="text-center">Loading...</p>
               </div>
             </div>
-            <div className="border-[#BFBFBF] border-b-[1px] bg-black"></div>
           </div>
-        ))}
+        ) : enquiryData?.data?.length > 0 ? (
+          <>
+            {enquiryData?.data?.map((list, index) => (
+              <div key={list._id}>
+                <div className="font-urban flex py-3 px-3">
+                  <div className="w-[5%] flex items-center">
+                    {index + 1 + (currentPage - 1) * limit}
+                  </div>
+                  <div className="w-[15%]">
+                    {list?.user?.first_name}{" "}
+                    {list?.user?.last_name && list?.user?.last_name}
+                  </div>
+                  <div className="w-[20%] ">{list?.user?.email}</div>
+                  <div className="w-[30%]">
+                    {list?.course?.course_level}{" "}
+                    {list?.course?.course_level !== "MBA"
+                      ? `of ${list?.course?.discipline} `
+                      : "in"}{" "}
+                    {list?.course?.area_of_study}
+                  </div>
+                  <div className="w-[20%] ">
+                    {list?.course?.university_name?.university_name}
+                  </div>
+                  <div className="w-[10%] flex">
+                    {list?.isOpened ? (
+                      <button
+                        className="mr-4 border border-[#30589F] text-[#30589F] rounded-lg py-1 px-2 active:bg-[#30589F] active:text-white"
+                        onClick={() => handleView(list, false)}
+                      >
+                        viewed
+                      </button>
+                    ) : (
+                      <button
+                        className="mr-4 border border-[#30589F] text-[#30589F] rounded-lg py-1 px-2 active:bg-[#30589F] active:text-white"
+                        onClick={() => handleView(list, true)}
+                      >
+                        view
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="border-[#BFBFBF] border-b-[1px] bg-black"></div>
+              </div>
+            ))}
 
-        {/* Pagination */}
-        <div className="flex justify-between items-center mt-5 font-urban">
-          <span className="text-sm">
-            Page {currentPage} of {totalPages}
-          </span>
-          <div className="flex space-x-2">
-            <button
-              className={`px-4 py-2 rounded border-[#535353] ${
-                currentPage === 1
-                  ? "bg-white cursor-not-allowed text-[#524f4f]"
-                  : "bg-[#30589F] text-white"
-              }`}
-              onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <button
-              className={`px-4 py-2 border-[#30589F] rounded ${
-                currentPage === totalPages
-                  ? "bg-white cursor-not-allowed text-[#30589F]"
-                  : "bg-[#30589F] text-white"
-              }`}
-              onClick={() =>
-                currentPage < totalPages && setCurrentPage(currentPage + 1)
-              }
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        </div>
+            {/* Pagination */}
+            <div className="flex justify-between items-center mt-5 font-urban">
+              <span className="text-sm">
+                Page {currentPage} of {totalPages}
+              </span>
+              <div className="flex space-x-2">
+                <button
+                  className={`px-4 py-2 rounded border-[#535353] ${
+                    currentPage === 1
+                      ? "bg-white cursor-not-allowed text-[#524f4f]"
+                      : "bg-[#30589F] text-white"
+                  }`}
+                  onClick={() =>
+                    currentPage > 1 && setCurrentPage(currentPage - 1)
+                  }
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                <button
+                  className={`px-4 py-2 border-[#30589F] rounded ${
+                    currentPage === totalPages
+                      ? "bg-white cursor-not-allowed text-[#30589F]"
+                      : "bg-[#30589F] text-white"
+                  }`}
+                  onClick={() =>
+                    currentPage < totalPages && setCurrentPage(currentPage + 1)
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="text-center pt-16">No data found</p>
+        )}
       </div>
       {isModalOpen && selectedApplication && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
