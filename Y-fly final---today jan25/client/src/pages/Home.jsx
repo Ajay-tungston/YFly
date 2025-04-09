@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import bgvideo from '../assets/images/bg-yfly.mp4';
 import grid from '../assets/images/image/grid.svg'
 import card1 from '../assets/images/card1.svg';
 import card2 from '../assets/images/card2.svg';
@@ -13,8 +12,8 @@ import Footer from '../components/Footer';
 import Trainings from '../components/Trainings';
 import TopUniversity from '../components/TopUniversity';
 import TopSchool from '../components/TopSchool';
-
-
+import backvideo from '../assets/images/loop.mp4'
+import InfoGraphic from '../components/Infographics';
 
 const Home = () => {
   return (
@@ -24,15 +23,15 @@ const Home = () => {
         {/* first-section */}
         <div className="relative">
           <div>
-            <video src={bgvideo} alt="video" autoPlay muted loop disablePictureInPicture className="w-full rounded-b-[300px] max-sm:rounded-b-[100px] md:rounded-b-[200px]"/>   
+            <video src={backvideo} alt="video" autoPlay muted loop disablePictureInPicture className="w-full rounded-b-[300px] max-sm:rounded-b-[100px] md:rounded-b-[200px]"/>   
           </div>
           
           {/* <div className="flex justify-center"> */}
-            <Navbar/>   
+            
           {/* </div>   */}
           
           <div className="flex justify-center">
-            
+          <Navbar/>   
 
             <button class="cursor-pointer flex items-center overflow-hidden z-100 mt-24  group px-10 py-3 max-xl:py-2 max-lg:py-1 top-[12rem] max-xl:top-[9rem] max-lg:top-[7.5rem] max-md:hidden text-[2rem]  absolute font-urban text-white border-white border-[2px] font-semibold  rounded-full ">
               <span class="relative font-bold z-10 text-white group-hover:text-[#30589f]  text-xl max-xl:text-[1rem] duration-500">WELCOME TO YFLY</span>
@@ -197,7 +196,7 @@ const Home = () => {
             </div>
           </div>
         
-
+         <InfoGraphic/>
        
         </div>
        

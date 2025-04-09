@@ -31,6 +31,16 @@ import Mattermost from './components/MattersTheMost';
 import MyProfile from './components/MyProfile';
 import EnquiryList from './components/EnquiryList';
 import CourseOverview from './pages/CourseOverview';
+import StudyinUk from './pages/StudyinUk';
+import StudyinCanada from './pages/StudyinCanada';
+import StudyinAustralia from './pages/StudyinAustralia';
+import StudyinGermany from './pages/StudyinGermany';
+import StudyinNewzealand from './pages/StudyinNewzealand';
+import StudyinIreland from './pages/StudyinIreland';
+import StudyinComponentUk from './components/StudyinComponentUk';
+
+
+
 
 
 const ProtectedRoute = ({ children }) => {
@@ -48,7 +58,14 @@ const App = () => {
         <Route path='/admin-login' element={<AdminLogin/>}/>
         <Route path='/signup2' element={<SignupPageOne/>}/>
         <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/studydestination' element={<Studyin/>}/>
+        <Route path='/study-usa' element={<Studyin/>}/>
+        <Route path='/study-uk' element={<StudyinUk/>}/>
+        <Route path='/study-canada' element={<StudyinCanada/>}/>
+        <Route path='/study-germany' element={<StudyinGermany/>}/>
+        <Route path='/study-australia' element={<StudyinAustralia/>}/>
+        <Route path='/study-new-zealand' element={<StudyinNewzealand/>}/>
+        <Route path='/study-ireland' element={<StudyinIreland/>}/>
+
         <Route path='/coursefinder' element={<Coursefinder/>}/>
         <Route path='/profilematcher' element={<Profilematcher/>}/>
         <Route path='/scholarship' element={<ScholarshipFinder/>}/>
@@ -71,6 +88,10 @@ const App = () => {
         <Route path='/myprofile' element={<MyProfile/>}/>
         <Route path='/enquiry' element={<EnquiryList/>}/>
         <Route path='/courseoverview/:id' element={<CourseOverview/>}/>
+        <Route path='/Stuydinuk' element={<StudyinComponentUk/>}/>
+     
+     
+       
         
         
       </Routes>

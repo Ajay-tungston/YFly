@@ -33,6 +33,14 @@ const Parallax = () => {
             buttonText: "Get scholarships",
             image: parallax3,
             link: "/scholarship"
+        },
+        {
+            id: 3,
+            title: "Application Support ",
+            description: "Lorem ipsum dolor sit amet consectetur. Cursus nibh aliquam bibendum quam ultrices ultrices ac eu orci. Hac venenatis mi purus venenatis et vulputate vel aliquet.",
+            buttonText: "Apply for Application",
+            image: parallax3,
+            link: "/scholarship"
         }
     ];
 

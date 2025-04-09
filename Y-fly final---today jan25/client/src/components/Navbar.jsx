@@ -16,7 +16,7 @@ import scholarship from "../assets/images/teacher.svg";
 import ai from "../assets/images/aiblink.svg";
 import { useDispatch, useSelector } from "react-redux";
 import Countries from "./Countries";
-import { token } from "../Redux/store";
+import { logout, token } from "../Redux/store";
 import Australia from "../assets/images/countrybg/Australia.png";
 import USA from "../assets/images/countrybg/USA.png";
 import Ireland from "../assets/images/countrybg/Ireland.png";
@@ -28,7 +28,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu state
   const navigate = useNavigate();
   const location = useLocation();
-
+  const dispatch = useDispatch();
   const hideLoginPaths = [
     "/experience",
     "/selectcourses",
@@ -41,23 +41,22 @@ const Navbar = () => {
   ];
 
   const shouldShowButton = !hideLoginPaths.includes(location.pathname);
-
-  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
+
   useEffect(() => {
     if (!isAuthenticated) {
       const getToken = localStorage.getItem("authToken");
       if (getToken) {
-        dispatch(
-          token({
-            getToken,
-          })
-        );
+        dispatch(token({ token: getToken })); // fix: token key must match action.payload.token
       }
     }
   }, [isAuthenticated, dispatch]);
-  const [services, setServices] = useState([]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    dispatch(logout());
+    navigate("/");
+  };
   // Dropdown states for desktop
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [isMajorProductOpen, setIsMajorProductOpen] = useState(false);
@@ -91,7 +90,7 @@ const Navbar = () => {
   //   document.addEventListener("mousedown", handleClickOutside);
   //   return () => document.removeEventListener("mousedown", handleClickOutside);
   // }, []);
-
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Check if click was on an interactive element
@@ -125,7 +124,7 @@ const Navbar = () => {
   const [showAll, setShowAll] = useState(false);
 
   const handleService = () => setIsServiceOpen(!isServiceOpen);
-
+  const[services,setServices]=useState([]);
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -183,7 +182,7 @@ const Navbar = () => {
           </div>
           {isDestinationOpen && (
             <div
-              className="absolute pl-4 w-[30vw] py-5 z-10 space-y-2 rounded-[20px] shadow-lightshad bg-[#fff] mt-[1rem] border focus:outline-none"
+              className="absolute pl-4 w-[28vw] py-5 z-10 space-y-2 rounded-[20px] shadow-lightshad bg-[#fff] mt-[1rem] border focus:outline-none"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="options-menu"
@@ -219,7 +218,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 2 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-uk")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={UK}
@@ -244,7 +246,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 3 */}
-                  <div className="group  relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-canada")}
+                    className="group  relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Canada}
@@ -267,7 +272,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 4 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-germany")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Germany}
@@ -293,7 +301,10 @@ const Navbar = () => {
                 {/* Second Row */}
                 <div className="flex items-center gap-2 px-0 py-0">
                   {/* Card 5 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-australia")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Australia}
@@ -316,7 +327,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 6 */}
-                  <div className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-ireland")}
+                    className=" group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={Ireland}
@@ -339,7 +353,10 @@ const Navbar = () => {
                   </div>
 
                   {/* Card 7 */}
-                  <div className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                  <div
+                    onClick={() => navigate("/study-new-zealand")}
+                    className="group relative w-[120px] h-[80px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150"
+                  >
                     {/* Background */}
                     <img
                       src={NewZealand}
@@ -570,30 +587,33 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* My Profile Button */}
-      {/* <button
-        className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-        onClick={() => navigate("/login")}
-      >
-        Login
-      </button> */}
       <>
-        {shouldShowButton &&
-          (isAuthenticated ? (
-            <button
-              className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-              onClick={() => navigate("/myprofile")}
-            >
-              My Profile
-            </button>
-          ) : (
-            <button
-              className="hidden lg:inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:to-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
-          ))}
+        {isAuthenticated ? (
+          <>
+            {location.pathname === "/myprofile" ? (
+              <div
+                className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+                onClick={handleLogout}
+              >
+                Logout
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate("/myprofile")}
+                className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+              >
+                My Profile
+              </button>
+            )}
+          </>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="hidden lg:inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+          >
+            Login
+          </button>
+        )}
       </>
 
       {/* Mobile Menu Toggle */}
@@ -628,7 +648,19 @@ const Navbar = () => {
             <div className="flex flex-col items-center px-4 py-4 bg-white border rounded-[20px] shadow-lightshad focus:outline-none space-y-3">
               <div className="grid grid-cols-2 gap-4">
                 {/* Card 1 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-usa")}
+                  onTouchEnd={() => navigate("/study-usa")}
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    // Add keyboard support
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-usa");
+                    }
+                  }}
+                >
                   <img
                     src={USA}
                     alt="USA background"
@@ -648,13 +680,28 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 2 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-uk")}
+                  onTouchEnd={() => navigate("/study-uk")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-uk");
+                    }
+                  }}
+                >
+                  {" "}
                   <img
                     src={UK}
                     alt="UK background"
                     className="absolute inset-0 w-full h-full object-cover z-0"
                   />
-                  <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
+                  <div
+                    onClick={() => navigate("/study-uk")}
+                    className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"
+                  ></div>
                   <div className="relative z-10 flex flex-col items-center justify-center h-full">
                     <img
                       src={uk}
@@ -668,7 +715,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 3 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-canada")}
+                  onTouchEnd={() => navigate("/study-canada")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-canada");
+                    }
+                  }}
+                >
                   <img
                     src={Canada}
                     alt="Canada background"
@@ -688,14 +746,25 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 4 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-germany")}
+                  onTouchEnd={() => navigate("/study-germany")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-germany");
+                    }
+                  }}
+                >
                   <img
                     src={Germany}
                     alt="Germany background"
-                    className="absolute inset-0 w-full h-full object-cover z-0"
+                    className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" // Added pointer-events-none
                   />
-                  <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5]"></div>
-                  <div className="relative z-10 flex flex-col items-center justify-center h-full">
+                  <div className="absolute inset-0 bg-[#F137378C] group-hover:bg-[#6d94f780] transition-colors duration-150 z-[5] pointer-events-none"></div>
+                  <div className="relative z-10 flex flex-col items-center justify-center h-full w-full">
                     <img
                       src={germany}
                       alt="Germany flag"
@@ -708,7 +777,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 5 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-new-zealand")}
+                  onTouchEnd={() => navigate("/study-new-zealand")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button" // Better accessibility
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-new-zealand");
+                    }
+                  }}
+                >
                   <img
                     src={NewZealand}
                     alt="New Zealand background"
@@ -728,7 +808,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 6 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-australia")}
+                  onTouchEnd={() => navigate("/study-australia")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-australia");
+                    }
+                  }}
+                >
                   <img
                     src={Australia}
                     alt="Australia background"
@@ -748,7 +839,18 @@ const Navbar = () => {
                 </div>
 
                 {/* Card 7 */}
-                <div className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150">
+                <div
+                  onClick={() => navigate("/study-ireland")}
+                  onTouchEnd={() => navigate("/study-ireland")} // Added for better mobile touch support
+                  className="group relative w-full h-[90px] border rounded-[15px] overflow-hidden hover:shadow-lightshad focus:outline-none active:scale-95 transition-transform duration-150 cursor-pointer select-none" // Added cursor-pointer and select-none
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      navigate("/study-ireland");
+                    }
+                  }}
+                >
                   <img
                     src={Ireland}
                     alt="Ireland background"
@@ -897,12 +999,34 @@ const Navbar = () => {
           >
             Contact Us
           </div>
-          <button
-            className="border-[#30589F] border-[2px] text-[#30589F] px-4 py-2 rounded-full"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </button>
+         <>
+          {isAuthenticated ? (
+            <>
+            {location.pathname === "/myprofile" ? (
+              <div
+                className="inline-block py-2 px-6 bg-white text-[#30589f] border-[2px] border-[#30589f] rounded-full font-bold hover:bg-[#30589f] hover:text-white transition-all"
+                onClick={handleLogout}
+              >
+                Logout
+              </div>
+            ) : (
+              <button
+                className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+                onClick={() => navigate("/myprofile")}
+              >
+                My Profile
+              </button>
+            )}
+            </>
+          ) : (
+            <button
+              className="inline-block py-2 px-8 text-[#30589f] border-[2px] border-[#30589f] font-urban font-bold overflow-hidden bg-white rounded-full transition-all duration-400 ease-in-out hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-bluegradient before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:left-0"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          )}
+          </>
         </div>
       )}
     </nav>
