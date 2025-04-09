@@ -95,7 +95,7 @@ const StudyinComponent = () => {
 
 
                 {/*---------------------------- why study  in USA---------------------- */}
-                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in New Zea-land?</div>
+                <div className='text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] max-md:pl-4 pl-10 '>Why study in New Zealand?</div>
 
                 <WhyStudySliderNewzealand />
 
