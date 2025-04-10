@@ -10,7 +10,7 @@
 
 //         {/* Login Form */}
 //         <div className="bg-white p-14 max-md:px-7 max-md:py-10 rounded-[48px] shadow-btn max-w-md w-full max-lg:w-[80%] mt-8">
-//             <h2 className="text-[2rem] max-lg:text-[1.5rem]  font-dela mb-6 text-center text-[#30589f]">Login</h2>
+//             <h2 className="text-[2rem] max-lg:text-[1.5rem]  font-lato mb-6 text-center text-[#30589f]">Login</h2>
 
 //             <form className='font-urban'>
 
@@ -109,7 +109,7 @@
 //     <div className="bg-blue">
 //       <div className="min-h-screen rounded-b-[300px] flex flex-col items-center justify-center bg-bluegradient">
 //         <div className="bg-white p-14 max-md:px-7 max-md:py-10 rounded-[48px] shadow-btn max-w-md w-full max-lg:w-[80%] mt-8">
-//           <h2 className="text-[2rem] max-lg:text-[1.5rem] font-dela mb-6 text-center text-[#30589f]">Login</h2>
+//           <h2 className="text-[2rem] max-lg:text-[1.5rem] font-lato mb-6 text-center text-[#30589f]">Login</h2>
 
 //           <form className="font-urban" onSubmit={handleSubmit}>
 //             {/* Email */}
@@ -231,7 +231,7 @@ const AdminLogin = () => {
       <div className="min-h-screen rounded-b-[300px] flex flex-col items-center justify-center bg-bluegradient">
         {/* Login Form */}
         <div className="bg-white p-14 max-md:px-7 max-md:py-10 rounded-[48px] shadow-btn max-w-md w-full max-lg:w-[80%] mt-8">
-          <h2 className="text-[2rem] max-lg:text-[1.5rem] font-dela mb-6 text-center text-[#30589f]">
+          <h2 className="text-[2rem] max-lg:text-[1.5rem] font-lato mb-6 text-center text-[#30589f]">
             Login
           </h2>
 

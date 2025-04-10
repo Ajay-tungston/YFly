@@ -119,7 +119,7 @@ const verifyOTP = async (e) => {
         <Navbar />
 
         <div className="bg-white p-14 max-md:px-7 max-md:py-10 rounded-[48px] shadow-btn max-w-md w-full max-lg:w-[80%] mt-8">
-          <h2 className="text-[2rem] max-lg:text-[1.5rem] font-dela mb-6 text-center text-[#30589f]">
+          <h2 className="text-[2rem] max-lg:text-[1.5rem] font-lato mb-6 text-center text-[#30589f]">
             Login with OTP
           </h2>
 

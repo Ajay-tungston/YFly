@@ -4,7 +4,6 @@ import grid from '../assets/images/image/grid.svg'
 import card1 from '../assets/images/card1.svg';
 import card2 from '../assets/images/card2.svg';
 import card3 from '../assets/images/card3.svg';
-import Contactus from '../components/ContactUs'
 import jane from '../assets/images/jane.png'
 import star from '../assets/images/star.svg'
 import Parallaxxx from '../components/Parallaxxx';
@@ -37,7 +36,7 @@ const Home = () => {
               <span class="relative font-bold z-10 text-white group-hover:text-[#30589f]  text-xl max-xl:text-[1rem] duration-500">WELCOME TO YFLY</span>
             
             </button>
-            <div className="text-white absolute text-[5.6rem] max-xl:text-[4.2rem] mt-10 max-xl:leading-[4.8rem] max-lg:text-[3.4rem] max-lg:leading-[3.5rem] max-md:text-[1.5rem] max-md:leading-[1.8rem] top-[38%] max-xl:top-[39%] max-lg:top-[42%] font-dela tracking-wide leading-[6rem] text-center">
+            <div className="text-white absolute text-[5.6rem] max-xl:text-[4.2rem] mt-10 max-xl:leading-[4.8rem] max-lg:text-[3.4rem] max-lg:leading-[3.5rem] max-md:text-[1.5rem] max-md:leading-[1.8rem] top-[38%] max-xl:top-[39%] max-lg:top-[42%] font-lato tracking-wide leading-[6rem] text-center">
               <p>Giving flight</p>
               <p>to your dreams.</p>
             </div> 
@@ -50,7 +49,7 @@ const Home = () => {
         w-10/12 mt-20 mb-28 max-md:my-10 mx-auto rounded-full max-md:rounded-[60px] px-3 py-4'>
 
           <div className='flex flex-col py-6 '>
-            <p className='font-dela text-[#5FD3FF] text-[45px] max-xl:text-[38px] max-lg:text-[30px] max-md:text-[25px] text-center'>2000+</p>
+            <p className='font-lato text-[#5FD3FF] text-[45px] max-xl:text-[38px] max-lg:text-[30px] max-md:text-[25px] text-center'>2000+</p>
             <p className='font-urban text-white font-normal text-[20px] max-xl:text-[15px] max-lg:text-[13px]  text-center'>Students guided</p>
           </div>
 
@@ -58,7 +57,7 @@ const Home = () => {
           <div className="w-0 bg-[#61CAF2] h-28 border-b border-[#61CAF2] transform rotate-180 max-md:h-0 max-md:w-28 md:hidden "></div>
 
           <div className='flex flex-col py-6 '>
-            <p className='font-dela text-[#5FD3FF] text-[45px] max-xl:text-[38px] max-lg:text-[30px] max-md:text-[25px] text-center'>93.7%</p>
+            <p className='font-lato text-[#5FD3FF] text-[45px] max-xl:text-[38px] max-lg:text-[30px] max-md:text-[25px] text-center'>93.7%</p>
             <p className='font-urban text-white font-normal text-[20px]  max-xl:text-[15px] max-lg:text-[13px] text-center'>Success rate</p>
           </div>
 
@@ -66,7 +65,7 @@ const Home = () => {
           <div className="w-0 bg-[#61CAF2] h-28 border-b border-[#61CAF2] transform rotate-180 max-md:h-0 max-md:w-28 md:hidden "></div>
 
           <div className='flex flex-col py-6 '>
-            <p className='font-dela text-[#5FD3FF] text-[45px] max-xl:text-[38px] max-lg:text-[30px] max-md:text-[25px] text-center'>4.97</p>
+            <p className='font-lato text-[#5FD3FF] text-[45px] max-xl:text-[38px] max-lg:text-[30px] max-md:text-[25px] text-center'>4.97</p>
             <p className='font-urban text-white font-normal text-[20px]  max-xl:text-[15px] max-lg:text-[13px] text-center'>Google rating</p>
           </div>
         </div>
@@ -88,7 +87,7 @@ const Home = () => {
             {/* cards */}
             <div>
             <button className='px-8 mt-[4rem] py-2 border-[2px] bg-white font-bold font-urban rounded-full tracking-wider text-[1.1rem]'>Our Services</button>
-            <p className='font-dela text-black text-[35px] max-lg:text-[32px] max-md:text-[28px] py-2'>We pave your way into <br className='max-md:hidden'/> top tier institutions</p>
+            <p className='font-lato text-black text-[35px] max-lg:text-[32px] max-md:text-[28px] py-2'>We pave your way into <br className='max-md:hidden'/> top tier institutions</p>
 
             {/* cards */}
             <div className='flex gap-14 mt-[2rem] max-xl:gap-6 shrink-0 max-md:overflow-x-scroll max-md:gap-x-3 w-full'>
@@ -148,7 +147,7 @@ const Home = () => {
               <div className='w-[23%] min-w-[24%] max-md:min-w-[70%] flex flex-col border-black bg-white border-[1px] rounded-[40px] hover:shadow-lightshad p-7 max-xl:p-5 '>
                 
                 <div><img src={jane} alt='jane'/></div>
-                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-dela mt-[1rem]'>Jane Doe</div>
+                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-lato mt-[1rem]'>Jane Doe</div>
                 <div className='font-urban font-normal text-[20px] max-lg:text-[17px] flex justify-between items-center mt-[0.7rem] mb-[0.7rem]'>
                   <p>Role</p>
                   <div className='flex items-center gap-2'><img src={star} alt='star'/>4.5</div>
@@ -160,7 +159,7 @@ const Home = () => {
               <div className='w-[23%] min-w-[24%] max-md:min-w-[70%]  flex flex-col border-black bg-white border-[1px] rounded-[40px] hover:shadow-rad p-7 max-xl:p-5'>
                 
                 <div><img src={jane} alt='jane'/></div>
-                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-dela mt-[1rem]'>Jane Doe</div>
+                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-lato mt-[1rem]'>Jane Doe</div>
                 <div className='font-urban font-normal text-[20px] max-lg:text-[17px] flex justify-between items-center mt-[0.7rem] mb-[0.7rem]'>
                   <p>Role</p>
                   <div className='flex items-center gap-2'><img src={star} alt='star'/>4.5</div>
@@ -172,7 +171,7 @@ const Home = () => {
               <div className='w-[23%] min-w-[24%] max-md:min-w-[70%]  flex flex-col border-black bg-white border-[1px] rounded-[40px] hover:shadow-rad p-7 max-xl:p-5 '>
                 
                 <div><img src={jane} alt='jane'/></div>
-                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-dela mt-[1rem]'>Jane Doe</div>
+                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-lato mt-[1rem]'>Jane Doe</div>
                 <div className='font-urban font-normal text-[20px] max-lg:text-[17px] flex justify-between items-center mt-[0.7rem] mb-[0.7rem]'>
                   <p>Role</p>
                   <div className='flex items-center gap-2'><img src={star} alt='star'/>4.5</div>
@@ -184,7 +183,7 @@ const Home = () => {
               <div className='w-[23%] min-w-[24%] max-md:min-w-[70%]  flex flex-col border-black bg-white border-[1px] rounded-[40px] hover:shadow-rad p-7 max-xl:p-5 '>
                 
                 <div><img src={jane} alt='jane'/></div>
-                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-dela mt-[1rem]'>Jane Doe</div>
+                <div className='text-[1.6rem] max-lg:text-[1.2rem] font-lato mt-[1rem]'>Jane Doe</div>
                 <div className='font-urban font-normal text-[20px] max-lg:text-[17px] flex justify-between items-center mt-[0.7rem] mb-[0.7rem]'>
                   <p>Role</p>
                   <div className='flex items-center gap-2'><img src={star} alt='star'/>4.5</div>
@@ -199,7 +198,43 @@ const Home = () => {
          <InfoGraphic/>
        
         </div>
-       
+        <section className="px-4 md:px-0">
+        <div className="bg-[#5cc7f1] rounded-[80px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto -mt-32 md:-mt-[150px]">
+          {/* Left Image */}
+          <div className="flex-shrink-0 w-full h-[250px] md:w-[571px] md:h-[403px] rounded-[20px] overflow-hidden">
+            <img
+              src="/images/dummy.png"
+              alt="Support Agent"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Right Text */}
+          <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
+            <h2 className="text-2xl md:text-3xl font-lato text-[#001f3f]">
+              Ready to flight your dreams?
+            </h2>
+            <p
+              className="text-[#001f3f] text-sm md:text-base leading-relaxed"
+              style={{
+                fontFamily: "'Roboto', sans-serif",
+                fontWeight: "400",
+                lineHeight: "1.75",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
+              placerat gravida aliquet at. Nisi urna quam massa pellentesque
+              lectus odio sagittis. Tortor massa in rhoncus purus nunc
+              scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
+              eget urna varius eu nibh in sed est.
+            </p>
+            <button className="bg-[#2B7CD6] text-white border border-[#2B7CD6] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#2B7CD6] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0 shadow-[3px_3px_0px_0px_#001426]">
+                            Book a call →
+                        </button>
+          </div>
+        </div>
+      </section>
         {/* footer section */}
         <Footer/>
 

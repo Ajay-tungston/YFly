@@ -81,10 +81,10 @@ const Academic = () => {
             <img src={IconBack} alt="Back" className="w-8 h-8" />
           </button>
           <div className="px-10 max-md:px-0">
-            <div className="text-center font-dela text-[#2B7CD6] max-md:text-[0.9rem]">
+            <div className="text-center font-lato text-[#2B7CD6] max-md:text-[0.9rem]">
               Have you taken or planning to take any academic test?
             </div>
-            <div className="flex gap-4 max-md:gap-2 max-md:flex-col justify-center mt-8 max-md:mt-5 text-[#2B7CD6] font-dela">
+            <div className="flex gap-4 max-md:gap-2 max-md:flex-col justify-center mt-8 max-md:mt-5 text-[#2B7CD6] font-lato">
               {["GRE", "GMAT", "Haven’t taken"].map((test) => (
                 <button
                   key={test}
@@ -100,7 +100,7 @@ const Academic = () => {
 
             {selectedTest !== "Haven’t taken" && (
               <>
-                <div className="text-center font-dela text-[#2B7CD6] mt-10 max-md:mt-5 max-md:text-[0.8rem]">
+                <div className="text-center font-lato text-[#2B7CD6] mt-10 max-md:mt-5 max-md:text-[0.8rem]">
                   Your score
                 </div>
                 <div className="flex max-md:flex-col items-center justify-center gap-4 max-md:gap-2 mt-5 max-md:mt-3">

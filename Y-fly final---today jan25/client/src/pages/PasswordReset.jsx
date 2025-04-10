@@ -10,7 +10,7 @@ const ResetPassword = () => {
 
     {/* Login Form */}
     <div className="bg-white p-14 max-md:px-7 max-md:py-10 rounded-[48px] shadow-btn max-w-md w-full max-lg:w-[80%] mt-8">
-        <h2 className="text-[2rem] max-lg:text-[1.5rem] max-md:text-[1.3rem] font-dela mb-9 max-md:mb-7 text-center text-[#30589f]">Password Reset</h2>
+        <h2 className="text-[2rem] max-lg:text-[1.5rem] max-md:text-[1.3rem] font-lato mb-9 max-md:mb-7 text-center text-[#30589f]">Password Reset</h2>
         <form className='font-urban'>
 
 

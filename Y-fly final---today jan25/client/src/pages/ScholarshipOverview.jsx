@@ -80,7 +80,7 @@ const ScholarshipOverview = () => {
               <button className="absolute top-[10rem] text-[#0F62AF] border-[2px] max-md:hidden border-[#0F62AF] px-5 py-2 rounded-full font-bold font-urban">
                 SCHOLARSHIP FINDER
               </button>
-              <div className="absolute top-[13.5rem] max-md:top-[10rem] max-md:px-5 font-dela text-[5.4rem] text-center leading-[6.5rem] max-xl:text-[3.5rem] max-xl:leading-[4.8rem] max-md:text-[1.9rem] max-md:leading-[3rem]">
+              <div className="absolute top-[13.5rem] max-md:top-[10rem] max-md:px-5 font-lato text-[5.4rem] text-center leading-[6.5rem] max-xl:text-[3.5rem] max-xl:leading-[4.8rem] max-md:text-[1.9rem] max-md:leading-[3rem]">
                 {scholarshipData?.scholarship_name?.split(" ").length > 2 ? (
                   <>
                     {scholarshipData.scholarship_name
@@ -109,7 +109,7 @@ const ScholarshipOverview = () => {
             style={{ backgroundImage: `url(${grid})` }}
           >
             <div className="flex justify-between items-center max-lg:mt-[2rem] max-md:mt-[1rem] max-md:flex-col max-md:items-start">
-              <div className="text-[#2B7CD6] font-dela text-[2rem] max-lg:text-[1.4rem] max-md:mb-4 max-md:text-[1.1rem]">
+              <div className="text-[#2B7CD6] font-lato text-[2rem] max-lg:text-[1.4rem] max-md:mb-4 max-md:text-[1.1rem]">
                 Scholarship Details
               </div>
               <button
@@ -133,7 +133,7 @@ const ScholarshipOverview = () => {
 
             {/* Overview */}
             <div>
-              <div className="text-[#2B7CD6] mb-5 font-dela text-[2rem] max-lg:text-[1.4rem] mt-12 max-md:text-[1.1rem]">
+              <div className="text-[#2B7CD6] mb-5 font-lato text-[2rem] max-lg:text-[1.4rem] mt-12 max-md:text-[1.1rem]">
                 Overview
               </div>
 
@@ -151,7 +151,7 @@ const ScholarshipOverview = () => {
                     <div className="text-[#898C9A] font-bold font-urban max-lg:text-[0.8rem] max-md:text-[0.7rem]">
                       Course Level
                     </div>
-                    <div className="font-dela text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
+                    <div className="font-lato text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
                       {scholarshipData?.course_level}
                     </div>
                   </div>
@@ -169,7 +169,7 @@ const ScholarshipOverview = () => {
                     <div className="text-[#898C9A] font-bold font-urban max-lg:text-[0.8rem] max-md:text-[0.7rem]">
                       Scholarship Type
                     </div>
-                    <div className="font-dela text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
+                    <div className="font-lato text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
                       {scholarshipData?.types_of_scholarship}
                     </div>
                   </div>
@@ -182,7 +182,7 @@ const ScholarshipOverview = () => {
                     <div className="text-[#898C9A] font-bold font-urban max-lg:text-[0.8rem] max-md:text-[0.7rem]">
                       Scholarship Amount
                     </div>
-                    <div className="font-dela text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
+                    <div className="font-lato text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
                       ${scholarshipData?.scholarship_amount}
                     </div>
                   </div>
@@ -195,7 +195,7 @@ const ScholarshipOverview = () => {
                 <div className="text-[#898C9A] font-bold font-urban max-lg:text-[0.8rem] max-md:text-[0.7rem]">
                   Intake year
                 </div>
-                <div className="font-dela text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
+                <div className="font-lato text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
                   Jan 2025
                 </div>
               </div>
@@ -214,7 +214,7 @@ const ScholarshipOverview = () => {
                     <div className="text-[#898C9A] font-bold font-urban max-lg:text-[0.8rem] max-md:text-[0.7rem]">
                       Deadline
                     </div>
-                    <div className="font-dela text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
+                    <div className="font-lato text-[#30589F] max-lg:text-[0.9rem] max-md:text-[0.8rem]">
                       {/* {scholarshipData?.scholarship_deadline} */}
                       {scholarshipData?.scholarship_deadline &&
                         format(
@@ -233,7 +233,7 @@ const ScholarshipOverview = () => {
 
             {/* Eligibility Criteria */}
             <div>
-              <div className="text-[#2B7CD6] mb-5 font-dela text-[2rem] max-lg:text-[1.4rem] mt-12 max-md:text-[1.1rem]">
+              <div className="text-[#2B7CD6] mb-5 font-lato text-[2rem] max-lg:text-[1.4rem] mt-12 max-md:text-[1.1rem]">
                 Eligibility Criteria
               </div>
               <div className="font-urban mt-6 max-md:text-[0.8rem]">
@@ -243,7 +243,7 @@ const ScholarshipOverview = () => {
 
             {/* Application Process */}
             <div className="mb-6">
-              <div className="text-[#2B7CD6] mb-5 font-dela text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] mt-12">
+              <div className="text-[#2B7CD6] mb-5 font-lato text-[2rem] max-lg:text-[1.4rem] max-md:text-[1.1rem] mt-12">
                 Application Process
               </div>
               <div className="font-urban mt-6 max-md:text-[0.8rem]">
@@ -255,12 +255,12 @@ const ScholarshipOverview = () => {
       )}
 
       {/* Image and Call to Action */}
-      <section>
-        <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
+      <section className="px-4 md:px-0">
+        <div className="bg-[#5cc7f1] rounded-[80px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto -mt-32 md:-mt-[150px]">
           {/* Left Image */}
-          <div className="flex-shrink-0 relative w-full h-[403px] md:w-[571px] md:h-[403px] mx-auto md:mx-0 rounded-[20px] overflow-hidden">
+          <div className="flex-shrink-0 w-full h-[250px] md:w-[571px] md:h-[403px] rounded-[20px] overflow-hidden">
             <img
-              src="/images/dummy.png" // Replace with your actual image path
+              src="/images/dummy.png"
               alt="Support Agent"
               className="w-full h-full object-cover"
             />
@@ -268,7 +268,7 @@ const ScholarshipOverview = () => {
 
           {/* Right Text */}
           <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#001f3f]">
+            <h2 className="text-2xl md:text-3xl font-lato text-[#001f3f]">
               Ready to flight your dreams?
             </h2>
             <p
@@ -286,10 +286,9 @@ const ScholarshipOverview = () => {
               scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
               eget urna varius eu nibh in sed est.
             </p>
-
-            <button className="bg-white text-[#001f3f] border border-[#001f3f] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#001f3f] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0">
-              Book a call →
-            </button>
+            <button className="bg-[#2B7CD6] text-white border border-[#2B7CD6] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#2B7CD6] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0 shadow-[3px_3px_0px_0px_#001426]">
+                            Book a call →
+                        </button>
           </div>
         </div>
       </section>

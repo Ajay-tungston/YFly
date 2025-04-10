@@ -10,7 +10,7 @@ const ForgotPassword = () => {
 
         {/* Login Form */}
         <div className="bg-white p-14 max-md:px-7 max-md:py-10 rounded-[48px] shadow-btn max-w-md w-full max-lg:w-[80%] mt-8">
-          <h2 className="text-[2rem] max-lg:text-[1.5rem] max-md:text-[1.2rem] font-dela mb-7 text-center text-[#30589f]">Password Reset</h2>
+          <h2 className="text-[2rem] max-lg:text-[1.5rem] max-md:text-[1.2rem] font-lato mb-7 text-center text-[#30589f]">Password Reset</h2>
           <p className='text-center mb-11 font-urban text-[1rem] max-md:text-[0.8rem] text-[#30589f]'>We will send a link to reset your password</p>
           <form className='font-urban'>
 

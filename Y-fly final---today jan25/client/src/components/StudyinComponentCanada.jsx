@@ -153,7 +153,7 @@ const StudyinComponent = () => {
                                     <img src={fee} alt='fee' className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Tuition fees</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$25000</div>
+                                        <div className='text-[#30589F] font-lato text-[20px] max-xl:text-[15px]'>$25000</div>
                                     </div>
                                 </div>
 
@@ -161,7 +161,7 @@ const StudyinComponent = () => {
                                     <img src={accomodation} alt='accomodation' width={50} className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Living & Accomodation</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$15000</div>
+                                        <div className='text-[#30589F] font-lato text-[20px] max-xl:text-[15px]'>$15000</div>
                                     </div>
                                 </div>
 
@@ -169,7 +169,7 @@ const StudyinComponent = () => {
                                     <img src={airfare} alt='airfare' className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Airfare</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$1000</div>
+                                        <div className='text-[#30589F] font-lato text-[20px] max-xl:text-[15px]'>$1000</div>
                                     </div>
                                 </div>
 
@@ -177,7 +177,7 @@ const StudyinComponent = () => {
                                     <img src={visa} alt='visa' className=' max-xl:w-[2rem]'></img>
                                     <div className='ml-3'>
                                         <div className='text-[13px] max-xl:text-[10px] font-bold font-urban text-[#898C9A]'>Visa</div>
-                                        <div className='text-[#30589F] font-dela text-[20px] max-xl:text-[15px]'>$510</div>
+                                        <div className='text-[#30589F] font-lato text-[20px] max-xl:text-[15px]'>$510</div>
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +204,7 @@ const StudyinComponent = () => {
                                 </div>
                                 <div className='flex justify-between mt-6 items-center'>
                                     <div>
-                                        <div className=' font-dela max-lg:text-[13px]'>{u.university}</div>
+                                        <div className=' font-lato max-lg:text-[13px]'>{u.university}</div>
                                         <div className='  text-[#898C9A] font-urban text-[14px] max-lg:text-[11px]'>{u.place}</div>
                                     </div>
                                     <div className='font-urban  max-lg:text-[13px]'>QS Rank: {u.rank}</div>
@@ -276,8 +276,8 @@ const StudyinComponent = () => {
                 </div>
 
              {/* Image and Call to Action */}
-              <section>
-                <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
+              <section className='px-4 md:px-0'>
+                <div className="bg-[#5BC7F1] rounded-[80px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
                     {/* Left Image */}
                     <div className="flex-shrink-0 relative w-full h-[403px] md:w-[571px] md:h-[403px] mx-auto md:mx-0 rounded-[20px] overflow-hidden">
                         <img
@@ -308,7 +308,7 @@ const StudyinComponent = () => {
                             eget urna varius eu nibh in sed est.
                         </p>
 
-                        <button className="bg-white text-[#001f3f] border border-[#001f3f] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#001f3f] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0">
+                        <button className="bg-[#2B7CD6] text-white border border-[#2B7CD6] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#2B7CD6] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0 shadow-[3px_3px_0px_0px_#001426]">
                             Book a call →
                         </button>
                     </div>

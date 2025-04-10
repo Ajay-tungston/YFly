@@ -46,7 +46,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
     >
       <Navbar />
       <div className="w-[50%] max-xl:w-[70%] max-lg:w-[80%] bg-white rounded-[3rem] border-black border-[1px] p-16 max-lg:p-10 max-md:p-7">
-        <div className="text-center font-dela text-[#2B7CD6] text-[1.2rem] max-md:text-[0.9rem]">
+        <div className="text-center font-lato text-[#2B7CD6] text-[1.2rem] max-md:text-[0.9rem]">
           What degree do you wish to pursue?
         </div>
 
@@ -58,7 +58,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
               selectedDegree === "Bachelors"
                 ? "bg-[#30589f] text-white shadow-lightshad"
                 : "bg-white text-[#2b7cd6]"
-            } border hover:bg-[#30589f] hover:text-white hover:shadow-lightshad border-[#0e1b2c] active:scale-95 transition transform duration-150 text-[1rem] font-dela py-6 max-md:py-4 px-2 rounded-3xl`}
+            } border hover:bg-[#30589f] hover:text-white hover:shadow-lightshad border-[#0e1b2c] active:scale-95 transition transform duration-150 text-[1rem] font-lato py-6 max-md:py-4 px-2 rounded-3xl`}
           >
             <div className="flex justify-center">
               <img
@@ -68,7 +68,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
                 className=" max-md:w-[4rem]"
               />
             </div>
-            <div className="text-center font-dela mt-3 text-[18px] max-md:text-[0.8rem]">
+            <div className="text-center font-lato mt-3 text-[18px] max-md:text-[0.8rem]">
               Bachelors
             </div>
           </button>
@@ -80,7 +80,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
               selectedDegree === "Masters"
                 ? "bg-[#30589f] text-white shadow-lightshad"
                 : "bg-white text-[#2b7cd6]"
-            } border hover:bg-[#30589f] hover:text-white hover:shadow-lightshad border-[#0e1b2c] active:scale-95 transition transform duration-150 text-[1rem] font-dela py-6 max-md:py-4 px-2 rounded-3xl`}
+            } border hover:bg-[#30589f] hover:text-white hover:shadow-lightshad border-[#0e1b2c] active:scale-95 transition transform duration-150 text-[1rem] font-lato py-6 max-md:py-4 px-2 rounded-3xl`}
           >
             <div className="flex justify-center">
               <img
@@ -90,7 +90,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
                 className=" max-md:w-[4rem]"
               />
             </div>
-            <div className="text-center font-dela mt-3 text-[18px] max-md:text-[0.8rem]">
+            <div className="text-center font-lato mt-3 text-[18px] max-md:text-[0.8rem]">
               Masters
             </div>
           </button>
@@ -102,7 +102,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
               selectedDegree === "MBA"
                 ? "bg-[#30589f] text-white shadow-lightshad"
                 : "bg-white text-[#2b7cd6]"
-            } border hover:bg-[#30589f] hover:text-white hover:shadow-lightshad border-[#0e1b2c] active:scale-95 transition transform duration-150 text-[1rem] font-dela py-6 max-md:py-4 px-2 rounded-3xl`}
+            } border hover:bg-[#30589f] hover:text-white hover:shadow-lightshad border-[#0e1b2c] active:scale-95 transition transform duration-150 text-[1rem] font-lato py-6 max-md:py-4 px-2 rounded-3xl`}
           >
             <div className="flex justify-center">
               <img
@@ -112,7 +112,7 @@ const Degree = ({ onOpenBachelors, onOpenMasters, onOpenMba }) => {
                 className=" max-md:w-[4rem]"
               />
             </div>
-            <div className="text-center font-dela mt-3 text-[18px] max-md:text-[0.8rem]">
+            <div className="text-center font-lato mt-3 text-[18px] max-md:text-[0.8rem]">
               MBA
             </div>
           </button>

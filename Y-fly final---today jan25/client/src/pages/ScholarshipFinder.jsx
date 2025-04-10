@@ -180,7 +180,7 @@ const ScholarshipFinder = () => {
             <button className="absolute top-[10rem] text-[#0F62AF] border-[2px] max-md:hidden border-[#0F62AF] px-5 py-2 rounded-full font-bold font-urban">
               SCHOLARSHIP FINDER
             </button>
-            <div className="absolute top-[13.5rem] max-md:top-[10rem] max-md:px-5 font-dela text-[5.4rem] text-center leading-[6.5rem] max-xl:text-[3.5rem] max-xl:leading-[4.8rem] max-md:text-[1.9rem] max-md:leading-[3rem]">
+            <div className="absolute top-[13.5rem] max-md:top-[10rem] max-md:px-5 font-lato text-[5.4rem] text-center leading-[6.5rem] max-xl:text-[3.5rem] max-xl:leading-[4.8rem] max-md:text-[1.9rem] max-md:leading-[3rem]">
               Scholarships
               <br /> made easy.
             </div>
@@ -373,7 +373,7 @@ const ScholarshipFinder = () => {
                       className="border mt-10 border-black w-[49%]  max-md:w-[100%] rounded-[40px] p-8 max-xl:p-6  bg-white hover:shadow-lightshad "
                       onClick={() => naviagte(`/scholarshipoverview/${s._id}`)}
                     >
-                      <div className="font-dela mb-3 text-[20px] max-xl:text-[16px]">
+                      <div className="font-lato mb-3 text-[20px] max-xl:text-[16px]">
                         {s.scholarship_name}
                       </div>
                       <div className="font-urban max-xl:text-[15px]">
@@ -389,7 +389,7 @@ const ScholarshipFinder = () => {
                           <div className="text-[#898C9A] font-urban font-bold ">
                             Deadline
                           </div>
-                          <div className="font-dela text-[15px] max-xl:text-[12px]">
+                          <div className="font-lato text-[15px] max-xl:text-[12px]">
                             {format(
                               new Date(s.scholarship_deadline),
                               "dd MMM yyyy"
@@ -400,7 +400,7 @@ const ScholarshipFinder = () => {
                           <div className="text-[#898C9A] font-urban font-bold ">
                             Scholarship Type
                           </div>
-                          <div className="font-dela text-[15px] max-xl:text-[12px]">
+                          <div className="font-lato text-[15px] max-xl:text-[12px]">
                             {s.types_of_scholarship}
                           </div>
                         </div>
@@ -408,7 +408,7 @@ const ScholarshipFinder = () => {
                           <div className="text-[#898C9A] font-urban font-bold ">
                             Total cost
                           </div>
-                          <div className="font-dela text-[15px] max-xl:text-[12px]">
+                          <div className="font-lato text-[15px] max-xl:text-[12px]">
                             ${s.scholarship_amount}
                           </div>
                         </div>
@@ -439,44 +439,43 @@ const ScholarshipFinder = () => {
         </div>
 
         {/* Image and Call to Action */}
-        <section>
-          <div className="bg-[#5BC7F1] rounded-[20px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto md:h-[510px] -mt-[100px]">
-            {/* Left Image */}
-            <div className="flex-shrink-0 relative w-full h-[403px] md:w-[571px] md:h-[403px] mx-auto md:mx-0 rounded-[20px] overflow-hidden">
-              <img
-                src="/images/dummy.png" // Replace with your actual image path
-                alt="Support Agent"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Right Text */}
-            <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
-              <h2 className="text-2xl md:text-3xl font-bold text-[#001f3f]">
-                Ready to flight your dreams?
-              </h2>
-              <p
-                className="text-[#001f3f] text-sm md:text-base leading-relaxed"
-                style={{
-                  fontFamily: "'Roboto', sans-serif",
-                  fontWeight: "400",
-                  lineHeight: "1.75",
-                  marginBottom: "1.5rem",
-                }}
-              >
-                Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
-                placerat gravida aliquet at. Nisi urna quam massa pellentesque
-                lectus odio sagittis. Tortor massa in rhoncus purus nunc
-                scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
-                eget urna varius eu nibh in sed est.
-              </p>
-
-              <button className="bg-white text-[#001f3f] border border-[#001f3f] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#001f3f] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0">
-                Book a call →
-              </button>
-            </div>
+        <section className="px-4 md:px-0 mt-10">
+        <div className="bg-[#5cc7f1] rounded-[80px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto -mt-32 md:-mt-[150px]">
+          {/* Left Image */}
+          <div className="flex-shrink-0 w-full h-[250px] md:w-[571px] md:h-[403px] rounded-[20px] overflow-hidden">
+            <img
+              src="/images/dummy.png"
+              alt="Support Agent"
+              className="w-full h-full object-cover"
+            />
           </div>
-        </section>
+
+          {/* Right Text */}
+          <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
+            <h2 className="text-2xl md:text-3xl font-lato text-[#001f3f]">
+              Ready to flight your dreams?
+            </h2>
+            <p
+              className="text-[#001f3f] text-sm md:text-base leading-relaxed"
+              style={{
+                fontFamily: "'Roboto', sans-serif",
+                fontWeight: "400",
+                lineHeight: "1.75",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
+              placerat gravida aliquet at. Nisi urna quam massa pellentesque
+              lectus odio sagittis. Tortor massa in rhoncus purus nunc
+              scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
+              eget urna varius eu nibh in sed est.
+            </p>
+            <button className="bg-[#2B7CD6] text-white border border-[#2B7CD6] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#2B7CD6] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0 shadow-[3px_3px_0px_0px_#001426]">
+                            Book a call →
+                        </button>
+          </div>
+        </div>
+      </section>
 
         {/* <Contactus /> */}
         {/* FOOTER SECTION */}

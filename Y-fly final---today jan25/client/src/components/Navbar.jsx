@@ -185,7 +185,7 @@ const Navbar = () => {
           </div>
           {isDestinationOpen && (
             <div
-              className="absolute pl-4 w-[28vw] py-5 z-10 space-y-2 rounded-[20px] shadow-lightshad bg-[#fff] mt-[1rem] border focus:outline-none"
+              className="absolute pl-4 w-[29vw] py-5 z-10 space-y-2 rounded-[20px] shadow-lightshad bg-[#fff] mt-[1rem] border focus:outline-none"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="options-menu"

@@ -13,7 +13,6 @@ import down from '../assets/images/nav-dropdown.svg';
 import Footer from '../components/Footer';
 import blueright from '../assets/images/arrow-right-blue.svg'
 import grid from '../assets/images/image/grid.svg'
-import Contactus from '../components/ContactUs'
 import intake from '../assets/images/intake.svg'
 import deadline from '../assets/images/deadline.svg'
 import stanford from '../assets/images/stanford.svg'
@@ -74,7 +73,7 @@ const UniversityOverview = () => {
                 </div>            
  
                 <div className='flex justify-center'>
-                    <div className="text-white absolute text-[5.5rem] max-xl:text-[4.9rem] max-lg:text-[3.9rem] max-md:text-[1.5rem] leading-[5.2rem] max-lg:leading-[4rem] max-md:leading-[2rem] top-[18rem] max-xl:top-[12rem] max-lg:top-[9rem] max-md:top-[4rem] font-dela tracking-wide  text-center">
+                    <div className="text-white absolute text-[5.5rem] max-xl:text-[4.9rem] max-lg:text-[3.9rem] max-md:text-[1.5rem] leading-[5.2rem] max-lg:leading-[4rem] max-md:leading-[2rem] top-[18rem] max-xl:top-[12rem] max-lg:top-[9rem] max-md:top-[4rem] font-lato tracking-wide  text-center">
                         <p>Harvard</p>
                         <p>University</p>
                     </div>
@@ -90,7 +89,7 @@ const UniversityOverview = () => {
                 style={{ backgroundImage: `url(${grid})` }}>
                 {/* ************************************ Course Details ********************************************** */}
                     <div>
-                        <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Course Details</div>
+                        <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Course Details</div>
                         <div className='flex max-md:flex-col justify-between my-5 font-urban font-bold max-md:text-[0.8rem]'>
                             <div className=''>Bachelor of Science in Engineering Sciences</div>
                             <div>Course Duration: 4 years</div>
@@ -101,7 +100,7 @@ const UniversityOverview = () => {
                                 <img src={intake} alt="" width={45} className='mr-3 '/>
                                 <div>
                                     <div className='font-urban text-[#898C9A] font-bold max-md:text-[0.8rem]'>Intakes</div>
-                                    <div className='font-dela text-[#0F62AF] text-[0.9rem] max-md:text-[0.7rem]'>Fall (August), 2024 Spring (January), 2025</div>
+                                    <div className='font-lato text-[#0F62AF] text-[0.9rem] max-md:text-[0.7rem]'>Fall (August), 2024 Spring (January), 2025</div>
                                 </div>
 
                             </div>
@@ -109,7 +108,7 @@ const UniversityOverview = () => {
                                 <img src={deadline} alt="" width={45} className='mr-3 '/>
                                 <div>
                                     <div className='font-urban text-[#898C9A] font-bold max-md:text-[0.8rem]'>Deadline</div>
-                                    <div className='font-dela text-[#0F62AF] text-[0.9rem] max-md:text-[0.7rem]'>Dec 15, 2024</div> 
+                                    <div className='font-lato text-[#0F62AF] text-[0.9rem] max-md:text-[0.7rem]'>Dec 15, 2024</div> 
                                 </div>
                             </div>
                         </div>
@@ -120,7 +119,7 @@ const UniversityOverview = () => {
                     {/* ******************************* OVERVIEW ******************************** */}
                         <div className='mt-10'>
                             
-                            <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Overview</div>
+                            <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Overview</div>
 
                             <div className='font-urban text-[1rem] max-md:text-[0.8rem] tracking-wide pt-4'>
                                 A member of the elite US group of Ivy League Schools. Harvard University is the oldest American University that was established in 1636. The university's 
@@ -134,10 +133,10 @@ const UniversityOverview = () => {
                         </div>
                     {/* ********************************Eligibility Requirements******************** */}
                     <div className='mt-8'>
-                        <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem] mb-7'>Eligibility Requirements</div>
+                        <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem] mb-7'>Eligibility Requirements</div>
                         <div className='flex max-md:flex-col justify-center'>
                             <div className='border w-[28%] max-xl:w-[35%] max-lg:w-[45%] max-md:w-[100%] max-md:mb-3 mr-10 bg-white border-black shadow-lightshad px-12 max-md:px-6 py-8 rounded-[30px]'>
-                                <div className='font-dela text-[#30589F]'>Requirements</div>
+                                <div className='font-lato text-[#30589F]'>Requirements</div>
                                 <hr className='my-2 border-b-0'/> 
                                 <div className='flex justify-between max-md:text-[0.8rem] font-urban font-bold mb-2'>
                                     <div>GPA (Min. required %)</div>
@@ -150,7 +149,7 @@ const UniversityOverview = () => {
                                 </div>
                             </div>
                             <div className='border w-[28%] max-xl:w-[35%] max-lg:w-[45%] max-md:w-[100%] bg-white border-black shadow-lightshad px-12 max-md:px-6 py-8 rounded-[30px]'>
-                                <div className='font-dela text-[#30589F]'>Test Requirements</div>
+                                <div className='font-lato text-[#30589F]'>Test Requirements</div>
                                 <hr className='my-2 border-b-0'/> 
                                 <div className='flex justify-between max-md:text-[0.8rem] font-urban font-bold mb-2'>
                                     <div>TOEFL Overall</div>
@@ -167,13 +166,13 @@ const UniversityOverview = () => {
                 
                     {/* ******************************* DEADLINES ******************************** */}
                         {/* <div className=' mt-8'>
-                            <div className='text-[#0F62AF] font-dela text-[2rem] '>Deadlines </div>
+                            <div className='text-[#0F62AF] font-lato text-[2rem] '>Deadlines </div>
 
                             <div className='flex justify-center pt-8'>
                                 <div className='border w-[75%] border-black shadow-lightshad px-10 py-5 rounded-[45px]'>
                                     <div className="flex justify-between ">
-                                        <div className='text-[#30589F] font-dela text-[1.6rem]'>Round</div>
-                                        <div className='text-[#30589F] font-dela text-[1.6rem]'>Deadline</div>
+                                        <div className='text-[#30589F] font-lato text-[1.6rem]'>Round</div>
+                                        <div className='text-[#30589F] font-lato text-[1.6rem]'>Deadline</div>
                                     </div>
                                     <hr className='mt-[0.5rem] border-b-0'/>
                                     <div className="flex justify-between mt-4 font-urban font-bold text-[1.2rem]">
@@ -185,10 +184,10 @@ const UniversityOverview = () => {
                         </div> */}
                     {/* ******************************* APPLICATION REQUIREMENTS ******************************** */}
                         <div className=' mt-10'>
-                            <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem] '>Application Requirements </div>
+                            <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem] '>Application Requirements </div>
                             <div className="flex justify-center pt-8">
                                 <div className="border w-[55%] max-lg:w-[70%] max-md:w-[100%] bg-white border-black shadow-lightshad px-12 max-md:px-5 py-8 rounded-[48px]">
-                                    <div className='text-[#30589F] font-dela text-[1.2rem] max-md:text-[1rem]'>Requirements</div>
+                                    <div className='text-[#30589F] font-lato text-[1.2rem] max-md:text-[1rem]'>Requirements</div>
                                     <hr className='mt-[0.5rem] border-b-0'/>       
                                     <div className='mt-4 space-y-1 font-urban font-bold text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>
                                                                         
@@ -246,7 +245,7 @@ const UniversityOverview = () => {
                         </div>
                     {/* ******************************* CAREER OUTCOMES ******************************** */}
                         <div className=' mt-10'>
-                            <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Career Outcomes </div>
+                            <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Career Outcomes </div>
                             <div className='text-[#30589F] mt-[1rem]  font-urban font-extrabold text-[1.5rem] max-md:text-[1rem]'>Job Roles Guaranteed</div>
                             <div className='mx-auto rounded-[48px] mt-[1rem] flex flex-wrap w-[95%] max-xl:text-[15px] max-lg:text-[13px] border-black border-[1px] bg-white py-5 px-10 max-xl:px-6 gap-x-3 max-lg:gap-x-1 gap-y-3 max-xl:gap-y-2 shadow-lightshad'>
                                 
@@ -276,19 +275,19 @@ const UniversityOverview = () => {
                         </div>
                     {/* ******************************* FEES & SCHOLARSHIPS ******************************** */}
                         <div className=' mt-10'>
-                            <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Fees & Scholarships </div>
+                            <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>Fees & Scholarships </div>
                             <div className="flex py-4 gap-3 w-80 max-md:w-72 px-5 items-center mt-[1.6rem] rounded-[24px] border border-black">
                                 <img src={dollarcoin} alt='dollarcoin' />
                                 <div>
                                     <p className='font-urban text-[#898C9A] font-bold text-[1.1rem] max-md:text-[1rem]'>Tuition fees</p>
-                                    <p className='font-dela text-[#30589F] text-[1.1rem] max-md:text-[1rem]'>$39,517 / year</p>
+                                    <p className='font-lato text-[#30589F] text-[1.1rem] max-md:text-[1rem]'>$39,517 / year</p>
                                 </div>
                             </div>
                             {/* ******************** Funding Options ***************** */}
                             <div className='text-[#30589F] mt-[1.8rem] font-urban font-extrabold text-[1.4rem] max-md:text-[1.1rem]'>Funding Options</div>
                             <div className='flex max-md:flex-col  mt-[1.6rem] text-[0.9rem] space-x-8 max-md:space-x-0'>
-                                <div className=' py-4 px-6 text-[#30589F] max-md:mb-3 font-dela  rounded-[20px] border border-black'>Scholarships</div>
-                                <div className=' py-4 px-6 text-[#30589F] font-dela  rounded-[20px] border border-black'>Department funding</div>
+                                <div className=' py-4 px-6 text-[#30589F] max-md:mb-3 font-lato  rounded-[20px] border border-black'>Scholarships</div>
+                                <div className=' py-4 px-6 text-[#30589F] font-lato  rounded-[20px] border border-black'>Department funding</div>
                             </div>
 
                             <div className='font-urban text-[1rem] tracking-wide pt-4 max-md:text-[0.8rem]'>
@@ -308,13 +307,13 @@ const UniversityOverview = () => {
                         </div>
                     {/* ******************************* FAQS ******************************** */}
                         <div className=' mt-10'>
-                            <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>FAQs </div>
+                            <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem]'>FAQs </div>
                             
                             <div className='mt-[1.5rem]'>
                                 {/* ----------------Can you work while studying in USA?---------- */}
                                 <div className='border-[1px] border-black rounded-[28px] bg-white p-8 max-md:p-5 mb-3'>
                                     <div className='flex justify-between items-center'>
-                                            <div className='font-dela text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>Can you work while studying in USA?</div>
+                                            <div className='font-lato text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>Can you work while studying in USA?</div>
                                             <button onClick={handleDrop1}>
                                                 <img src={down} alt='down' width={15} className={drop1 ? 'rotate-180' : ''}></img>
                                             </button>
@@ -331,7 +330,7 @@ const UniversityOverview = () => {
                                 {/* -------------What are the English language proficiency in USA?------------- */}
                                 <div className='border-[1px] border-black rounded-[28px] bg-white p-8 max-md:p-5 mb-3'>
                                     <div className='flex justify-between items-center'>
-                                            <div className='font-dela text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>What are the English language proficiency in USA?</div>
+                                            <div className='font-lato text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>What are the English language proficiency in USA?</div>
                                             <button onClick={handleDrop2}>
                                                 <img src={down} alt='down' width={15} className={drop2 ? 'rotate-180' : ''}></img>
                                             </button>
@@ -348,7 +347,7 @@ const UniversityOverview = () => {
                                 {/* -------------What are other standardized tests in USA?------------- */}
                                 <div className='border-[1px] border-black rounded-[28px] bg-white p-8 max-md:p-5 mb-3'>
                                     <div className='flex justify-between items-center'>
-                                            <div className='font-dela text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>What are other standardized tests in USA?</div>
+                                            <div className='font-lato text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>What are other standardized tests in USA?</div>
                                             <button onClick={handleDrop3}>
                                                 <img src={down} alt='down' width={15} className={drop3 ? 'rotate-180' : ''}></img>
                                             </button>
@@ -365,7 +364,7 @@ const UniversityOverview = () => {
                                   {/* ------------What are the popular courses in USA?------------- */}
                                 <div className='border-[1px] border-black rounded-[28px] bg-white p-8 max-md:p-5 mb-3'>
                                     <div className='flex justify-between items-center'>
-                                            <div className='font-dela text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>What are the popular courses in USA?</div>
+                                            <div className='font-lato text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>What are the popular courses in USA?</div>
                                             <button onClick={handleDrop4}>
                                                 <img src={down} alt='down' width={15} className={drop4 ? 'rotate-180' : ''}></img>
                                             </button>
@@ -382,7 +381,7 @@ const UniversityOverview = () => {
                                 {/* -------------Are there any scholarships available in USA?------------- */}
                                 <div className='border-[1px] border-black rounded-[28px] bg-white p-8 max-md:p-5 mb-3'>
                                     <div className='flex justify-between items-center'>
-                                            <div className='font-dela text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>Are there any scholarships available in USA?</div>
+                                            <div className='font-lato text-[1.2rem] max-lg:text-[1rem] max-md:text-[0.8rem]'>Are there any scholarships available in USA?</div>
                                             <button onClick={handleDrop5}>
                                                 <img src={down} alt='down' width={15} className={drop5 ? 'rotate-180' : ''}></img>
                                             </button>
@@ -401,7 +400,7 @@ const UniversityOverview = () => {
                         </div>
                     {/* ***********************************Similar Courses******************** */}
                     <div className='mt-10'>
-                        <div className='text-[#0F62AF] font-dela text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem] mb-6'>Similar Courses</div>
+                        <div className='text-[#0F62AF] font-lato text-[2rem] max-lg:text-[1.6rem] max-md:text-[1.1rem] mb-6'>Similar Courses</div>
                         <div className='flex flex-wrap justify-between'>   
                         {universities.map((u)=>(
                                 <div className=' border-[1px] w-[48%] max-xl:w-[49%] max-md:w-[98%] border-black rounded-[38px] shadow-right-bottom bg-white p-6 mb-5'>
@@ -412,18 +411,18 @@ const UniversityOverview = () => {
                                         <div className='text-[#30589F] bg-[#E5F1FF] rounded-full font-urban text-[13px] px-3 py-1'>{u.university}</div>
                                         <div className='font-urban font-bold max-xl:text-[12px]'>QS Rank: {u.rank}</div>
                                     </div>
-                                    <div className='mt-2 font-dela text-[15px] max-xl:text-[13px]'>{u.course}</div>
+                                    <div className='mt-2 font-lato text-[15px] max-xl:text-[13px]'>{u.course}</div>
 
                                     <div className='border-t-[0.5px] border-[#bfc0c5] my-4'></div>
 
                                     <div className='flex justify-between'>
                                         <div>
                                             <div className='text-[#898C9A] font-urban font-bold max-xl:text-[14px]'>Deadline</div>
-                                            <div className='font-dela text-[15px] max-xl:text-[13px]'>{u.deadline}</div>
+                                            <div className='font-lato text-[15px] max-xl:text-[13px]'>{u.deadline}</div>
                                         </div>
                                         <div>
                                             <div className='text-[#898C9A] font-urban font-bold  max-xl:text-[14px]'>Total cost</div>
-                                            <div className='font-dela text-[15px] max-xl:text-[13px]'>${u.totalCost}</div>
+                                            <div className='font-lato text-[15px] max-xl:text-[13px]'>${u.totalCost}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -436,10 +435,45 @@ const UniversityOverview = () => {
 
             </div>
             
-            
+            <section className="px-4 md:px-0  mt-10">
+        <div className="bg-[#5cc7f1] rounded-[80px] md:rounded-[500px] flex flex-col md:flex-row items-center p-8 md:p-16 gap-8 w-full max-w-[1637px] mx-auto h-auto -mt-32 md:-mt-[150px]">
+          {/* Left Image */}
+          <div className="flex-shrink-0 w-full h-[250px] md:w-[571px] md:h-[403px] rounded-[20px] overflow-hidden">
+            <img
+              src="/images/dummy.png"
+              alt="Support Agent"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
+          {/* Right Text */}
+          <div className="flex flex-col space-y-4 max-w-xl w-full px-4 md:px-0 text-center md:text-left">
+            <h2 className="text-2xl md:text-3xl font-lato text-[#001f3f]">
+              Ready to flight your dreams?
+            </h2>
+            <p
+              className="text-[#001f3f] text-sm md:text-base leading-relaxed"
+              style={{
+                fontFamily: "'Roboto', sans-serif",
+                fontWeight: "400",
+                lineHeight: "1.75",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Lorem ipsum dolor sit amet consectetur. Id donec facilisis duis
+              placerat gravida aliquet at. Nisi urna quam massa pellentesque
+              lectus odio sagittis. Tortor massa in rhoncus purus nunc
+              scelerisque nullam. Consequat rhoncus nam ac enim leo. Feugiat
+              eget urna varius eu nibh in sed est.
+            </p>
+            <button className="bg-[#2B7CD6] text-white border border-[#2B7CD6] px-4 py-2 rounded-full text-sm md:text-base hover:bg-[#2B7CD6] hover:text-white transition-all duration-300 w-max mx-auto md:mx-0 shadow-[3px_3px_0px_0px_#001426]">
+                            Book a call →
+                        </button>
+          </div>
+        </div>
+      </section>
             {/* *************************************************** Footer ***************************************************************** */}
-            <Contactus/>
+            {/* <Contactus/> */}
             <Footer/>
         </div>
 
