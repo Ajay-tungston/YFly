@@ -7,9 +7,11 @@ import axios from "axios";
 import AddNewService from "./AddNewService";
 import EditService from "./EditService";
 import { Oval } from "react-loader-spinner";
+import AddMultipleServices from "./AddMultipleServices";
 
 const ServiceList = () => {
   const [addingNewService, setAddingNewService] = useState(false);
+  const [showCsvUpload, setShowCsvUpload] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [service, setService] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,12 +64,17 @@ const ServiceList = () => {
       />
     );
   }
+
   if (editOpen) {
     return <EditService id={editOpen} setEditOpen={setEditOpen} />;
   }
 
   return (
     <div className="px-10 py-10 h-[100vh]">
+      {showCsvUpload && (
+        <AddMultipleServices setShowCsvUpload={setShowCsvUpload} fetchService={fetchService} />
+      )}
+
       <div className="flex justify-between">
         <input
           placeholder="Search"
@@ -88,7 +95,7 @@ const ServiceList = () => {
       <div>
         <div className="flex justify-between mb-5">
           <div className="font-urban font-bold text-[1.3rem]">Services</div>
-          <div className="">
+          <div className=" flex gap-5">
             <button
               onClick={() => setAddingNewService(true)}
               className="font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] py-2 px-4 rounded-[9px]"
@@ -102,6 +109,13 @@ const ServiceList = () => {
             >
               Delete
             </button> */}
+            <button
+              onClick={() => setShowCsvUpload(true)}
+              className="font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] py-2 px-4 rounded-[9px]"
+            >
+              <img src={add} alt="add" width={15} className="mr-1" />
+              Upload CSV
+            </button>
           </div>
         </div>
       </div>

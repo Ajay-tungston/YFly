@@ -1,5 +1,5 @@
 const express = require('express');
-const { addNewService, getAllServiceWithPagination, getAllServiceName, getServiceById, updateService, deleteService, applyForService, getServiceApplications } = require('../Controllers/servicesController');
+const { addNewService, getAllServiceWithPagination, getAllServiceName, getServiceById, updateService, deleteService, applyForService, getServiceApplications, bulkUploadServices } = require('../Controllers/servicesController');
 const router = express.Router();
 const formidable = require('express-formidable');
 const fs = require('fs');
@@ -15,7 +15,9 @@ if (!fs.existsSync(uploadDir)) {
 router.use(formidable({
     uploadDir,
     keepExtensions: true,
-    maxFileSize: 5 * 1024 * 1024 // 5MB limit
+    maxFileSize: 5 * 1024 * 1024, // 5MB limit
+    multiples: true, // ← This is crucial for bulk uploads
+    allowEmptyFiles: false // ← Prevent empty files
 }));
 router.post('/add', addNewService);
 router.get("/get-all",getAllServiceWithPagination)
@@ -25,4 +27,7 @@ router.put('/update/:id', updateService)
 router.delete('/delete/:id', deleteService)
 router.post("/applay",applyForService)
 router.get ("/application",getServiceApplications)
+
+router.post('/bulk-upload', bulkUploadServices);
+
 module.exports = router;

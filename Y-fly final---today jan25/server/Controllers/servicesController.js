@@ -5,6 +5,9 @@ const ServiceApplication = require("../Models/ServiceApplicaion");
 const fs = require("fs");
 const ServiceApplicaion = require("../Models/ServiceApplicaion");
 
+const xlsx = require("xlsx");
+
+
 const addNewService = async (req, res) => {
   try {
     // Extract fields from req.fields
@@ -547,6 +550,154 @@ const getServiceApplications = async (req, res) => {
     });
   }
 };
+
+
+
+const bulkUploadServices = async (req, res) => {
+  try {
+    const excelFile = req.files?.excel;
+    const imageFiles = req.files?.images;
+
+    if (!excelFile || !excelFile.path) {
+      return res.status(400).json({ message: "Valid Excel file is required" });
+    }
+
+    const workbook = xlsx.readFile(excelFile.path);
+    const sheetName = workbook.SheetNames[0];
+    const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    // Build image map
+    const imageMap = {};
+    if (imageFiles) {
+      if (Array.isArray(imageFiles)) {
+        imageFiles.forEach((file) => {
+          imageMap[file.name] = file;
+        });
+      } else if (imageFiles.name) {
+        imageMap[imageFiles.name] = imageFiles;
+      }
+    }
+
+    const createdServices = [];
+    const updatedServices = [];
+    const errors = [];
+
+    for (const row of rows) {
+      try {
+        const {
+          id, // New custom ID
+          service_name,
+          price,
+          overview,
+          benefits,
+          procedure,
+          workflow,
+          image_name,
+        } = row;
+
+        // Validation
+        if (
+          !id ||
+          !service_name ||
+          !price ||
+          !overview ||
+          !benefits ||
+          !procedure ||
+          !workflow ||
+          !image_name
+        ) {
+          errors.push(`Skipping incomplete row (missing required fields): ${service_name || "Unnamed Service"}`);
+          continue;
+        }
+
+        const imageFile = imageMap[image_name];
+
+        const cleanedBenefits = typeof benefits === "string"
+          ? benefits.split(",").map((b) => b.trim()).filter(Boolean)
+          : Array.isArray(benefits)
+            ? benefits.map((b) => b.trim()).filter(Boolean)
+            : [];
+
+        const existingService = await Service.findOne({ id });
+
+        if (existingService) {
+          const oldImagePath = existingService.service_image;
+          const oldImageName = path.basename(oldImagePath);
+
+          const isImageChanged = image_name !== oldImageName;
+
+          if (isImageChanged && imageFile?.path) {
+            const fullOldPath = path.join(__dirname, "..", oldImagePath);
+
+            if (fs.existsSync(fullOldPath)) {
+              try {
+                fs.unlinkSync(fullOldPath);
+              } catch (unlinkErr) {
+                console.warn(`Failed to delete old image for ${service_name}: ${unlinkErr.message}`);
+              }
+            }
+
+            existingService.service_image = imageFile.path;
+          }
+
+          existingService.service_name = service_name;
+          existingService.price = price;
+          existingService.overview = overview;
+          existingService.benefits = cleanedBenefits;
+          existingService.procedure = procedure;
+          existingService.workflow = workflow;
+
+          await existingService.save();
+          updatedServices.push(existingService);
+        } else {
+          if (!imageFile?.path) {
+            errors.push(`Image not found for ${service_name}: ${image_name}`);
+            continue;
+          }
+
+          const newService = new Service({
+            id,
+            service_name,
+            price,
+            overview,
+            benefits: cleanedBenefits,
+            procedure,
+            workflow,
+            service_image: imageFile.path,
+          });
+
+          await newService.save();
+          createdServices.push(newService);
+        }
+      } catch (rowError) {
+        errors.push(`Error processing row ${row.service_name || 'unnamed'}: ${rowError.message}`);
+      }
+    }
+
+    const response = {
+      message: `Bulk upload completed.`,
+      createdCount: createdServices.length,
+      updatedCount: updatedServices.length,
+      errorCount: errors.length,
+    };
+
+    if (createdServices.length > 0) response.createdServices = createdServices;
+    if (updatedServices.length > 0) response.updatedServices = updatedServices;
+    if (errors.length > 0) response.errors = errors;
+
+    res.status(createdServices.length > 0 || updatedServices.length > 0 ? 201 : 400).json(response);
+  } catch (error) {
+    console.error("Bulk upload error:", error);
+    res.status(500).json({
+      message: "Bulk upload failed",
+      errorCount: 1,
+      createdCount: 0,
+      updatedCount: 0,
+      errors: [process.env.NODE_ENV === "development" ? error.message : "An internal error occurred."]
+    });
+  }
+};
+
 module.exports = {
   addNewService,
   getAllServiceName,
@@ -556,4 +707,5 @@ module.exports = {
   deleteService,
   applyForService,
   getServiceApplications,
+  bulkUploadServices
 };
