@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const EditService = ({ id, setEditOpen }) => {
+const EditService = ({ id, setEditOpen,fetchService }) => {
   const [service, setService] = useState({});
   const [formData, setFormData] = useState({
     service_name: "",
@@ -176,6 +176,7 @@ const EditService = ({ id, setEditOpen }) => {
         }
       );
       alert("Service updated successfully!");
+      fetchService()
       setEditOpen(false);
     } catch (error) {
       console.error("Error updating service", error);

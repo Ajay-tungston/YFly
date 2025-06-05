@@ -7,7 +7,6 @@ const ServiceApplicaion = require("../Models/ServiceApplicaion");
 
 const xlsx = require("xlsx");
 
-
 const addNewService = async (req, res) => {
   try {
     // Extract fields from req.fields
@@ -32,7 +31,6 @@ const addNewService = async (req, res) => {
     benefits = Array.isArray(benefits)
       ? benefits.map((b) => b.trim()).filter((b) => b)
       : [benefits].filter(Boolean);
-
 
     // Get the uploaded image file
     const serviceImage = req.files?.service_image;
@@ -551,8 +549,6 @@ const getServiceApplications = async (req, res) => {
   }
 };
 
-
-
 const bulkUploadServices = async (req, res) => {
   try {
     const excelFile = req.files?.excel;
@@ -585,7 +581,7 @@ const bulkUploadServices = async (req, res) => {
     for (const row of rows) {
       try {
         const {
-          id, // New custom ID
+          id,
           service_name,
           price,
           overview,
@@ -595,7 +591,6 @@ const bulkUploadServices = async (req, res) => {
           image_name,
         } = row;
 
-        // Validation
         if (
           !id ||
           !service_name ||
@@ -606,37 +601,57 @@ const bulkUploadServices = async (req, res) => {
           !workflow ||
           !image_name
         ) {
-          errors.push(`Skipping incomplete row (missing required fields): ${service_name || "Unnamed Service"}`);
+          errors.push(
+            `Skipping incomplete row (missing fields): ${
+              service_name || "Unnamed Service"
+            }`
+          );
           continue;
         }
 
         const imageFile = imageMap[image_name];
 
-        const cleanedBenefits = typeof benefits === "string"
-          ? benefits.split(",").map((b) => b.trim()).filter(Boolean)
-          : Array.isArray(benefits)
+        const cleanedBenefits =
+          typeof benefits === "string"
+            ? benefits
+                .split(",")
+                .map((b) => b.trim())
+                .filter(Boolean)
+            : Array.isArray(benefits)
             ? benefits.map((b) => b.trim()).filter(Boolean)
             : [];
+
+        const serviceWithSameName = await Service.findOne({
+          service_name: { $regex: new RegExp(`^${service_name}$`, "i") },
+        });
+
+        // If found service with same name but different ID
+        if (serviceWithSameName && serviceWithSameName.id !== id) {
+          errors.push(
+            `Service name "${service_name}" already exists under a different ID.`
+          );
+          continue;
+        }
 
         const existingService = await Service.findOne({ id });
 
         if (existingService) {
+          // UPDATE
           const oldImagePath = existingService.service_image;
           const oldImageName = path.basename(oldImagePath);
-
           const isImageChanged = image_name !== oldImageName;
 
           if (isImageChanged && imageFile?.path) {
             const fullOldPath = path.join(__dirname, "..", oldImagePath);
-
             if (fs.existsSync(fullOldPath)) {
               try {
                 fs.unlinkSync(fullOldPath);
-              } catch (unlinkErr) {
-                console.warn(`Failed to delete old image for ${service_name}: ${unlinkErr.message}`);
+              } catch (err) {
+                console.warn(
+                  `Failed to delete old image for ${service_name}: ${err.message}`
+                );
               }
             }
-
             existingService.service_image = imageFile.path;
           }
 
@@ -650,6 +665,7 @@ const bulkUploadServices = async (req, res) => {
           await existingService.save();
           updatedServices.push(existingService);
         } else {
+          // CREATE
           if (!imageFile?.path) {
             errors.push(`Image not found for ${service_name}: ${image_name}`);
             continue;
@@ -670,9 +686,33 @@ const bulkUploadServices = async (req, res) => {
           createdServices.push(newService);
         }
       } catch (rowError) {
-        errors.push(`Error processing row ${row.service_name || 'unnamed'}: ${rowError.message}`);
+        errors.push(
+          `Error in row "${row.service_name || "Unnamed"}": ${rowError.message}`
+        );
       }
     }
+
+    // ✅ Delete Excel file after processing
+    try {
+      fs.unlinkSync(excelFile.path);
+    } catch (e) {
+      console.warn("Failed to delete Excel file:", e.message);
+    }
+
+    // ✅ Delete unused images (not referenced in Excel)
+    const usedImageNames = new Set(rows.map((row) => row.image_name));
+    Object.keys(imageMap).forEach((imageName) => {
+      if (!usedImageNames.has(imageName)) {
+        try {
+          fs.unlinkSync(imageMap[imageName].path);
+          console.log(`Deleted unused image: ${imageName}`);
+        } catch (err) {
+          console.warn(
+            `Failed to delete unused image ${imageName}: ${err.message}`
+          );
+        }
+      }
+    });
 
     const response = {
       message: `Bulk upload completed.`,
@@ -685,7 +725,11 @@ const bulkUploadServices = async (req, res) => {
     if (updatedServices.length > 0) response.updatedServices = updatedServices;
     if (errors.length > 0) response.errors = errors;
 
-    res.status(createdServices.length > 0 || updatedServices.length > 0 ? 201 : 400).json(response);
+    res
+      .status(
+        createdServices.length > 0 || updatedServices.length > 0 ? 201 : 400
+      )
+      .json(response);
   } catch (error) {
     console.error("Bulk upload error:", error);
     res.status(500).json({
@@ -693,7 +737,11 @@ const bulkUploadServices = async (req, res) => {
       errorCount: 1,
       createdCount: 0,
       updatedCount: 0,
-      errors: [process.env.NODE_ENV === "development" ? error.message : "An internal error occurred."]
+      errors: [
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "An internal error occurred.",
+      ],
     });
   }
 };
@@ -707,5 +755,5 @@ module.exports = {
   deleteService,
   applyForService,
   getServiceApplications,
-  bulkUploadServices
+  bulkUploadServices,
 };

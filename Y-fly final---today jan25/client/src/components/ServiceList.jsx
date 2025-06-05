@@ -61,12 +61,13 @@ const ServiceList = () => {
       <AddNewService
         setAddingService={setAddingNewService}
         setEditOpen={setEditOpen}
+        fetchService={fetchService}
       />
     );
   }
 
   if (editOpen) {
-    return <EditService id={editOpen} setEditOpen={setEditOpen} />;
+    return <EditService id={editOpen} setEditOpen={setEditOpen} fetchService={fetchService}/>;
   }
 
   return (

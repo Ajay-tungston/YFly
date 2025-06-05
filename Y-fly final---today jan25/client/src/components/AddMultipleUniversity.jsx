@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
+const AddMultipleUniversity = ({ setShowCsvUpload, fetchUniversities }) => {
   const [file, setFile] = useState(null);
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -20,7 +20,7 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
       return Swal.fire({
         icon: "warning",
         title: "Missing Images",
-        text: "Please select at least one image.",
+        text: "Please select at least one university logo image.",
       });
     }
 
@@ -34,36 +34,37 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
       setUploading(true);
 
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/service/bulk-upload`,
+        `${process.env.REACT_APP_API_URL}/university/bulk-upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+
       const { createdCount, updatedCount, errorCount, errors } = res.data;
 
       Swal.fire({
         icon: "success",
         title: "Upload Completed",
         html: `
-          <p><strong>New Services Added:</strong> ${createdCount}</p>
-          <p><strong>Existing Services Updated:</strong> ${updatedCount}</p>
+          <p><strong>New Universities Added:</strong> ${createdCount}</p>
+          <p><strong>Existing Universities Updated:</strong> ${updatedCount}</p>
           <p><strong>Errors:</strong> ${errorCount}</p>
+          ${
+            errors?.length
+              ? `<details style="text-align:left; margin-top:10px;">
+                  <summary style="cursor:pointer;">View Error Details</summary>
+                  <ul style="max-height:150px; overflow-y:auto;">
+                    ${errors.map((e) => `<li>${e}</li>`).join("")}
+                  </ul>
+                </details>`
+              : ""
+          }
         `,
-        width: 600,
+        // width: 600,
       });
 
-      // ${
-      //   errorCount > 0
-      //     ? `<details style="text-align: left; margin-top: 10px;">
-      //         <summary style="cursor:pointer;">View Error Details</summary>
-      //         <ul style="margin-top: 10px; max-height: 150px; overflow-y: auto;">
-      //           ${errors.map((err) => `<li>${err}</li>`).join("")}
-      //         </ul>
-      //       </details>`
-      //     : ""
-      // }
-      fetchService();
+      fetchUniversities();
       setShowCsvUpload(false);
     } catch (err) {
       console.error(err);
@@ -76,8 +77,8 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
       const errorMessage =
         errorCount !== null
           ? `Upload completed with some issues:<br>
-             <strong>Services Added:</strong> ${createdCount}<br>
-             <strong>Services Updated:</strong> ${updatedCount}<br>
+             <strong>Universities Added:</strong> ${createdCount}<br>
+             <strong>Universities Updated:</strong> ${updatedCount}<br>
              <strong>Errors:</strong> ${errorCount}`
           : "Something went wrong during the upload. Please try again.";
 
@@ -97,7 +98,7 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
               : ""
           }
         `,
-        width: 600,
+        // width: 600,
       });
     } finally {
       setUploading(false);
@@ -113,9 +114,9 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
         >
           ✕
         </button>
-        <h2 className="text-xl font-semibold mb-4">Bulk Service Upload</h2>
+        <h2 className="text-xl font-semibold mb-4">Bulk University Upload</h2>
 
-        <label className="block mb-2 font-medium">Upload ExcelFile</label>
+        <label className="block mb-2 font-medium">Upload Excel File</label>
         <input
           type="file"
           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -123,7 +124,7 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
           className="mb-4 block w-full"
         />
 
-        <label className="block mb-2 font-medium">Upload Service Images</label>
+        <label className="block mb-2 font-medium">Upload University Logos</label>
         <input
           type="file"
           accept="image/*"
@@ -144,4 +145,4 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
   );
 };
 
-export default AddMultipleServices;
+export default AddMultipleUniversity;

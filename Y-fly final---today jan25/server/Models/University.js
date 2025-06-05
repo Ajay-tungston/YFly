@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const universitySchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      // required: true,
+      unique: true, 
+      trim: true,
+    },
     university_name: { type: String, required: true, trim: true, unique: true  },
     university_ranking: { type: Number, required: true },
     state: { type: String, required: true, trim: true },

@@ -7,6 +7,7 @@ import axios from "axios";
 import AddNewUniversity from "./AddNewUniversity";
 import EditUniversity from "./EditUniversity";
 import { Oval } from "react-loader-spinner";
+import AddMultipleUniversity from "./AddMultipleUniversity";
 
 const UniversityList = () => {
   const [addingNewUniversity, setAddingNewUniversity] = useState(false);
@@ -17,6 +18,7 @@ const UniversityList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [editOpen, setEditOpen] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showCsvUpload, setShowCsvUpload] = useState(false);
   const limit = 10;
   // Fetch the courses from the backend
   const fetchUniversities = async () => {
@@ -69,6 +71,9 @@ const UniversityList = () => {
 
   return (
     <div className="px-10 py-10 h-[100vh]">
+      {showCsvUpload && (
+        <AddMultipleUniversity setShowCsvUpload={setShowCsvUpload} fetchUniversities={fetchUniversities} />
+      )}
       <div className="flex justify-between">
         <input
           placeholder="Search"
@@ -89,7 +94,7 @@ const UniversityList = () => {
       <div>
         <div className="flex justify-between mb-5">
           <div className="font-urban font-bold text-[1.3rem]">Universities</div>
-          <div className="">
+          <div className="flex gap-5">
             <button
               onClick={() => setAddingNewUniversity(true)}
               className="font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] py-2 px-4 rounded-[9px]"
@@ -103,6 +108,13 @@ const UniversityList = () => {
             >
               Delete
             </button> */}
+             <button
+              onClick={() => setShowCsvUpload(true)}
+              className="font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] py-2 px-4 rounded-[9px]"
+            >
+              <img src={add} alt="add" width={15} className="mr-1" />
+              Upload CSV
+            </button>
           </div>
         </div>
       </div>

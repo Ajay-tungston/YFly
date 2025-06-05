@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddNewService = ({ setAddingService }) => {
+const AddNewService = ({ setAddingService,fetchService }) => {
   const [formData, setFormData] = useState({
     service_name: "",
     price: "",
@@ -65,7 +65,7 @@ const AddNewService = ({ setAddingService }) => {
           'Content-Type': 'multipart/form-data'
         }
       });
-  
+      fetchService()
       setSuccessMessage('Service created successfully!');
       
       // Reset form

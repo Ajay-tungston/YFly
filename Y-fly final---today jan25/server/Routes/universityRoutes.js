@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const formidable = require("express-formidable");
 const fs = require("fs");
-const { createUniversity, getAllUniversity, profileMatcher, getUniversitiesWithPagination, deleteUniversityById, getUniversityById, updateUniversity,  } = require("../Controllers/universityController");
+const { createUniversity, getAllUniversity, profileMatcher, getUniversitiesWithPagination, deleteUniversityById, getUniversityById, updateUniversity, bulkUploadUniversities,  } = require("../Controllers/universityController");
 
 // Ensure upload directory exists
 const uploadDir = "./uploads/university";
@@ -15,6 +15,7 @@ router.use(
     formidable({
         uploadDir,
         keepExtensions: true, // Preserve file extensions
+        multiples: true,
     })
 );
 
@@ -34,6 +35,7 @@ router.put("/update/:id",updateUniversity)
 
 router.delete("/delete/:id",deleteUniversityById)
 
+router.post("/bulk-upload", bulkUploadUniversities);
 
 
 module.exports = router;
