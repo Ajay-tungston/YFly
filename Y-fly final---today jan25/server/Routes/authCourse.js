@@ -13,6 +13,8 @@ if (!fs.existsSync(uploadDir)){
 router.use(formidable({
     uploadDir,
     keepExtensions: true,  // Preserve file extensions
+    multiples: true, // ← This is crucial for bulk uploads
+    allowEmptyFiles: false // ← Prevent empty files
 }));
 
 // POST route for creating a course
@@ -38,5 +40,5 @@ router.get('/getall', courseController.getFilteredCourses);
 // router.get('/filtersearch', courseController.filterSearch);
 router.get('/filters', courseController.filterCourses)
 
-
+router.post('/bulk-upload', courseController.bulkUploadCourses);
 module.exports = router;

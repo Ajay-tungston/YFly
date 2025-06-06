@@ -1,6 +1,9 @@
 const Course = require("../Models/courseSchema");
 const fs = require("fs");
 const University = require("../Models/University");
+const path = require("path");
+const xlsx = require("xlsx");
+const { default: mongoose } = require("mongoose");
 
 // Utility functions for validation
 const validateArrayField = (field, errorMessage) => {
@@ -730,202 +733,198 @@ exports.deleteCourse = async (req, res) => {
   }
 };
 
-// exports.profileMatcher = async (req, res) => {
-//     try {
-//         let {
-//             search = "",
-//             country,
-//             course_level,
-//             area_of_study,
-//             minRanking,
-//             maxRanking,
-//             intakeYear
-//         } = req.query;
+exports.bulkUploadCourses = async (req, res) => {
+  try {
+    const excelFile = req.files?.excel;
+    const imageFiles = req.files?.images;
 
-//         let filter = {};
+    if (!excelFile || !excelFile.path) {
+      return res.status(400).json({ message: "Valid Excel file is required" });
+    }
 
-//         // Search filter (match university or course name)
-//         if (search) {
-//             filter.$or = [
-//                 { university_name: { $regex: search, $options: "i" } },
-//                 { area_of_study: { $regex: search, $options: "i" } }
-//             ];
-//         }
+    const workbook = xlsx.readFile(excelFile.path);
+    const sheetName = workbook.SheetNames[0];
+    const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-//         // Apply filters dynamically
-//         if (country) filter.country = country;
-//         if (course_level) filter.course_level = course_level;
-//         if (area_of_study) filter.area_of_study = area_of_study;
+    const imageMap = {};
+    if (imageFiles) {
+      if (Array.isArray(imageFiles)) {
+        imageFiles.forEach((file) => {
+          imageMap[file.name] = file;
+        });
+      } else if (imageFiles.name) {
+        imageMap[imageFiles.name] = imageFiles;
+      }
+    }
 
-//         // Ranking filter
-//         if (!isNaN(minRanking) || !isNaN(maxRanking)) {
-//             filter.university_ranking = {};
-//             if (!isNaN(minRanking)) filter.university_ranking.$gte = Number(minRanking);
-//             if (!isNaN(maxRanking)) filter.university_ranking.$lte = Number(maxRanking);
-//         }
+    const createdCourses = [];
+    const updatedCourses = [];
+    const errors = [];
 
-//         // Intake Year Filter (Only return courses that have an intake in the specified year)
-//         if (intakeYear) {
-//             filter["intakes.year"] = parseInt(intakeYear);
-//         }
+    for (const row of rows) {
+      try {
+        const {
+          id,
+          course_level,
+          discipline,
+          area_of_study,
+          country,
+          university_name,
+          course_duration,
+          application_deadline,
+          overview,
+          intakeMonth,
+          intakeYear,
+          testRequirementName,
+          overallScore,
+          requirementType,
+          minGPA,
+          backlogRange,
+          workExperience,
+          entranceExam,
+          requirement,
+          isRequired,
+          job_roles,
+          recruiters_name,
+          recruiters_logo,
+          scholarship_applicable,
+          tution_fee,
+          funding_options,
+          program_level,
+          program_name
+        } = row;
 
-//         // Fetch courses matching filters and return only necessary fields
-//         const courses = await Course.find(filter)
-//             .select("university_name university_logo university_ranking intakes.year")
-//             .limit(50);
+        // Required field checks
+        if (!id || !course_level || !discipline || !area_of_study || !country || !university_name) {
+          errors.push(`Missing required fields for ID: ${id || "N/A"}`);
+          continue;
+        }
 
-//         // Categorize universities
-//         let ascenderUniversities = [];
-//         let contenderUniversities = [];
-//         let pathfinderUniversities = [];
+        // Validate university_name as valid ObjectId and check if university exists
+        if (!mongoose.Types.ObjectId.isValid(university_name)) {
+          errors.push(`Invalid university ID for course ID: ${id}`);
+          continue;
+        }
 
-//         courses.forEach(course => {
-//             const formattedCourse = {
-//                 university_name: course.university_name,
-//                 university_logo: course.university_logo,
-//                 university_ranking: course.university_ranking,
-//                 intake_years: course.intakes.map(i => i.year)
-//             };
+        const universityExists = await University.findById(university_name);
+        if (!universityExists) {
+          errors.push(`University not found for ID: ${university_name} in course ID: ${id}`);
+          continue;
+        }
 
-//             if (course.university_ranking <= 50) {
-//                 ascenderUniversities.push(formattedCourse);
-//             } else if (course.university_ranking <= 100) {
-//                 contenderUniversities.push(formattedCourse);
-//             } else {
-//                 pathfinderUniversities.push(formattedCourse);
-//             }
-//         });
+        // Validate recruiter logo if recruiter name provided
+        let logoData;
+        if (recruiters_name) {
+          const logoFile = imageMap[recruiters_logo];
+          if (!logoFile || !fs.existsSync(logoFile.path)) {
+            errors.push(`Recruiter logo missing or invalid for course ID: ${id}`);
+            continue; // skip this course
+          }
+          logoData = {
+            data: fs.readFileSync(logoFile.path),
+            contentType: logoFile.type
+          };
+        }
 
-//         res.status(200).json({
-//             success: true,
-//             categories: {
-//                 ascenderUniversities,
-//                 contenderUniversities,
-//                 pathfinderUniversities
-//             }
-//         });
+        // Construct nested fields
+        const intakes = intakeMonth && intakeYear ? [{ month: intakeMonth, year: Number(intakeYear) }] : [];
+        const testRequirements = testRequirementName && overallScore ? [{ testRequirementName, overallScore }] : [];
+        const eligibilityRequirements = requirementType ? [{
+          requirementType,
+          minGPA: minGPA ? Number(minGPA) : undefined,
+          backlogRange,
+          workExperience,
+          entranceExam
+        }] : [];
+        const application_requirements = requirement ? [{
+          requirement,
+          isRequired: isRequired === 'true' || isRequired === true
+        }] : [];
 
-//     } catch (error) {
-//         console.error("Error in profile matcher:", error);
-//         res.status(500).json({ success: false, message: "Server Error", error });
-//     }
-// };
+        const top_recruiters = recruiters_name ? [{
+          recruiters_name,
+          recruiters_logo: logoData
+        }] : [];
 
-// controllers/courseController.js
+        const jobRoles = typeof job_roles === 'string' ? job_roles.split(',').map(j => j.trim()) : [];
+        const scholarshipApplicable = typeof scholarship_applicable === 'string' ? scholarship_applicable.split(',').map(s => s.trim()) : [];
+        const fundingOptions = typeof funding_options === 'string' ? funding_options.split(',').map(f => f.trim()) : [];
 
-// exports.profileMatcher = async (req, res) => {
-//   try {
-//     const { country, course_level, discipline, university_name } = req.query;
+        const courseData = {
+          course_level,
+          discipline,
+          area_of_study,
+          country,
+          university_name,
+          course_duration,
+          application_deadline: application_deadline ? new Date(application_deadline) : undefined,
+          overview,
+          intakes,
+          testRequirements,
+          eligibilityRequirements,
+          application_requirements,
+          job_roles: jobRoles,
+          top_recruiters,
+          scholarship_applicable: scholarshipApplicable,
+          tution_fee: tution_fee ? Number(tution_fee) : undefined,
+          funding_options: fundingOptions,
+          program_level,
+          program_name
+        };
 
-//     // Build match stage for filtering
-//     let matchStage = {};
-//     if (country) matchStage.country = country;
-//     if (course_level) matchStage.course_level = course_level;
-//     if (discipline)
-//       matchStage.discipline = { $regex: discipline, $options: "i" };
-//     if (university_name)
-//       matchStage.university_name = { $regex: university_name, $options: "i" }; // Name search
+        const existing = await Course.findOne({ id: id.trim() });
 
-//     const pipeline = [
-//       { $match: matchStage }, // Apply filters
-//       {
-//         $project: {
-//           university_name: 1,
-//           university_logo: 1,
-//           university_ranking: 1,
-//           country: 1,
-//           // city: 1,
-//           // state: 1,
-//           intakes: 1, // Added intake year
-//           category: {
-//             $switch: {
-//               branches: [
-//                 { case: { $lte: ["$university_ranking", 50] }, then: "Ascend" },
-//                 {
-//                   case: {
-//                     $and: [
-//                       { $gt: ["$university_ranking", 50] },
-//                       { $lte: ["$university_ranking", 100] },
-//                     ],
-//                   },
-//                   then: "Contender",
-//                 },
-//                 {
-//                   case: {
-//                     $and: [
-//                       { $gt: ["$university_ranking", 100] },
-//                       { $lte: ["$university_ranking", 200] },
-//                     ],
-//                   },
-//                   then: "Frontrunner",
-//                 },
-//               ],
-//               default: null, // No "Others" category
-//             },
-//           },
-//         },
-//       },
-//       {
-//         $match: { category: { $ne: null } }, // Remove "Others" category
-//       },
-//       {
-//         $project: {
-//           university_name: 1,
-//           university_logo: 1,
-//           university_ranking: 1,
-//           country: 1,
-//           intakes: {
-//             $map: {
-//               input: "$intakes",
-//               as: "intake",
-//               in: {
-//                 month: "$$intake.month",
-//                 year: "$$intake.year",
-//               },
-//             },
-//           },
-//           category: 1,
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: "$category",
-//           universities: {
-//             $push: {
-//               university_name: "$university_name",
-//               university_logo: "$university_logo",
-//               qs_rank: "$university_ranking",
-//               intakes: "$intakes",
-//               location: "$country",
-//             },
-//           },
-//           count: { $sum: 1 },
-//         },
-//       },
-//     ];
+        if (existing) {
+          Object.assign(existing, courseData);
+          await existing.save();
+          updatedCourses.push(id);
+        } else {
+          const newCourse = new Course({ id: id.trim(), ...courseData });
+          await newCourse.save();
+          createdCourses.push(id);
+        }
 
-//     const results = await Course.aggregate(pipeline);
+        // Remove used recruiter logo
+        if (imageMap[recruiters_logo]) {
+          fs.unlinkSync(imageMap[recruiters_logo].path);
+        }
+      } catch (err) {
+        errors.push(`Error for ID ${row.id || 'unknown'}: ${err.message}`);
+      }
+    }
 
-//     // Prepare structured response
-//     const data = {
-//       Ascend: { count: 0, universities: [] },
-//       Contender: { count: 0, universities: [] },
-//       Frontrunner: { count: 0, universities: [] },
-//     };
+    // Remove unused images
+    const usedImageNames = new Set(rows.map(row => row.recruiters_logo).filter(Boolean));
+    for (const name in imageMap) {
+      if (!usedImageNames.has(name)) {
+        try {
+          fs.unlinkSync(imageMap[name].path);
+        } catch (err) {
+          console.warn(`Failed to delete unused image: ${name}`, err.message);
+        }
+      }
+    }
 
-//     results.forEach((group) => {
-//       data[group._id] = {
-//         count: group.count,
-//         universities: group.universities,
-//       };
-//     });
+    // Delete the uploaded Excel file
+    fs.unlinkSync(excelFile.path);
 
-//     res.status(200).json({
-//       success: true,
-//       data,
-//     });
-//   } catch (error) {
-//     console.error("Error in profileMatcher:", error);
-//     res.status(500).json({ success: false, message: "Server Error", error });
-//   }
-// };
+    res.status(createdCourses.length > 0 || updatedCourses.length > 0 ? 201 : 400).json({
+      message: "Bulk course upload complete.",
+      createdCount: createdCourses.length,
+      updatedCount: updatedCourses.length,
+      errorCount: errors.length,
+      created: createdCourses,
+      updated: updatedCourses,
+      errors
+    });
+  } catch (error) {
+    console.error("Bulk upload error:", error);
+    res.status(500).json({
+      message: "Bulk upload failed",
+      createdCount: 0,
+      updatedCount: 0,
+      errorCount: 1,
+      errors: [error.message]
+    });
+  }
+};

@@ -1,226 +1,3 @@
-// // import React, { useEffect, useState } from 'react';import profile from '../assets/images/profile.svg'
-// // import arrow from '../assets/images/downarrowblack.svg'
-// // import add from '../assets/images/add.svg'
-// // import edit from '../assets/images/edit.svg'
-// // import trash from '../assets/images/greytrash.svg'
-
-
-
-// // function CourseList({setAddCourse}) {
-// //     const enquiry=[{
-// //         course:"Computer Science",
-// //         university:"Harvard University",
-// //         country:"USA",
-// //       },
-// //       {
-// //         course:"Computer Science",
-// //         university:"Harvard University",
-// //         country:"USA",
-// //       },
-// //       {
-// //         course:"Computer Science",
-// //         university:"Harvard University",
-// //         country:"USA",
-// //       },
-// //     ]
-// //   return (
-// //     <div className='px-10 py-10 h-[100vh]'>
-// //         <div className='flex justify-between'>
-// //             <input
-// //             placeholder='Search'
-// //             className='bg-[#F2F4F7] py-3 w-[30%] pl-5 border-none placeholder:font-urban text-[1rem] rounded-[4px] outline-none'
-
-// //             />
-// //             <div className='flex items-center'>
-// //                 <div className='font-urban text-[#33517F] font-bold pr-2 text-[1.2rem]'>Hi, User</div>
-// //                 <img src={profile} alt='profile' width={35} />
-// //             </div>
-// //         </div>
-// //         <div className='border-[#BFBFBF] border-b-[1px] my-5'></div>
-
-// //           {/* course section */}
-// //           <div>
-// //             <div className='flex justify-between mb-5'>
-// //                 <div className='font-urban font-bold text-[1.3rem] '>Courses</div>
-// //                 <button onClick={()=>setAddCourse('addcourse')} className='font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] px-4 rounded-[9px]'>
-// //                     <img src={add} alt='add' width={15} className='mr-1' />
-// //                     Add course
-// //                 </button>
-// //             </div>
-
-
-// //             <div className='flex text-[0.9rem] font-urban'>
-// //               <div>Sort by:</div>
-// //               <button className='flex items-center ml-2 font-semibold'>
-// //                 Course
-// //                 <img src={arrow} alt='arrow' width={15} className='ml-1' />
-// //               </button>
-// //             </div>
-
-// //         </div>
-
-// //         <div className='mt-8 text-[0.9rem]'>
-// //           {/* header of list */}
-// //           <div>
-// //             <div className='font-urban flex bg-[#F9F9F9] py-3 px-3 text-[#30589F]'>
-// //               <div className='w-[30%] flex items-center '>
-// //               Course
-// //               </div>
-// //               <div className='w-[30%]'>University</div>
-// //               <div className='w-[30%]'>Country</div>
-// //               <div className='w-[10%]'>Action</div>
-// //             </div>
-// //             <div className='border-[#BFBFBF] border-b-[1px]'></div>
-// //           </div>
-
-// //            {/* -----list--- */}
-// //            {enquiry.map((list)=>(
-// //             <div>
-// //             <div className='font-urban flex py-3 px-3'>
-// //               <div className='w-[30%] flex items-center '>
-// //                 {course}
-// //               </div>
-// //               <div className='w-[30%]'>{list.university}</div>
-// //               <div className='w-[30%]'>{list.country}</div>
-// //               <div className='w-[10%]'>
-// //               <button className='mr-4'>
-// //                 <img src={trash} width={20} alt='trash'/>
-// //               </button>
-// //               <button>
-// //                 <img src={edit} width={20} alt='trash'/>
-// //               </button>
-// //               </div>
-// //             </div>
-// //             <div className='border-[#BFBFBF] flex border-b-[1px] bg-black'></div>
-// //          </div>
-// //            ))}
-
-
-// //         </div>
-
-// //     </div>
-// //   )
-// // }
-
-// // export default CourseList
-
-// import React, { useEffect, useState } from 'react';
-// import profile from '../assets/images/profile.svg';
-// import arrow from '../assets/images/downarrowblack.svg';
-// import add from '../assets/images/add.svg';
-// import edit from '../assets/images/edit.svg';
-// import trash from '../assets/images/greytrash.svg';
-// import axios from 'axios';
-// import AddNewCourse from './AddNewCourse';
-// import EditCourse from './EditCourse'; // Import the Edit Modal
-
-
-// const CourseList = () => {
-//   const [addingNewCourse, setAddingNMewCourse] = useState('');
-//   const [courses, setCourses] = useState([]);
-//   const [courseSearchQuery,setCourseSearchQuery] = useState('');
-//   const [courseSortField,setCourseSortField] = useState('');
-//   const [ciurseSortOrder, setCourseSortOrder] = useState('asc');
-//   const [selectedCourses,setSelectedCourses] = useState([]);
-//   const [currentPage,setCurrentPage] = useState(1);
-//   const coursesPerPage = 10;
-
-//   //Fetch the courses from the backend
-//   useEffect(() => {
-//       const fetchCourses = async () => {
-//         try {
-//           const response = await axios.get('http://localhost:5000/courses/get-all');
-//           setCourses(response.data.courses);
-//         } catch (error) {
-//           console.log('Error in fetching courses:', error);
-//         }
-//       }
-//       fetchCourses();
-//   }, []);
-
-// // Handle search
-// const filteredCourses = courses.filter((course) =>
-//   course.course_name.toLowerCase().includes(courseSearchQuery.toLowerCase())
-// );
-
-//   return (
-//     <div className='px-10 py-10 h-[100vh]'>
-//         <div className='flex justify-between'>
-//             <input
-//             placeholder='Search'
-//             className='bg-[#F2F4F7] py-3 w-[30%] pl-5 border-none placeholder:font-urban text-[1rem] rounded-[4px] outline-none'
-
-//             />
-//             <div className='flex items-center'>
-//                 <div className='font-urban text-[#33517F] font-bold pr-2 text-[1.2rem]'>Hi, User</div>
-//                 <img src={profile} alt='profile' width={35} />
-//             </div>
-//         </div>
-//         <div className='border-[#BFBFBF] border-b-[1px] my-5'></div>
-
-//           {/* course section */}
-//           <div>
-//             <div className='flex justify-between mb-5'>
-//                 <div className='font-urban font-bold text-[1.3rem] '>Courses</div>
-//                 <button className='font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] px-4 rounded-[9px]'>
-//                     <img src={add} alt='add' width={15} className='mr-1' />
-//                     Add course
-//                 </button>
-//             </div>
-
-
-//             <div className='flex text-[0.9rem] font-urban'>
-//               <div>Sort by:</div>
-//               <button className='flex items-center ml-2 font-semibold'>
-//                 Course
-//                 <img src={arrow} alt='arrow' width={15} className='ml-1' />
-//               </button>
-//             </div>
-
-//         </div>
-
-//         <div className='mt-8 text-[0.9rem]'>
-//           {/* header of list */}
-//           <div>
-//             <div className='font-urban flex bg-[#F9F9F9] py-3 px-3 text-[#30589F]'>
-//               <div className='w-[30%] flex items-center '>
-//               Course
-//               </div>
-//               <div className='w-[30%]'>University</div>
-//               <div className='w-[30%]'>Country</div>
-//               <div className='w-[10%]'>Action</div>
-//             </div>
-//             <div className='border-[#BFBFBF] border-b-[1px]'></div>
-//           </div>
-
-//            {/* -----list--- */}
-//             <div>
-//             <div className='font-urban flex py-3 px-3'>
-//               <div className='w-[30%] flex items-center '>
-//                 course
-//               </div>
-//               <div className='w-[30%]'>university</div>
-//               <div className='w-[30%]'>country</div>
-//               <div className='w-[10%]'>
-//               <button className='mr-4'>
-//                 <img src={trash} width={20} alt='trash'/>
-//               </button>
-//               <button>
-//                 <img src={edit} width={20} alt='trash'/>
-//               </button>
-//               </div>
-//             </div>
-//             <div className='border-[#BFBFBF] flex border-b-[1px] bg-black'></div>
-//          </div>
-
-
-//         </div>
-
-//     </div>
-//   )
-// }
-
-// export default CourseList
 
 import React, { useEffect, useState } from 'react';
 import profile from '../assets/images/profile.svg';
@@ -231,6 +8,7 @@ import trash from '../assets/images/greytrash.svg';
 import axios from 'axios';
 import AddNewCourse from './AddNewCourse';
 import EditCourse from './EditCourse'; // Import the Edit Modal
+import AddMultipleCourse from './AddMultipleCourse';
 
 const CourseList = () => {
   const [addingNewCourse, setAddingNewCourse] = useState(false);
@@ -240,19 +18,22 @@ const CourseList = () => {
   const [courseSortOrder, setCourseSortOrder] = useState('asc');
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+    const [showCsvUpload, setShowCsvUpload] = useState(false);
+  
   const coursesPerPage = 10;
 
   // Fetch the courses from the backend
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/courses/get-all`);
+     
+      setCourses(response.data.courses || []); // Use fallback to avoid errors
+    } catch (error) {
+      console.error('Error in fetching courses:', error);
+    }
+  };
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/courses/get-all`);
-       
-        setCourses(response.data.courses || []); // Use fallback to avoid errors
-      } catch (error) {
-        console.error('Error in fetching courses:', error);
-      }
-    };
+  
     fetchCourses();
   }, []);
 
@@ -294,6 +75,9 @@ const CourseList = () => {
 
   return (
     <div className="px-10 py-10 h-[100vh]">
+       {showCsvUpload && (
+        <AddMultipleCourse setShowCsvUpload={setShowCsvUpload} fetchCourses={fetchCourses} />
+      )}
       <div className="flex justify-between">
         <input
           placeholder="Search"
@@ -312,6 +96,7 @@ const CourseList = () => {
       <div>
         <div className="flex justify-between mb-5">
           <div className="font-urban font-bold text-[1.3rem]">Courses</div>
+          <div className='flex gap-5'>
           <button
             onClick={() => setAddingNewCourse(true)}
             className="font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] px-4 rounded-[9px]"
@@ -319,6 +104,14 @@ const CourseList = () => {
             <img src={add} alt="add" width={15} className="mr-1" />
             Add course
           </button>
+          <button
+              onClick={() => setShowCsvUpload(true)}
+              className="font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] py-2 px-4 rounded-[9px]"
+            >
+              <img src={add} alt="add" width={15} className="mr-1" />
+              Upload Excel
+            </button>
+            </div>
         </div>
 
         <div className="flex text-[0.9rem] font-urban">

@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      // required: true,
+      unique: true, 
+      trim: true,
+    },
     // Existing fields...
     course_level: {
       type: String,

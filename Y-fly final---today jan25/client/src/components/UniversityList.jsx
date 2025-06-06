@@ -113,7 +113,7 @@ const UniversityList = () => {
               className="font-urban flex items-center bg-[#30589F] text-white text-[0.9rem] py-2 px-4 rounded-[9px]"
             >
               <img src={add} alt="add" width={15} className="mr-1" />
-              Upload CSV
+              Upload Excel
             </button>
           </div>
         </div>

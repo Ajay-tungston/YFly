@@ -14,6 +14,8 @@ if (!fs.existsSync(uploadDir)){
 router.use(formidable({
     uploadDir,
     keepExtensions: true,  // Preserve file extensions
+    multiples: true, 
+    allowEmptyFiles: false
 }));
 
 // POST route for creating a scholarship
@@ -33,6 +35,9 @@ router.delete('/delete/:id', scholarshipController.deleteScholarship);
 
 router.get('/search', scholarshipController.searchScholarships);
 router.get('/get-filters', scholarshipController.getScholarshipFilters);
+
+router.post('/bulk-upload', scholarshipController.bulkUploadScholarships);
+
 
 
 module.exports = router;

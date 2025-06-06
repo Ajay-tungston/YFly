@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const scholarshipSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      // required: true,
+      unique: true, 
+      trim: true,
+    },
     scholarship_name: { type: String, required: true, trim: true },
     types_of_scholarship: {
       type: String,
