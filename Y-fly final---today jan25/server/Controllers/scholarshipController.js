@@ -389,219 +389,199 @@ exports.getScholarshipFilters = async (req, res) => {
 
 
 exports.bulkUploadScholarships = async (req, res) => {
-    try {
-      const excelFile = req.files?.excel;
-      const brochureFiles = req.files?.brochures;
-  
-      if (!excelFile || !excelFile.path) {
-        return res.status(400).json({ message: "Valid Excel file is required" });
-      }
-  
-      const workbook = xlsx.readFile(excelFile.path);
-      const sheetName = workbook.SheetNames[0];
-      const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
-  
-      // Map uploaded brochure files by their original names
-      const brochureMap = {};
-      if (brochureFiles) {
-        if (Array.isArray(brochureFiles)) {
-          brochureFiles.forEach((file) => {
-            brochureMap[file.name] = file;
-          });
-        } else if (brochureFiles.name) {
-          brochureMap[brochureFiles.name] = brochureFiles;
-        }
-      }
-  
-      const createdScholarships = [];
-      const updatedScholarships = [];
-      const errors = [];
-  
-      for (const row of rows) {
-        try {
-          const {
-            id,
-            scholarship_name,
-            types_of_scholarship,
-            country,
-            course_level,
-            area_of_study,
-            scholarship_amount,
-            scholarship_deadline,
-            overview,
-            eligibility_criteria,
-            application_process,
-            testRequirementName,
-            overallScore,
-            student_citizenship,
-            specialRestrictions,
-            scholarship_applicability,
-            brochure_name,
-          } = row;
-  
-          // Required field validation
-          if (
-            !scholarship_name ||
-            !types_of_scholarship ||
-            !country ||
-            !course_level ||
-            !area_of_study ||
-            !scholarship_amount ||
-            !scholarship_deadline
-          ) {
-            errors.push(`Missing required fields for scholarship ID: ${id || "N/A"}`);
-            continue;
-          }
-  
-          // Handle brochure file if brochure_name is provided
-          let brochureData = null;
-          if (brochure_name) {
-            const brochureFile = brochureMap[brochure_name];
-  
-            // Debug log for troubleshooting
-            // console.log(`Checking brochure for ID ${id}:`, {
-            //   name: brochureFile?.name,
-            //   mimetype: brochureFile?.mimetype,
-            //   path: brochureFile?.path,
-            // });
-  
-            if (!brochureFile || !fs.existsSync(brochureFile.path)) {
-              errors.push(`Brochure file missing for scholarship ID: ${id}`);
-              continue;
-            }
-  
-            // Validate PDF file - check mimetype and fallback to extension check
-            const isPdf =
-              (brochureFile.mimetype && brochureFile.mimetype.toLowerCase().includes("pdf")) ||
-              brochureFile.name.toLowerCase().endsWith(".pdf");
-  
-            if (!isPdf) {
-              errors.push(`Invalid file type (must be PDF) for scholarship ID: ${id}`);
-              continue;
-            }
-  
-            brochureData = {
-              data: fs.readFileSync(brochureFile.path),
-              contentType: brochureFile.mimetype || "application/pdf",
-            };
-  
-            // Remove used brochure file immediately
-            fs.unlinkSync(brochureFile.path);
-            delete brochureMap[brochure_name];
-          }
-  
-          // Prepare other nested fields
-          const testRequirements =
-            testRequirementName && overallScore
-              ? [
-                  {
-                    test_name: testRequirementName,
-                    overall_score: overallScore,
-                  },
-                ]
-              : [];
-  
-          const specialRestrictionsArray =
-            typeof specialRestrictions === "string"
-              ? specialRestrictions.split(",").map((s) => s.trim())
-              : [];
-  
-          const scholarshipData = {
-            scholarship_name,
-            types_of_scholarship,
-            country,
-            course_level,
-            area_of_study,
-            scholarship_amount: Number(scholarship_amount),
-            scholarship_deadline: new Date(scholarship_deadline),
-            overview,
-            eligibility_criteria,
-            application_process,
-            testRequirements,
-            student_citizenship,
-            specialRestrictions: specialRestrictionsArray,
-            scholarship_applicability,
-            brochure: brochureData,
-          };
-  
-          // Check if scholarship exists by name (trimmed)
-          const existing = await Scholarship.findOne({
-            scholarship_name: scholarship_name.trim(),
-          });
-          if (existing) {
-            Object.assign(existing, scholarshipData);
-            await existing.save();
-            updatedScholarships.push(id || scholarship_name);
-          } else {
-            const newScholarship = new Scholarship(scholarshipData);
-            await newScholarship.save();
-            createdScholarships.push(id || scholarship_name);
-          }
-        } catch (err) {
-          errors.push(`Error for ID ${row.id || "unknown"}: ${err.message}`);
-        }
-      }
-  
-      // Cleanup any unused brochure files
-      const usedBrochureNames = new Set(
-        rows.map((row) => row.brochure_name).filter(Boolean)
-      );
-      for (const name in brochureMap) {
-        if (!usedBrochureNames.has(name)) {
-          try {
-            fs.unlinkSync(brochureMap[name].path);
-          } catch (err) {
-            console.warn(`Failed to delete unused brochure: ${name}`, err.message);
-          }
-        }
-      }
-  
-      // Delete uploaded Excel file
-      fs.unlinkSync(excelFile.path);
-  
-      // Final response
-      res.status(
-        createdScholarships.length > 0 || updatedScholarships.length > 0 ? 201 : 400
-      ).json({
-        message: "Bulk scholarship upload complete",
-        createdCount: createdScholarships.length,
-        updatedCount: updatedScholarships.length,
-        errorCount: errors.length,
-        created: createdScholarships,
-        updated: updatedScholarships,
-        errors,
-      });
-    } catch (error) {
-      console.error("Bulk upload error:", error);
-  
-      // Cleanup on error
-      try {
-        if (excelFile?.path && fs.existsSync(excelFile.path)) {
-          fs.unlinkSync(excelFile.path);
-        }
-        if (req.files?.brochures) {
-          const brochures = Array.isArray(req.files.brochures)
-            ? req.files.brochures
-            : [req.files.brochures];
-          brochures.forEach((file) => {
-            if (file?.path && fs.existsSync(file.path)) {
-              fs.unlinkSync(file.path);
-            }
-          });
-        }
-      } catch (cleanupError) {
-        console.error("Cleanup error:", cleanupError);
-      }
-  
-      res.status(500).json({
-        message: "Bulk upload failed",
-        createdCount: 0,
-        updatedCount: 0,
-        errorCount: 1,
-        errors: [error.message],
+  try {
+    const excelFile = req.files?.excel;
+    const brochureFiles = req.files?.brochures;
+
+    if (!excelFile || !excelFile.path) {
+      return res.status(400).json({ message: "Valid Excel file is required" });
+    }
+
+    const workbook = xlsx.readFile(excelFile.path);
+    const sheetName = workbook.SheetNames[0];
+    const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    const brochureMap = {};
+    if (brochureFiles) {
+      const files = Array.isArray(brochureFiles) ? brochureFiles : [brochureFiles];
+      files.forEach((file) => {
+        brochureMap[file.name] = file;
       });
     }
-  };
+
+    const createdScholarships = [];
+    const updatedScholarships = [];
+    const errors = [];
+
+    for (const row of rows) {
+      try {
+        const {
+          id,
+          scholarship_name,
+          types_of_scholarship,
+          country,
+          course_level,
+          area_of_study,
+          scholarship_amount,
+          scholarship_deadline,
+          overview,
+          eligibility_criteria,
+          application_process,
+          testRequirementName,
+          overallScore,
+          student_citizenship,
+          specialRestrictions,
+          scholarship_applicability,
+          brochure_name,
+        } = row;
+
+        if (
+          !id ||
+          !scholarship_name ||
+          !types_of_scholarship ||
+          !country ||
+          !course_level ||
+          !area_of_study ||
+          !scholarship_amount ||
+          !scholarship_deadline
+        ) {
+          errors.push(`Missing required fields for scholarship ID: ${id || "N/A"}`);
+          continue;
+        }
+
+        let brochureData = null;
+        if (brochure_name) {
+          const brochureFile = brochureMap[brochure_name];
+          if (!brochureFile || !fs.existsSync(brochureFile.path)) {
+            errors.push(`Brochure file missing for scholarship ID: ${id}`);
+            continue;
+          }
+
+          const isPdf =
+            (brochureFile.mimetype && brochureFile.mimetype.toLowerCase().includes("pdf")) ||
+            brochureFile.name.toLowerCase().endsWith(".pdf");
+
+          if (!isPdf) {
+            errors.push(`Invalid file type (must be PDF) for scholarship ID: ${id}`);
+            continue;
+          }
+
+          brochureData = {
+            data: fs.readFileSync(brochureFile.path),
+            contentType: brochureFile.mimetype || "application/pdf",
+          };
+
+          fs.unlinkSync(brochureFile.path);
+          delete brochureMap[brochure_name];
+        }
+
+        const testRequirements =
+          testRequirementName && overallScore
+            ? [
+                {
+                  test_name: testRequirementName,
+                  overall_score: overallScore,
+                },
+              ]
+            : [];
+
+        const specialRestrictionsArray =
+          typeof specialRestrictions === "string"
+            ? specialRestrictions.split(",").map((s) => s.trim())
+            : [];
+
+        const scholarshipData = {
+          id,
+          scholarship_name,
+          types_of_scholarship,
+          country,
+          course_level,
+          area_of_study,
+          scholarship_amount: Number(scholarship_amount),
+          scholarship_deadline: new Date(scholarship_deadline),
+          overview,
+          eligibility_criteria,
+          application_process,
+          testRequirements,
+          student_citizenship,
+          specialRestrictions: specialRestrictionsArray,
+          scholarship_applicability,
+          brochure: brochureData,
+        };
+
+        const existing = await Scholarship.findOne({ id });
+
+        if (existing) {
+          Object.assign(existing, scholarshipData);
+          await existing.save();
+          updatedScholarships.push(id);
+        } else {
+          const newScholarship = new Scholarship(scholarshipData);
+          await newScholarship.save();
+          createdScholarships.push(id);
+        }
+      } catch (err) {
+        errors.push(`Error for ID ${row.id || "unknown"}: ${err.message}`);
+      }
+    }
+
+    // Cleanup unused brochures
+    const usedBrochureNames = new Set(rows.map((row) => row.brochure_name).filter(Boolean));
+    for (const name in brochureMap) {
+      if (!usedBrochureNames.has(name)) {
+        try {
+          fs.unlinkSync(brochureMap[name].path);
+        } catch (err) {
+          console.warn(`Failed to delete unused brochure: ${name}`, err.message);
+        }
+      }
+    }
+
+    fs.unlinkSync(excelFile.path);
+
+    res.status(
+      createdScholarships.length > 0 || updatedScholarships.length > 0 ? 201 : 400
+    ).json({
+      message: "Bulk scholarship upload complete",
+      createdCount: createdScholarships.length,
+      updatedCount: updatedScholarships.length,
+      errorCount: errors.length,
+      created: createdScholarships,
+      updated: updatedScholarships,
+      errors,
+    });
+  } catch (error) {
+    console.error("Bulk upload error:", error);
+
+    try {
+      if (excelFile?.path && fs.existsSync(excelFile.path)) {
+        fs.unlinkSync(excelFile.path);
+      }
+      if (req.files?.brochures) {
+        const brochures = Array.isArray(req.files.brochures)
+          ? req.files.brochures
+          : [req.files.brochures];
+        brochures.forEach((file) => {
+          if (file?.path && fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+          }
+        });
+      }
+    } catch (cleanupError) {
+      console.error("Cleanup error:", cleanupError);
+    }
+
+    res.status(500).json({
+      message: "Bulk upload failed",
+      createdCount: 0,
+      updatedCount: 0,
+      errorCount: 1,
+      errors: [error.message],
+    });
+  }
+};
+
+
 
 
 

@@ -15,24 +15,24 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
         text: "Please select a CSV/Excel file.",
       });
     }
-
+  
     if (images.length === 0) {
       return Swal.fire({
         icon: "warning",
         title: "Missing Images",
-        text: "Please select at least one image.",
+        text: "Please select at least one service image.",
       });
     }
-
+  
     const formData = new FormData();
     formData.append("excel", file);
     images.forEach((img) => {
       formData.append("images", img);
     });
-
+  
     try {
       setUploading(true);
-
+  
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/service/bulk-upload`,
         formData,
@@ -40,8 +40,9 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+  
       const { createdCount, updatedCount, errorCount, errors } = res.data;
-
+  
       Swal.fire({
         icon: "success",
         title: "Upload Completed",
@@ -49,30 +50,29 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
           <p><strong>New Services Added:</strong> ${createdCount}</p>
           <p><strong>Existing Services Updated:</strong> ${updatedCount}</p>
           <p><strong>Errors:</strong> ${errorCount}</p>
+          ${
+            errors?.length
+              ? `<details style="text-align:left; margin-top:10px;">
+                  <summary style="cursor:pointer;">View Error Details</summary>
+                  <ul style="max-height:150px; overflow-y:auto;">
+                    ${errors.map((e) => `<li>${e}</li>`).join("")}
+                  </ul>
+                </details>`
+              : ""
+          }
         `,
-        width: 600,
       });
-
-      // ${
-      //   errorCount > 0
-      //     ? `<details style="text-align: left; margin-top: 10px;">
-      //         <summary style="cursor:pointer;">View Error Details</summary>
-      //         <ul style="margin-top: 10px; max-height: 150px; overflow-y: auto;">
-      //           ${errors.map((err) => `<li>${err}</li>`).join("")}
-      //         </ul>
-      //       </details>`
-      //     : ""
-      // }
+  
       fetchService();
       setShowCsvUpload(false);
     } catch (err) {
       console.error(err);
-
+  
       const createdCount = err?.response?.data?.createdCount ?? 0;
       const updatedCount = err?.response?.data?.updatedCount ?? 0;
       const errorCount = err?.response?.data?.errorCount ?? null;
       const errors = err?.response?.data?.errors ?? [];
-
+  
       const errorMessage =
         errorCount !== null
           ? `Upload completed with some issues:<br>
@@ -80,7 +80,7 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
              <strong>Services Updated:</strong> ${updatedCount}<br>
              <strong>Errors:</strong> ${errorCount}`
           : "Something went wrong during the upload. Please try again.";
-
+  
       Swal.fire({
         icon: "error",
         title: "Upload Failed",
@@ -97,12 +97,12 @@ const AddMultipleServices = ({ setShowCsvUpload, fetchService }) => {
               : ""
           }
         `,
-        width: 600,
       });
     } finally {
       setUploading(false);
     }
   };
+  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
