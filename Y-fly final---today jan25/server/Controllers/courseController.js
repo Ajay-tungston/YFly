@@ -733,6 +733,7 @@ exports.deleteCourse = async (req, res) => {
   }
 };
 
+
 exports.bulkUploadCourses = async (req, res) => {
   try {
     const excelFile = req.files?.excel;
@@ -777,11 +778,8 @@ exports.bulkUploadCourses = async (req, res) => {
           intakeYear,
           testRequirementName,
           overallScore,
-          requirementType,
-          minGPA,
-          backlogRange,
-          workExperience,
-          entranceExam,
+          requirementType,        // Simplified format
+          requirementValue,       // Simplified format
           requirement,
           isRequired,
           job_roles,
@@ -794,13 +792,11 @@ exports.bulkUploadCourses = async (req, res) => {
           program_name
         } = row;
 
-        // Required field checks
         if (!id || !course_level || !discipline || !area_of_study || !country || !university_name) {
           errors.push(`Missing required fields for ID: ${id || "N/A"}`);
           continue;
         }
 
-        // Validate university_name as valid ObjectId and check if university exists
         if (!mongoose.Types.ObjectId.isValid(university_name)) {
           errors.push(`Invalid university ID for course ID: ${id}`);
           continue;
@@ -812,13 +808,12 @@ exports.bulkUploadCourses = async (req, res) => {
           continue;
         }
 
-        // Validate recruiter logo if recruiter name provided
         let logoData;
         if (recruiters_name) {
           const logoFile = imageMap[recruiters_logo];
           if (!logoFile || !fs.existsSync(logoFile.path)) {
             errors.push(`Recruiter logo missing or invalid for course ID: ${id}`);
-            continue; // skip this course
+            continue;
           }
           logoData = {
             data: fs.readFileSync(logoFile.path),
@@ -826,29 +821,71 @@ exports.bulkUploadCourses = async (req, res) => {
           };
         }
 
-        // Construct nested fields
-        const intakes = intakeMonth && intakeYear ? [{ month: intakeMonth, year: Number(intakeYear) }] : [];
-        const testRequirements = testRequirementName && overallScore ? [{ testRequirementName, overallScore }] : [];
-        const eligibilityRequirements = requirementType ? [{
-          requirementType,
-          minGPA: minGPA ? Number(minGPA) : undefined,
-          backlogRange,
-          workExperience,
-          entranceExam
-        }] : [];
-        const application_requirements = requirement ? [{
-          requirement,
-          isRequired: isRequired === 'true' || isRequired === true
-        }] : [];
+        const intakes = intakeMonth && intakeYear
+          ? intakeMonth.split(',').map((month, idx) => ({
+              month: month.trim(),
+              year: Number(intakeYear.split(',')[idx]?.trim())
+            })).filter(i => i.month && i.year)
+          : [];
 
-        const top_recruiters = recruiters_name ? [{
-          recruiters_name,
-          recruiters_logo: logoData
-        }] : [];
+        const testRequirements = testRequirementName && overallScore
+          ? testRequirementName.split(',').map((name, idx) => ({
+              testRequirementName: name.trim(),
+              overallScore: overallScore.split(',')[idx]?.trim()
+            })).filter(r => r.testRequirementName && r.overallScore)
+          : [];
 
-        const jobRoles = typeof job_roles === 'string' ? job_roles.split(',').map(j => j.trim()) : [];
-        const scholarshipApplicable = typeof scholarship_applicable === 'string' ? scholarship_applicable.split(',').map(s => s.trim()) : [];
-        const fundingOptions = typeof funding_options === 'string' ? funding_options.split(',').map(f => f.trim()) : [];
+        // ✅ Simplified eligibilityRequirements
+        const eligibilityRequirements = [];
+        if (requirementType && requirementValue) {
+          const types = String(requirementType).split(',').map(t => t.trim());
+          const values = String(requirementValue).split(',').map(v => v.trim());
+
+          for (let i = 0; i < types.length; i++) {
+            const type = types[i];
+            const value = values[i];
+
+            const entry = { requirementType: type };
+            switch (type) {
+              case 'minGPA':
+                entry.minGPA = Number(value);
+                break;
+              case 'backlogRange':
+                entry.backlogRange = value;
+                break;
+              case 'workExperience':
+                entry.workExperience = value;
+                break;
+              case 'entranceExam':
+                entry.entranceExam = value;
+                break;
+            }
+            eligibilityRequirements.push(entry);
+          }
+        }
+
+        const application_requirements = requirement
+          ? requirement.split(',').map((req, idx) => ({
+              requirement: req.trim(),
+              isRequired: String(isRequired).split(',')[idx]?.trim().toLowerCase() === 'true'
+            }))
+          : [];
+
+        const top_recruiters = recruiters_name
+          ? recruiters_name.split(',').map((name, idx) => ({
+              recruiters_name: name.trim(),
+              recruiters_logo: logoData
+            }))
+          : [];
+
+        const jobRoles = typeof job_roles === 'string'
+          ? job_roles.split(',').map(j => j.trim()) : [];
+
+        const scholarshipApplicable = typeof scholarship_applicable === 'string'
+          ? scholarship_applicable.split(',').map(s => s.trim()) : [];
+
+        const fundingOptions = typeof funding_options === 'string'
+          ? funding_options.split(',').map(f => f.trim()) : [];
 
         const courseData = {
           course_level,
@@ -884,7 +921,6 @@ exports.bulkUploadCourses = async (req, res) => {
           createdCourses.push(id);
         }
 
-        // Remove used recruiter logo
         if (imageMap[recruiters_logo]) {
           fs.unlinkSync(imageMap[recruiters_logo].path);
         }
@@ -893,7 +929,6 @@ exports.bulkUploadCourses = async (req, res) => {
       }
     }
 
-    // Remove unused images
     const usedImageNames = new Set(rows.map(row => row.recruiters_logo).filter(Boolean));
     for (const name in imageMap) {
       if (!usedImageNames.has(name)) {
@@ -905,7 +940,6 @@ exports.bulkUploadCourses = async (req, res) => {
       }
     }
 
-    // Delete the uploaded Excel file
     fs.unlinkSync(excelFile.path);
 
     res.status(createdCourses.length > 0 || updatedCourses.length > 0 ? 201 : 400).json({
@@ -920,11 +954,8 @@ exports.bulkUploadCourses = async (req, res) => {
   } catch (error) {
     console.error("Bulk upload error:", error);
     res.status(500).json({
-      message: "Bulk upload failed",
-      createdCount: 0,
-      updatedCount: 0,
-      errorCount: 1,
-      errors: [error.message]
+      message: "Server error during bulk upload",
+      error: error.message
     });
   }
 };
