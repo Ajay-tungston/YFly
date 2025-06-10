@@ -40,15 +40,15 @@ const AddMultipleCourse = ({ setShowCsvUpload, fetchCourses }) => {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        const { createdCount, updatedCount, errorCount, errors } = res.data;
+        const { coursesAdded, coursesUpdated, errorCount, errors } = res.data;
       
         // If there were errors, show as warning, else success
         Swal.fire({
           icon: errorCount > 0 ? "warning" : "success",
           title: errorCount > 0 ? "Upload Completed with Some Issues" : "Upload Successful",
           html: `
-            <p><strong>Courses Added:</strong> ${createdCount}</p>
-            <p><strong>Courses Updated:</strong> ${updatedCount}</p>
+            <p><strong>Courses Added:</strong> ${coursesAdded}</p>
+            <p><strong>Courses Updated:</strong> ${coursesUpdated}</p>
             <p><strong>Errors:</strong> ${errorCount}</p>
             ${
               errors.length > 0
@@ -69,16 +69,16 @@ const AddMultipleCourse = ({ setShowCsvUpload, fetchCourses }) => {
       } catch (err) {
         console.error(err);
       
-        const createdCount = err?.response?.data?.createdCount ?? 0;
-        const updatedCount = err?.response?.data?.updatedCount ?? 0;
+        const coursesAdded = err?.response?.data?.coursesAdded ?? 0;
+        const coursesUpdated = err?.response?.data?.coursesUpdated ?? 0;
         const errorCount = err?.response?.data?.errorCount ?? null;
         const errors = err?.response?.data?.errors ?? [];
       
         const errorMessage =
           errorCount !== null
             ? `Upload completed with some issues:<br>
-               <strong>Courses Added:</strong> ${createdCount}<br>
-               <strong>Courses Updated:</strong> ${updatedCount}<br>
+               <strong>Courses Added:</strong> ${coursesAdded}<br>
+               <strong>Courses Updated:</strong> ${coursesUpdated}<br>
                <strong>Errors:</strong> ${errorCount}`
             : "Something went wrong during the upload. Please try again.";
       

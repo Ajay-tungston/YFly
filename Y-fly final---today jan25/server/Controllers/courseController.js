@@ -30,7 +30,7 @@ exports.createCourse = async (req, res) => {
       overview,
       tution_fee,
     } = req.fields;
-console.log(req.fields,req.files)
+    console.log(req.fields, req.files);
     // const university_logo = req.files ? req.files.university_logo : null;
 
     // Validate required fields
@@ -160,38 +160,36 @@ console.log(req.fields,req.files)
         // Assume the file is named recruiters_logo_0, recruiters_logo_1, etc.
         const fileKey = `recruiters_logo_${index}`;
         const file = req.files[fileKey];
-      
+
         if (file) {
           // Validate file type and size if necessary
           if (!["image/jpeg", "image/png"].includes(file.type)) {
             throw new Error("Recruiters logo must be a JPEG or PNG image.");
           }
-          if (file.size > 5000000) { // example 5MB limit
+          if (file.size > 5000000) {
+            // example 5MB limit
             throw new Error("Recruiters logo size must be less than 5MB.");
           }
           if (!fs.existsSync(file.path)) {
             throw new Error("Uploaded recruiters logo file does not exist.");
           }
-      
+
           // Read file data
           const fileData = fs.readFileSync(file.path);
           // Optionally remove file after reading
           fs.unlinkSync(file.path);
-      
-        
+
           return {
-            recruiters_name: recruiter.recruiters_name, 
+            recruiters_name: recruiter.recruiters_name,
             recruiters_logo: {
               data: fileData,
               contentType: file.type,
             },
           };
         } else {
-         
           return recruiter;
         }
       });
-
 
       scholarship_applicable = safeParseJson(
         req.fields.scholarship_applicable,
@@ -278,7 +276,6 @@ exports.getAllCourses = async (req, res) => {
     );
     res.status(200).json({ success: true, courses });
   } catch (error) {
-   
     res.status(500).json({ error: error.message });
   }
 };
@@ -444,7 +441,7 @@ exports.updateCourse = async (req, res) => {
           return {
             requirementType: req.requirementType.trim(),
             // gpaRange: req.gpaRange?.trim() || null,
-            minGPA:req.minGPA||null,
+            minGPA: req.minGPA || null,
             backlogRange: req.backlogRange?.trim() || null,
             workExperience: req.workExperience?.trim() || null,
             entranceExam: req.entranceExam?.trim() || null,
@@ -552,8 +549,8 @@ exports.filterCourses = async (req, res) => {
       limit = 10,
       search = "",
       course_level,
-      discipline,            // if provided directly
-      disciplineSearch,      // alternate query parameter name from frontend
+      discipline, // if provided directly
+      disciplineSearch, // alternate query parameter name from frontend
       area_of_study,
       country,
       university_name,
@@ -561,16 +558,16 @@ exports.filterCourses = async (req, res) => {
       min_tuition_fee,
       max_tuition_fee,
       application_deadline,
-      intakeYear,            // can be either "2025" or "September-2025"
+      intakeYear, // can be either "2025" or "September-2025"
       program_level,
       program_name,
-     
-      backlog,               // filter for eligibilityRequirements backlogRange
-      testRequirementName,   // filter for testRequirements name
-      testOverallScore,      // filter for testRequirements overall score
-      course_title,          // filter directly on course_title field
-      sort: sortBy = "",     // using "sort" from query string (frontend sends sort)
-      scholarship_applicable // optional: filter on scholarship_applicable field
+
+      backlog, // filter for eligibilityRequirements backlogRange
+      testRequirementName, // filter for testRequirements name
+      testOverallScore, // filter for testRequirements overall score
+      course_title, // filter directly on course_title field
+      sort: sortBy = "", // using "sort" from query string (frontend sends sort)
+      scholarship_applicable, // optional: filter on scholarship_applicable field
     } = req.query;
 
     page = isNaN(page) || page < 1 ? 1 : parseInt(page);
@@ -583,7 +580,7 @@ exports.filterCourses = async (req, res) => {
     if (search) {
       filter.$or = [
         { course_title: { $regex: search, $options: "i" } },
-        { overview: { $regex: search, $options: "i" } }
+        { overview: { $regex: search, $options: "i" } },
       ];
     }
 
@@ -595,9 +592,13 @@ exports.filterCourses = async (req, res) => {
     }
 
     if (disciplineSearch || discipline) {
-      filter.discipline = { $regex: disciplineSearch || discipline, $options: "i" };
+      filter.discipline = {
+        $regex: disciplineSearch || discipline,
+        $options: "i",
+      };
     }
-    if (area_of_study) filter.area_of_study = { $regex: area_of_study, $options: "i" };
+    if (area_of_study)
+      filter.area_of_study = { $regex: area_of_study, $options: "i" };
     if (country) filter.country = country;
 
     if (university_name) {
@@ -623,37 +624,47 @@ exports.filterCourses = async (req, res) => {
 
     if (intakeYear) {
       if (intakeYear.includes("-")) {
-        const [monthPart, yearPart] = intakeYear.split("-").map(item => item.trim());
+        const [monthPart, yearPart] = intakeYear
+          .split("-")
+          .map((item) => item.trim());
         filter.intakes = {
           $elemMatch: {
             month: { $regex: `^${monthPart}`, $options: "i" },
-            year: Number(yearPart)
-          }
+            year: Number(yearPart),
+          },
         };
       } else {
         filter["intakes.year"] = Number(intakeYear);
       }
     }
 
-    if (program_level) filter.program_level = { $regex: program_level, $options: "i" };
-    if (program_name) filter.program_name = { $regex: program_name, $options: "i" };
+    if (program_level)
+      filter.program_level = { $regex: program_level, $options: "i" };
+    if (program_name)
+      filter.program_name = { $regex: program_name, $options: "i" };
 
     if (scholarship_applicable) {
-      filter.scholarship_applicable = { $regex: scholarship_applicable, $options: "i" };
+      filter.scholarship_applicable = {
+        $regex: scholarship_applicable,
+        $options: "i",
+      };
     }
 
     if (backlog) {
       filter.eligibilityRequirements = {
         $elemMatch: {
-          backlogRange: { $regex: backlog, $options: "i" }
-        }
+          backlogRange: { $regex: backlog, $options: "i" },
+        },
       };
     }
 
     if (testRequirementName || testOverallScore) {
       filter.testRequirements = { $elemMatch: {} };
       if (testRequirementName) {
-        filter.testRequirements.$elemMatch.testRequirementName = { $regex: testRequirementName, $options: "i" };
+        filter.testRequirements.$elemMatch.testRequirementName = {
+          $regex: testRequirementName,
+          $options: "i",
+        };
       }
       if (testOverallScore) {
         filter.testRequirements.$elemMatch.overallScore = testOverallScore;
@@ -667,7 +678,7 @@ exports.filterCourses = async (req, res) => {
       deadline_asc: { application_deadline: 1 },
       deadline_desc: { application_deadline: -1 },
       tuition_asc: { tution_fee: 1 },
-      tuition_desc: { tution_fee: -1 }
+      tuition_desc: { tution_fee: -1 },
     };
     const sortOptions = sortOptionsMap[sortBy] || { createdAt: -1 };
 
@@ -675,7 +686,7 @@ exports.filterCourses = async (req, res) => {
     const courses = await Course.find(filter)
       .populate({
         path: "university_name",
-        select: "university_name university_logo university_rank country"
+        select: "university_name university_logo university_rank country",
       })
       .sort(sortOptions)
       .skip((page - 1) * limit)
@@ -683,7 +694,6 @@ exports.filterCourses = async (req, res) => {
       .exec();
 
     // Convert the university logo Buffer to base64 string for each course
-
 
     // Get total count for pagination
     const total = await Course.countDocuments(filter);
@@ -696,19 +706,17 @@ exports.filterCourses = async (req, res) => {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "An error occurred while filtering courses",
-      error: error.message
+      error: error.message,
     });
   }
 };
-
-
 
 // Helper function to get University ID by name
 const getUniversityIdByName = async (name) => {
@@ -733,7 +741,6 @@ exports.deleteCourse = async (req, res) => {
   }
 };
 
-
 exports.bulkUploadCourses = async (req, res) => {
   try {
     const excelFile = req.files?.excel;
@@ -743,219 +750,191 @@ exports.bulkUploadCourses = async (req, res) => {
       return res.status(400).json({ message: "Valid Excel file is required" });
     }
 
+    // Read workbook and rows
     const workbook = xlsx.readFile(excelFile.path);
     const sheetName = workbook.SheetNames[0];
     const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
+    // Build imageMap: filename -> file object
     const imageMap = {};
     if (imageFiles) {
       if (Array.isArray(imageFiles)) {
-        imageFiles.forEach((file) => {
-          imageMap[file.name] = file;
-        });
+        imageFiles.forEach(file => { imageMap[file.name] = file });
       } else if (imageFiles.name) {
         imageMap[imageFiles.name] = imageFiles;
       }
     }
 
+    // Trackers
     const createdCourses = [];
     const updatedCourses = [];
     const errors = [];
+    const usedImages = new Set();
 
     for (const row of rows) {
       try {
         const {
-          id,
-          course_level,
-          discipline,
-          area_of_study,
-          country,
-          university_name,
-          course_duration,
-          application_deadline,
-          overview,
-          intakeMonth,
-          intakeYear,
-          testRequirementName,
-          overallScore,
-          requirementType,        // Simplified format
-          requirementValue,       // Simplified format
-          requirement,
-          isRequired,
-          job_roles,
-          recruiters_name,
-          recruiters_logo,
-          scholarship_applicable,
-          tution_fee,
-          funding_options,
-          program_level,
-          program_name
+          id, course_level, discipline, area_of_study, country,
+          university_name, course_duration, application_deadline,
+          overview, intakeMonth, intakeYear,
+          testRequirementName, overallScore,
+          EligibilityRequirementType, EligibilityRequirementValue,
+          ApplicationRequirement, isRequired,
+          job_roles, recruiters_name, recruiters_logo,
+          scholarship_applicable, tution_fee, funding_options,
+          program_level, program_name
         } = row;
 
+        // Validate required
         if (!id || !course_level || !discipline || !area_of_study || !country || !university_name) {
-          errors.push(`Missing required fields for ID: ${id || "N/A"}`);
+          errors.push(`Missing required fields for ID: ${id || 'N/A'}`);
           continue;
         }
 
-        if (!mongoose.Types.ObjectId.isValid(university_name)) {
-          errors.push(`Invalid university ID for course ID: ${id}`);
-          continue;
-        }
-
-        const universityExists = await University.findById(university_name);
-        if (!universityExists) {
+        // Verify university
+        const university = await University.findOne({ id: university_name });
+        if (!university) {
           errors.push(`University not found for ID: ${university_name} in course ID: ${id}`);
           continue;
         }
 
-        let logoData;
-        if (recruiters_name) {
-          const logoFile = imageMap[recruiters_logo];
-          if (!logoFile || !fs.existsSync(logoFile.path)) {
-            errors.push(`Recruiter logo missing or invalid for course ID: ${id}`);
-            continue;
-          }
-          logoData = {
-            data: fs.readFileSync(logoFile.path),
-            contentType: logoFile.type
-          };
-        }
+        // Parse intakes (handles single/multiple entries)
+        const months = intakeMonth ? String(intakeMonth).split(",").map(m => m.trim()) : [];
+        const years = intakeYear ? String(intakeYear).split(",").map(y => y.trim()) : [];
+        const intakes = months.map((month, idx) => {
+          const yearVal = years[idx] || years[0] || '';
+          const yearNum = Number(yearVal);
+          return (month && !isNaN(yearNum))
+            ? { month, year: yearNum }
+            : null;
+        }).filter(i => i);
 
-        const intakes = intakeMonth && intakeYear
-          ? intakeMonth.split(',').map((month, idx) => ({
-              month: month.trim(),
-              year: Number(intakeYear.split(',')[idx]?.trim())
-            })).filter(i => i.month && i.year)
-          : [];
+        // Parse test requirements (handles single/multiple entries)
+        const names = testRequirementName ? String(testRequirementName).split(",").map(n => n.trim()) : [];
+        const scores = overallScore ? String(overallScore).split(",").map(s => s.trim()) : [];
+        const testRequirements = names.map((name, idx) => {
+          const scoreVal = scores[idx] || scores[0] || '';
+          return (name && scoreVal)
+            ? { testRequirementName: name, overallScore: scoreVal }
+            : null;
+        }).filter(r => r);
 
-        const testRequirements = testRequirementName && overallScore
-          ? testRequirementName.split(',').map((name, idx) => ({
-              testRequirementName: name.trim(),
-              overallScore: overallScore.split(',')[idx]?.trim()
-            })).filter(r => r.testRequirementName && r.overallScore)
-          : [];
-
-        // ✅ Simplified eligibilityRequirements
+        // Parse eligibility requirements
         const eligibilityRequirements = [];
-        if (requirementType && requirementValue) {
-          const types = String(requirementType).split(',').map(t => t.trim());
-          const values = String(requirementValue).split(',').map(v => v.trim());
-
-          for (let i = 0; i < types.length; i++) {
-            const type = types[i];
-            const value = values[i];
-
+        if (EligibilityRequirementType && EligibilityRequirementValue) {
+          const types = String(EligibilityRequirementType).split(',').map(t => t.trim());
+          const values = String(EligibilityRequirementValue).split(',').map(v => v.trim());
+          types.forEach((type, i) => {
+            const value = values[i] || values[0] || '';
             const entry = { requirementType: type };
             switch (type) {
-              case 'minGPA':
-                entry.minGPA = Number(value);
-                break;
-              case 'backlogRange':
-                entry.backlogRange = value;
-                break;
-              case 'workExperience':
-                entry.workExperience = value;
-                break;
-              case 'entranceExam':
-                entry.entranceExam = value;
-                break;
+              case 'minGPA': entry.minGPA = Number(value); break;
+              case 'backlogRange': entry.backlogRange = value; break;
+              case 'workExperience': entry.workExperience = value; break;
+              case 'entranceExam': entry.entranceExam = value; break;
             }
             eligibilityRequirements.push(entry);
-          }
+          });
         }
 
-        const application_requirements = requirement
-          ? requirement.split(',').map((req, idx) => ({
+        // Parse application requirements
+        const application_requirements = ApplicationRequirement
+          ? String(ApplicationRequirement).split(',').map((req, i) => ({
               requirement: req.trim(),
-              isRequired: String(isRequired).split(',')[idx]?.trim().toLowerCase() === 'true'
+              isRequired: String(isRequired).split(',')[i]?.trim().toLowerCase() === 'true'
             }))
           : [];
 
-        const top_recruiters = recruiters_name
-          ? recruiters_name.split(',').map((name, idx) => ({
-              recruiters_name: name.trim(),
-              recruiters_logo: logoData
-            }))
-          : [];
+        // Parse top_recruiters: names & logos arrays
+        const recruiterNames = recruiters_name ? String(recruiters_name).split(',').map(r => r.trim()) : [];
+        const recruiterLogos = recruiters_logo ? String(recruiters_logo).split(',').map(l => l.trim()) : [];
+        const top_recruiters = [];
 
-        const jobRoles = typeof job_roles === 'string'
-          ? job_roles.split(',').map(j => j.trim()) : [];
+        recruiterNames.forEach((name, i) => {
+          const logoFilename = recruiterLogos[i] || recruiterLogos[0];
+          const file = imageMap[logoFilename];
+          if (!file || !fs.existsSync(file.path)) {
+            errors.push(`Recruiter logo missing or invalid ('${logoFilename}') for course ID: ${id}`);
+          } else {
+            const logoData = {
+              data: fs.readFileSync(file.path),
+              contentType: file.type
+            };
+            top_recruiters.push({ recruiters_name: name, recruiters_logo: logoData });
+            usedImages.add(logoFilename);
+          }
+        });
 
-        const scholarshipApplicable = typeof scholarship_applicable === 'string'
-          ? scholarship_applicable.split(',').map(s => s.trim()) : [];
+        // Other array fields
+        const job_roles_arr = typeof job_roles === 'string'
+          ? String(job_roles).split(',').map(j => j.trim()) : [];
+        const scholarship_applicable_arr = typeof scholarship_applicable === 'string'
+          ? String(scholarship_applicable).split(',').map(s => s.trim()) : [];
+        const funding_options_arr = typeof funding_options === 'string'
+          ? String(funding_options).split(',').map(f => f.trim()) : [];
 
-        const fundingOptions = typeof funding_options === 'string'
-          ? funding_options.split(',').map(f => f.trim()) : [];
-
+        // Build courseData
         const courseData = {
-          course_level,
-          discipline,
-          area_of_study,
-          country,
-          university_name,
+          course_level, discipline, area_of_study, country,
+          university_name: university._id,
           course_duration,
           application_deadline: application_deadline ? new Date(application_deadline) : undefined,
-          overview,
-          intakes,
-          testRequirements,
-          eligibilityRequirements,
-          application_requirements,
-          job_roles: jobRoles,
-          top_recruiters,
-          scholarship_applicable: scholarshipApplicable,
+          overview, intakes, testRequirements, eligibilityRequirements,
+          application_requirements, job_roles: job_roles_arr,
+          top_recruiters, scholarship_applicable: scholarship_applicable_arr,
           tution_fee: tution_fee ? Number(tution_fee) : undefined,
-          funding_options: fundingOptions,
-          program_level,
-          program_name
+          funding_options: funding_options_arr,
+          program_level, program_name
         };
 
+        // Create or update
         const existing = await Course.findOne({ id: id.trim() });
-
         if (existing) {
           Object.assign(existing, courseData);
           await existing.save();
           updatedCourses.push(id);
         } else {
-          const newCourse = new Course({ id: id.trim(), ...courseData });
-          await newCourse.save();
+          await new Course({ id: id.trim(), ...courseData }).save();
           createdCourses.push(id);
-        }
-
-        if (imageMap[recruiters_logo]) {
-          fs.unlinkSync(imageMap[recruiters_logo].path);
         }
       } catch (err) {
         errors.push(`Error for ID ${row.id || 'unknown'}: ${err.message}`);
       }
     }
 
-    const usedImageNames = new Set(rows.map(row => row.recruiters_logo).filter(Boolean));
-    for (const name in imageMap) {
-      if (!usedImageNames.has(name)) {
-        try {
-          fs.unlinkSync(imageMap[name].path);
-        } catch (err) {
-          console.warn(`Failed to delete unused image: ${name}`, err.message);
-        }
+    // Clean up files
+    Object.entries(imageMap).forEach(([name, file]) => {
+      if (!usedImages.has(name)) {
+        try { fs.unlinkSync(file.path); } catch {};
       }
-    }
-
+    });
+    usedImages.forEach(name => {
+      const file = imageMap[name];
+      try { fs.unlinkSync(file.path); } catch {};
+    });
     fs.unlinkSync(excelFile.path);
 
-    res.status(createdCourses.length > 0 || updatedCourses.length > 0 ? 201 : 400).json({
-      message: "Bulk course upload complete.",
-      createdCount: createdCourses.length,
-      updatedCount: updatedCourses.length,
+    // Response
+    res.status((createdCourses.length || updatedCourses.length) ? 201 : 400).json({
+      message: 'Upload Successful',
+      coursesAdded: createdCourses.length,
+      coursesUpdated: updatedCourses.length,
       errorCount: errors.length,
-      created: createdCourses,
-      updated: updatedCourses,
       errors
     });
-  } catch (error) {
-    console.error("Bulk upload error:", error);
+  } catch (err) {
+    console.error('Bulk upload error:', err);
     res.status(500).json({
-      message: "Server error during bulk upload",
-      error: error.message
+      message: 'Bulk upload failed',
+      coursesAdded: 0,
+      coursesUpdated: 0,
+      errorCount: 1,
+      errors: [err.message]
     });
   }
 };
+
+
+
+
+
