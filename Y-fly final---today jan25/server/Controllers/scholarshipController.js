@@ -425,15 +425,13 @@ exports.bulkUploadScholarships = async (req, res) => {
           overview,
           eligibility_criteria,
           application_process,
-          testRequirementName,
-          overallScore,
+          testRequirements, // JSON string expected
           student_citizenship,
           specialRestrictions,
           scholarship_applicability,
           brochure_name,
         } = row;
 
-        // Validate required fields
         if (
           !id || !scholarship_name || !types_of_scholarship || !country || !course_level ||
           !area_of_study || !scholarship_amount || !scholarship_deadline || !overview ||
@@ -443,21 +441,23 @@ exports.bulkUploadScholarships = async (req, res) => {
           continue;
         }
 
-        // Convert testRequirementName and overallScore → testRequirements array
-        const testNames = testRequirementName?.split(',').map(s => s.trim()) || [];
-        const testScores = overallScore?.split(',').map(s => s.trim()) || [];
+        let parsedTestRequirements = [];
+        try {
+          if (testRequirements) {
+            parsedTestRequirements = JSON.parse(testRequirements);
+            if (!Array.isArray(parsedTestRequirements)) {
+              throw new Error("testRequirements must be an array");
+            }
+          }
+        } catch (err) {
+          errors.push(`Invalid JSON in testRequirements for ID: ${id}`);
+          continue;
+        }
 
-        const testRequirements = testNames.map((name, index) => ({
-          test_name: name,
-          overall_score: testScores[index] || '',
-        }));
-
-        // Convert specialRestrictions into array
         const specialRestrictionsArray = specialRestrictions
-          ? specialRestrictions.split(',').map(s => s.trim())
+          ? specialRestrictions.split(",").map(s => s.trim())
           : [];
 
-        // Handle brochure upload
         let brochureData = null;
         if (brochure_name) {
           const brochureFile = brochureMap[brochure_name];
@@ -468,7 +468,7 @@ exports.bulkUploadScholarships = async (req, res) => {
 
           brochureData = {
             data: fs.readFileSync(brochureFile.path),
-            contentType: brochureFile.mimetype || 'application/pdf',
+            contentType: brochureFile.mimetype || "application/pdf",
           };
 
           fs.unlinkSync(brochureFile.path); // Delete after use
@@ -489,7 +489,7 @@ exports.bulkUploadScholarships = async (req, res) => {
           application_process,
           student_citizenship,
           scholarship_applicability,
-          testRequirements,
+          testRequirements: parsedTestRequirements,
           specialRestrictions: specialRestrictionsArray,
           brochure: brochureData,
         };
@@ -509,7 +509,6 @@ exports.bulkUploadScholarships = async (req, res) => {
       }
     }
 
-    // Clean up unused brochure files
     for (const name in brochureMap) {
       try {
         fs.unlinkSync(brochureMap[name].path);
@@ -518,7 +517,7 @@ exports.bulkUploadScholarships = async (req, res) => {
       }
     }
 
-    fs.unlinkSync(excelFile.path); // delete main Excel
+    fs.unlinkSync(excelFile.path);
 
     res.status(created.length || updated.length ? 201 : 400).json({
       message: "Bulk upload complete",
@@ -534,10 +533,3 @@ exports.bulkUploadScholarships = async (req, res) => {
     res.status(500).json({ error: "Server error during bulk upload" });
   }
 };
-
-
-
-
-
-
-
