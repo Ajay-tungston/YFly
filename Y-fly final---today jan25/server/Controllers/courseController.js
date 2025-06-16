@@ -776,11 +776,18 @@ exports.bulkUploadCourses = async (req, res) => {
         const {
           id, course_level, discipline, area_of_study, country,
           university_name, course_duration, application_deadline,
-          overview, intakeMonth, intakeYear,
-          testRequirementName, overallScore,
-          EligibilityRequirementType, EligibilityRequirementValue,
-          ApplicationRequirement, isRequired,
-          job_roles, recruiters_name, recruiters_logo,
+          overview, 
+          // intakeMonth, intakeYear,
+          intakes,
+          // testRequirementName, overallScore,
+          testRequirements,
+          // EligibilityRequirementType, EligibilityRequirementValue,
+          eligibilityRequirements,
+          // ApplicationRequirement, isRequired,
+          application_requirements,
+          job_roles,
+          //  recruiters_name, recruiters_logo,
+          top_recruiters,
           scholarship_applicable, tution_fee, funding_options,
           program_level, program_name
         } = row;
@@ -798,72 +805,48 @@ exports.bulkUploadCourses = async (req, res) => {
           continue;
         }
 
-        // Parse intakes (handles single/multiple entries)
-        const months = intakeMonth ? String(intakeMonth).split(",").map(m => m.trim()) : [];
-        const years = intakeYear ? String(intakeYear).split(",").map(y => y.trim()) : [];
-        const intakes = months.map((month, idx) => {
-          const yearVal = years[idx] || years[0] || '';
-          const yearNum = Number(yearVal);
-          return (month && !isNaN(yearNum))
-            ? { month, year: yearNum }
-            : null;
-        }).filter(i => i);
 
-        // Parse test requirements (handles single/multiple entries)
-        const names = testRequirementName ? String(testRequirementName).split(",").map(n => n.trim()) : [];
-        const scores = overallScore ? String(overallScore).split(",").map(s => s.trim()) : [];
-        const testRequirements = names.map((name, idx) => {
-          const scoreVal = scores[idx] || scores[0] || '';
-          return (name && scoreVal)
-            ? { testRequirementName: name, overallScore: scoreVal }
-            : null;
-        }).filter(r => r);
+        let parsedIntakes = [], parsedTestReqs = [], parsedEligibility = [], parsedAppReqs = [], parsedRecruiters = [];
 
-        // Parse eligibility requirements
-        const eligibilityRequirements = [];
-        if (EligibilityRequirementType && EligibilityRequirementValue) {
-          const types = String(EligibilityRequirementType).split(',').map(t => t.trim());
-          const values = String(EligibilityRequirementValue).split(',').map(v => v.trim());
-          types.forEach((type, i) => {
-            const value = values[i] || values[0] || '';
-            const entry = { requirementType: type };
-            switch (type) {
-              case 'minGPA': entry.minGPA = Number(value); break;
-              case 'backlogRange': entry.backlogRange = value; break;
-              case 'workExperience': entry.workExperience = value; break;
-              case 'entranceExam': entry.entranceExam = value; break;
+        try {
+          parsedIntakes = intakes ? JSON.parse(intakes) : [];
+        } catch { errors.push(`Invalid JSON in intakes for ID: ${id}`); }
+
+        try {
+          parsedTestReqs = testRequirements ? JSON.parse(testRequirements) : [];
+        } catch { errors.push(`Invalid JSON in testRequirements for ID: ${id}`); }
+
+        try {
+          parsedEligibility = eligibilityRequirements ? JSON.parse(eligibilityRequirements) : [];
+        } catch { errors.push(`Invalid JSON in eligibilityRequirements for ID: ${id}`); }
+
+        try {
+          parsedAppReqs = application_requirements ? JSON.parse(application_requirements) : [];
+        } catch { errors.push(`Invalid JSON in application_requirements for ID: ${id}`); }
+
+        try {
+          const raw_recruiters = top_recruiters ? JSON.parse(top_recruiters) : [];
+          for (const recruiter of raw_recruiters) {
+            const { recruiters_name, recruiters_logo } = recruiter;
+            const file = imageMap[recruiters_logo];
+            if (!file || !fs.existsSync(file.path)) {
+              errors.push(`Recruiter logo missing or invalid ('${recruiters_logo}') for course ID: ${id}`);
+              continue;
             }
-            eligibilityRequirements.push(entry);
-          });
-        }
-
-        // Parse application requirements
-        const application_requirements = ApplicationRequirement
-          ? String(ApplicationRequirement).split(',').map((req, i) => ({
-              requirement: req.trim(),
-              isRequired: String(isRequired).split(',')[i]?.trim().toLowerCase() === 'true'
-            }))
-          : [];
-
-        // Parse top_recruiters: names & logos arrays
-        const recruiterNames = recruiters_name ? String(recruiters_name).split(',').map(r => r.trim()) : [];
-        const recruiterLogos = recruiters_logo ? String(recruiters_logo).split(',').map(l => l.trim()) : [];
-        const top_recruiters = [];
-
-        recruiterNames.forEach((name, i) => {
-          const logoFilename = recruiterLogos[i] || recruiterLogos[0];
-          const file = imageMap[logoFilename];
-          if (!file || !fs.existsSync(file.path)) {
-            errors.push(`Recruiter logo missing or invalid ('${logoFilename}') for course ID: ${id}`);
-          } else {
             const logoData = {
               data: fs.readFileSync(file.path),
-              contentType: file.type
+              contentType: file.type,
             };
-            top_recruiters.push({ recruiters_name: name, recruiters_logo: logoData });
-            usedImages.add(logoFilename);
+            parsedRecruiters.push({
+              recruiters_name,
+              recruiters_logo: logoData,
+            });
+            usedImages.add(recruiters_logo);
           }
-        });
+        } catch {
+          errors.push(`Invalid JSON in top_recruiters for ID: ${id}`);
+        }
+
 
         // Other array fields
         const job_roles_arr = typeof job_roles === 'string'
@@ -879,9 +862,14 @@ exports.bulkUploadCourses = async (req, res) => {
           university_name: university._id,
           course_duration,
           application_deadline: application_deadline ? new Date(application_deadline) : undefined,
-          overview, intakes, testRequirements, eligibilityRequirements,
-          application_requirements, job_roles: job_roles_arr,
-          top_recruiters, scholarship_applicable: scholarship_applicable_arr,
+          overview, 
+          intakes:parsedIntakes,
+           testRequirements:parsedTestReqs,
+            eligibilityRequirements:parsedEligibility,
+          application_requirements:parsedAppReqs,
+           job_roles: job_roles_arr,
+          top_recruiters:parsedRecruiters,
+           scholarship_applicable: scholarship_applicable_arr,
           tution_fee: tution_fee ? Number(tution_fee) : undefined,
           funding_options: funding_options_arr,
           program_level, program_name
